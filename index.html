@@ -4,96 +4,156 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-  <title>Innovación Digital en la Ingeniería y Gestión de Procesos</title>
+  <title>INGENIERÍA DIGITAL: Tres Herramientas Clave</title>
   
-  <meta name="description" content="Presentación de postgrado sobre la innovación digital en ingeniería, profundizando en Google Sheets, Lucidchart y Autodesk Construction Cloud para el control de procesos.">
+  <meta name="description" content="Presentación de postgrado de alto impacto sobre innovación digital en ingeniería de procesos.">
   <meta name="author" content="Ing. Dalia Rojas, Ing. Homer Perozo, Ing. Indiana Salas, Lic. Ruby Medina">
 
   <!-- Google Fonts for Modern Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:wght@500;600;700;800;900&display=swap" rel="stylesheet">
 
   <!-- RevealJS Core Stylesheets -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/black.min.css" id="theme">
 
-  <!-- Custom Theme Overrides: Premium Dark Corporate Style -->
+  <!-- Startup Style Theme Customizations -->
   <style>
     :root {
-      --bg-color: #030f26;
+      --bg-color: #050814;
       --text-color: #f8fafc;
-      --primary-accent: #00f2fe; /* Vibrant Teal */
-      --secondary-accent: #4facfe; /* Cyan/Teal Gradient */
+      --primary-accent: #00f2fe; /* Glowing Cyan */
+      --secondary-accent: #4facfe; /* Deep Cyan/Blue */
+      --neon-pink: #ff007f; /* Accent Pink */
       --muted-text: #94a3b8;
-      --glass-bg: rgba(15, 23, 42, 0.65);
+      --glass-bg: rgba(10, 15, 30, 0.7);
       --glass-border: rgba(0, 242, 254, 0.15);
-      --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      --card-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.5);
     }
 
     body {
-      font-family: 'Inter', 'Montserrat', sans-serif !important;
+      font-family: 'Inter', sans-serif !important;
       background-color: var(--bg-color) !important;
       color: var(--text-color) !important;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(0, 242, 254, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(79, 172, 254, 0.05) 0%, transparent 40%);
     }
 
     .reveal {
-      font-family: 'Inter', 'Montserrat', sans-serif !important;
+      font-family: 'Inter', sans-serif !important;
       color: var(--text-color) !important;
     }
 
-    .reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
+    /* Headings styling - Startup Keynote feel */
+    .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
       font-family: 'Montserrat', sans-serif !important;
-      font-weight: 700 !important;
-      color: var(--text-color) !important;
+      font-weight: 900 !important;
       text-transform: none !important;
-      letter-spacing: -0.02em !important;
+      letter-spacing: -0.04em !important;
+      color: var(--text-color) !important;
     }
 
+    /* Cinematic Product Launch Title */
     .reveal h1 {
-      background: linear-gradient(135deg, #ffffff 30%, var(--primary-accent) 100%);
+      font-size: 2.8em !important;
+      line-height: 1.05 !important;
+      background: linear-gradient(135deg, #ffffff 40%, var(--primary-accent) 70%, var(--secondary-accent) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-shadow: none !important;
+      text-shadow: 0 0 40px rgba(0, 242, 254, 0.2) !important;
+      margin-bottom: 10px !important;
+      animation: titlePulse 6s infinite alternate ease-in-out;
     }
 
     .reveal h2 {
+      font-size: 1.8em !important;
+      line-height: 1.1 !important;
       background: linear-gradient(135deg, var(--primary-accent) 0%, var(--secondary-accent) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      border-bottom: 2px solid rgba(0, 242, 254, 0.3);
-      padding-bottom: 10px;
-      margin-bottom: 30px !important;
+      margin-bottom: 25px !important;
+      border: none !important;
+      padding-bottom: 0 !important;
+      text-shadow: 0 0 20px rgba(0, 242, 254, 0.1) !important;
     }
 
     .reveal h3 {
+      font-size: 1.2em !important;
       color: var(--primary-accent) !important;
+      letter-spacing: -0.02em !important;
     }
 
-    /* Glassmorphism Cards */
+    /* Glowing Glassmorphism Cards with Shimmering Border */
     .glass-card {
       background: var(--glass-bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border: 1px solid var(--glass-border);
-      border-radius: 16px;
-      padding: 30px;
+      border-radius: 20px;
+      padding: 25px;
       box-shadow: var(--card-shadow);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      text-align: left;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .glass-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 242, 254, 0.15), transparent);
+      transition: all 0.6s ease;
+      pointer-events: none;
+    }
+
+    .glass-card:hover::before {
+      left: 150%;
     }
 
     .glass-card:hover {
-      border-color: rgba(0, 242, 254, 0.4);
-      box-shadow: 0 12px 40px 0 rgba(0, 242, 254, 0.15);
-      transform: translateY(-5px);
+      border-color: rgba(0, 242, 254, 0.5);
+      box-shadow: 0 15px 50px 0 rgba(0, 242, 254, 0.25);
+      transform: translateY(-8px) scale(1.02);
     }
 
-    /* Grid Layouts for Multi-column Content */
+    /* High-Impact Stat Blocks */
+    .stat-number {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2.2em;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--primary-accent) 0%, var(--secondary-accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1;
+      margin-bottom: 5px;
+      letter-spacing: -0.05em;
+    }
+
+    .stat-label {
+      font-size: 0.52em;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-color);
+    }
+
+    .stat-desc {
+      font-size: 0.42em;
+      color: var(--muted-text);
+      line-height: 1.35;
+      margin-top: 5px;
+    }
+
+    /* Grid Layouts - Startup Keynote */
     .grid-2 {
       display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 30px;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
       align-items: stretch;
     }
 
@@ -104,63 +164,64 @@
       align-items: stretch;
     }
 
-    /* Elegant, Modern Styled Table */
+    /* Ultra-sleek, clean comparison table */
     .custom-table {
       width: 100%;
       border-collapse: collapse;
-      background: rgba(15, 23, 42, 0.5);
-      backdrop-filter: blur(8px);
-      border-radius: 12px;
+      background: rgba(10, 15, 30, 0.4);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
       overflow: hidden;
       border: 1px solid var(--glass-border);
       font-size: 0.52em !important;
     }
 
     .custom-table th {
-      background: linear-gradient(135deg, rgba(0, 242, 254, 0.2) 0%, rgba(79, 172, 254, 0.2) 100%);
+      background: rgba(0, 242, 254, 0.08);
       color: var(--primary-accent) !important;
-      font-weight: 700;
+      font-weight: 800;
       text-transform: uppercase;
       font-size: 0.85em;
-      letter-spacing: 0.05em;
-      padding: 14px 16px;
-      border-bottom: 2px solid var(--glass-border);
+      letter-spacing: 0.08em;
+      padding: 16px;
+      border-bottom: 1px solid var(--glass-border);
     }
 
     .custom-table td {
-      padding: 12px 16px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
       color: var(--text-color);
-      font-size: 0.9em;
+      font-size: 0.85em;
       vertical-align: middle;
       line-height: 1.35;
     }
 
     .custom-table tr:hover {
-      background: rgba(0, 242, 254, 0.05);
+      background: rgba(0, 242, 254, 0.04);
     }
 
     .custom-table tr:last-child td {
       border-bottom: none;
     }
 
-    /* Timeline for Zoom Defense Strategy */
+    /* Animated Visual Timeline for zoom presentation */
     .timeline-container {
       display: flex;
       justify-content: space-between;
       position: relative;
       margin-top: 40px;
-      padding: 20px 0;
+      padding: 10px 0;
     }
 
     .timeline-container::before {
       content: '';
       position: absolute;
-      top: 40px;
+      top: 25px;
       left: 5%;
       width: 90%;
-      height: 4px;
-      background: rgba(255, 255, 255, 0.1);
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary-accent), var(--secondary-accent));
+      opacity: 0.3;
       z-index: 1;
     }
 
@@ -172,49 +233,55 @@
     }
 
     .timeline-badge {
-      width: 40px;
-      height: 40px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
-      background: #0f172a;
-      border: 3px solid var(--muted-text);
+      background: #050814;
+      border: 2px solid var(--muted-text);
       color: var(--text-color);
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 15px auto;
-      font-weight: bold;
-      font-size: 0.8em;
-      transition: all 0.3s ease;
+      margin: 0 auto 10px auto;
+      font-weight: 800;
+      font-size: 0.7em;
+      transition: all 0.4s ease;
     }
 
     .timeline-step.active .timeline-badge {
       border-color: var(--primary-accent);
       background: var(--primary-accent);
-      color: #030f26;
-      box-shadow: 0 0 15px var(--primary-accent);
+      color: #050814;
+      box-shadow: 0 0 20px var(--primary-accent);
     }
 
     .timeline-title {
-      font-weight: 700;
-      font-size: 0.55em !important;
+      font-weight: 800;
+      font-size: 0.52em !important;
       color: var(--primary-accent);
-      margin-bottom: 5px;
+      margin-bottom: 3px;
     }
 
     .timeline-desc {
-      font-size: 0.45em !important;
+      font-size: 0.42em !important;
       color: var(--muted-text);
-      line-height: 1.35;
+      line-height: 1.3;
     }
 
-    /* Customizing bulleted lists for better academic presentation readability */
+    /* Slide specific adjustments */
+    .reveal p {
+      font-size: 0.65em;
+      line-height: 1.45;
+      color: var(--muted-text);
+    }
+
     .reveal ul {
-      margin-left: 20px !important;
+      margin-left: 15px !important;
     }
 
     .reveal li {
-      margin-bottom: 10px;
-      font-size: 0.72em;
+      margin-bottom: 8px;
+      font-size: 0.6em;
       line-height: 1.4;
       color: #e2e8f0;
     }
@@ -238,28 +305,28 @@
     .glow-blob {
       position: absolute;
       border-radius: 50%;
-      filter: blur(150px);
-      opacity: 0.12;
+      filter: blur(120px);
+      opacity: 0.15;
       mix-blend-mode: screen;
       pointer-events: none;
     }
 
     .blob1 {
-      top: -10%;
-      left: -10%;
-      width: 50vw;
-      height: 50vw;
+      top: -15%;
+      left: -15%;
+      width: 60vw;
+      height: 60vw;
       background: radial-gradient(circle, var(--primary-accent) 0%, transparent 70%);
-      animation: float-blob 25s infinite alternate ease-in-out;
+      animation: float-blob 20s infinite alternate ease-in-out;
     }
 
     .blob2 {
-      bottom: -15%;
-      right: -10%;
-      width: 60vw;
-      height: 60vw;
+      bottom: -20%;
+      right: -15%;
+      width: 70vw;
+      height: 70vw;
       background: radial-gradient(circle, var(--secondary-accent) 0%, transparent 70%);
-      animation: float-blob 30s infinite alternate-reverse ease-in-out;
+      animation: float-blob 25s infinite alternate-reverse ease-in-out;
     }
 
     @keyframes float-blob {
@@ -267,17 +334,26 @@
         transform: translate(0, 0) scale(1);
       }
       50% {
-        transform: translate(5%, 10%) scale(1.1);
+        transform: translate(8%, 12%) scale(1.15);
       }
       100% {
-        transform: translate(-5%, -5%) scale(0.9);
+        transform: translate(-5%, -8%) scale(0.9);
+      }
+    }
+
+    @keyframes titlePulse {
+      0% {
+        filter: drop-shadow(0 0 20px rgba(0, 242, 254, 0.1));
+      }
+      100% {
+        filter: drop-shadow(0 0 45px rgba(0, 242, 254, 0.35));
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- Background Dynamic Mesh Elements -->
+  <!-- Dynamic ambient canvas backdrop -->
   <div class="glow-bg">
     <div class="glow-blob blob1"></div>
     <div class="glow-blob blob2"></div>
@@ -287,71 +363,65 @@
     <div class="slides">
 
       <!-- ========================================================
-           SLIDE 1: PORTADA PROFESIONAL
+           SLIDE 1: PORTADA PROFESIONAL (Startup Launch Style)
            ======================================================== -->
-      <!-- Employs deep navy gradient with high-end corporate glassmorphism card -->
-      <section data-background-gradient="radial-gradient(circle at 50% 50%, #09205a 0%, #030f26 100%)">
-        <div class="glass-card" style="text-align: center; max-width: 950px; margin: 0 auto; border-color: rgba(0, 242, 254, 0.3);">
-          <h1 style="font-size: 2.1em; line-height: 1.15; margin-bottom: 20px;">Innovación Digital en la Ingeniería y Gestión de Procesos</h1>
-          <h3 style="font-size: 1.05em; color: var(--secondary-accent); font-weight: 500; margin-bottom: 45px; letter-spacing: 0.05em;">
-            Tres Herramientas Clave: Google Sheets, Lucidchart y Autodesk Construction Cloud
+      <section data-background-gradient="radial-gradient(circle at 50% 50%, #07112a 0%, #050814 100%)">
+        <div class="glass-card" style="text-align: center; max-width: 950px; margin: 0 auto; border-color: rgba(0, 242, 254, 0.3); padding: 40px;">
+          <div style="background: rgba(0, 242, 254, 0.1); border: 1px solid var(--primary-accent); border-radius: 30px; padding: 5px 15px; display: inline-block; font-size: 0.45em; font-weight: 800; letter-spacing: 0.15em; color: var(--primary-accent); margin-bottom: 20px; text-transform: uppercase;">
+            INNOVACIÓN E INGENIERÍA 4.0
+          </div>
+          <h1>Ingeniería Digital y Gestión de Procesos</h1>
+          <h3 style="font-size: 1.05em; color: var(--muted-text); font-weight: 500; margin-bottom: 40px; letter-spacing: 0.02em;">
+            Tres Ejes de la Transformación: <span style="color: var(--primary-accent); font-weight: 700;">Sheets</span> • <span style="color: var(--primary-accent); font-weight: 700;">Lucidchart</span> • <span style="color: var(--primary-accent); font-weight: 700;">Autodesk CC</span>
           </h3>
           
-          <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 20px; font-size: 0.6em; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 25px;">
+          <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 20px; font-size: 0.58em; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 25px;">
             <div style="text-align: left;">
-              <span style="color: var(--primary-accent); font-weight: 700; display: block; margin-bottom: 10px; letter-spacing: 0.05em;">AUTORES (Ingeniería de Procesos):</span>
-              <ul style="list-style-type: none; margin: 0 !important; padding: 0;">
-                <li style="font-size: 1em; margin-bottom: 5px;">• Ing. Dalia Rojas Delgado</li>
-                <li style="font-size: 1em; margin-bottom: 5px;">• Ing. Homer Perozo Naveda</li>
-                <li style="font-size: 1em; margin-bottom: 5px;">• Ing. Indiana Salas Perozo</li>
-                <li style="font-size: 1em; margin-bottom: 5px;">• Lic. Ruby Medina Leidens</li>
-              </ul>
+              <span style="color: var(--primary-accent); font-weight: 800; display: block; margin-bottom: 8px; letter-spacing: 0.05em; text-transform: uppercase;">EQUIPO DE PROYECTO:</span>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; color: #fff;">
+                <div>• Ing. Dalia Rojas D.</div>
+                <div>• Ing. Homer Perozo N.</div>
+                <div>• Ing. Indiana Salas P.</div>
+                <div>• Lic. Ruby Medina L.</div>
+              </div>
             </div>
-            <div style="text-align: right; display: flex; flex-direction: column; justify-content: center; line-height: 1.45;">
-              <span style="color: var(--muted-text); display: block;">Programa de Postgrado en Ingeniería</span>
-              <span style="color: var(--muted-text); display: block; font-weight: 500;">Mención: Gestión y Optimización de Procesos</span>
-              <span style="color: var(--primary-accent); font-weight: 700; display: block; margin-top: 5px; letter-spacing: 0.02em;">[Nombre de la Universidad / Institución] • 2026</span>
+            <div style="text-align: right; display: flex; flex-direction: column; justify-content: center; line-height: 1.4;">
+              <span style="color: var(--muted-text); display: block; font-weight: 600;">Programa de Postgrado en Ingeniería</span>
+              <span style="color: var(--primary-accent); font-weight: 800; display: block; margin-top: 3px; letter-spacing: 0.02em;">[Nombre de la Universidad / Institución] • 2026</span>
             </div>
           </div>
         </div>
       </section>
 
       <!-- ========================================================
-           SLIDE 2: INTRODUCCIÓN
+           SLIDE 2: INTRODUCCIÓN (Punchy startup slide)
            ======================================================== -->
-      <!-- Establishes the context of digitalization in the engineering discipline -->
-      <section data-transition="slide">
-        <h2 style="font-size: 1.5em;">La Era de la Ingeniería Digitalizada</h2>
-        <p style="font-size: 0.72em; color: var(--muted-text); margin-bottom: 30px; text-align: left; line-height: 1.45;">
-          La ingeniería de procesos moderna exige una transición expedita de flujos de trabajo locales y manuales a ecosistemas integrados y gobernados en la nube. Esta transformación estratégica redefine la agilidad, la precisión operacional y la capacidad colaborativa de los equipos técnicos en un entorno de negocios globalizado.
+      <section data-transition="slide-in fade-out">
+        <h2>La Era de la Ingeniería Conectada</h2>
+        <p style="font-size: 0.7em; color: var(--muted-text); margin-bottom: 30px; text-align: left; line-height: 1.4;">
+          La ingeniería tradicional trabajaba en silos y formatos locales. La ingeniería digital 4.0 opera en la nube: síncrona, descentralizada y bajo un gobierno de datos riguroso.
         </p>
         
         <div class="grid-3">
-          <!-- Card 1: Descentralización -->
+          <!-- Pillar 1 -->
           <div class="glass-card fragment fade-up" data-fragment-index="1">
-            <div style="font-size: 1.8em; color: var(--primary-accent); margin-bottom: 12px;">☁️</div>
-            <h3 style="font-size: 0.85em; margin-bottom: 8px;">Descentralización</h3>
-            <p style="font-size: 0.52em; color: var(--muted-text); margin: 0; line-height: 1.4;">
-              Migración de infraestructuras cerradas locales a soluciones seguras basadas en arquitectura Software-as-a-Service (SaaS), permitiendo un acceso ubicuo a la información del proyecto.
-            </p>
+            <div class="stat-number">99.9%</div>
+            <div class="stat-label">Disponibilidad SaaS</div>
+            <div class="stat-desc">Acceso instantáneo y ubicuo a la información crítica del proceso desde cualquier dispositivo.</div>
           </div>
           
-          <!-- Card 2: Colaboración Activa -->
+          <!-- Pillar 2 -->
           <div class="glass-card fragment fade-up" data-fragment-index="2">
-            <div style="font-size: 1.8em; color: var(--primary-accent); margin-bottom: 12px;">👥</div>
-            <h3 style="font-size: 0.85em; margin-bottom: 8px;">Sincronía Operacional</h3>
-            <p style="font-size: 0.52em; color: var(--muted-text); margin: 0; line-height: 1.4;">
-              Eliminación de silos informativos a través de entornos de co-autoría síncrona en tiempo real, maximizando la velocidad y cohesión en la toma de decisiones críticas.
-            </p>
+            <div class="stat-number">0 ms</div>
+            <div class="stat-label">Desfase Temporal</div>
+            <div class="stat-desc">Colaboración multidisplicinaria síncrona que elimina reprocesos por versiones obsoletas.</div>
           </div>
           
-          <!-- Card 3: Gobernanza de Datos -->
+          <!-- Pillar 3 -->
           <div class="glass-card fragment fade-up" data-fragment-index="3">
-            <div style="font-size: 1.8em; color: var(--primary-accent); margin-bottom: 12px;">🛡️</div>
-            <h3 style="font-size: 0.85em; margin-bottom: 8px;">Gobernanza Digital</h3>
-            <p style="font-size: 0.52em; color: var(--muted-text); margin: 0; line-height: 1.4;">
-              Centralización de datos en un "Único Punto de Verdad" (Single Source of Truth), reduciendo sustancialmente riesgos de duplicidad documental y desactualización en la ingeniería de detalle.
-            </p>
+            <div class="stat-number">100%</div>
+            <div class="stat-label">Única Verdad</div>
+            <div class="stat-desc">Datos centralizados y protegidos bajo esquemas estructurados de propiedad intelectual.</div>
           </div>
         </div>
       </section>
@@ -359,42 +429,41 @@
       <!-- ========================================================
            SLIDE 3: HERRAMIENTA 1 - GOOGLE SHEETS (PILARES TÉCNICOS)
            ======================================================== -->
-      <!-- Technical architecture presentation with code extensions snippets -->
-      <section data-transition="slide">
-        <h2 style="font-size: 1.5em;">Google Sheets: Arquitectura y Pilares Técnicos</h2>
+      <section data-transition="slide-in fade-out">
+        <h2>Google Sheets: Motor SaaS Distribuido</h2>
         
         <div class="grid-2">
           <div>
-            <p style="font-size: 0.68em; text-align: left; margin-bottom: 20px; line-height: 1.4;">
-              Más allá de ser una simple hoja de cálculo tradicional, Google Sheets representa un potente motor SaaS de cálculo distribuido y base de datos de baja latencia fundamentado en:
+            <p style="text-align: left; margin-bottom: 15px;">
+              Una infraestructura robusta para el procesamiento distribuido de bases de datos relacionales ligeras.
             </p>
-            <ul style="font-size: 0.62em;">
+            <ul style="font-size: 0.58em; line-height: 1.45;">
               <li class="fragment fade-up" data-fragment-index="1">
-                <strong>Infraestructura SaaS Multiusuario:</strong> Operación nativa en navegador que delega el procesamiento pesado a clústeres en la nube de Google, reduciendo la dependencia de hardware local.
+                <strong>SaaS Multi-inquilino:</strong> Cálculo ejecutado al instante en la infraestructura de nube de Google.
               </li>
               <li class="fragment fade-up" data-fragment-index="2">
-                <strong>Algoritmos de Transformación Operacional (OT):</strong> Sistema avanzado de resolución transaccional de conflictos que gestiona ediciones concurrentes concurrentes sin sobrescribir datos.
+                <strong>Algoritmo OT:</strong> Operaciones Concurrentes (Operational Transformation) que impiden colisiones de datos.
               </li>
               <li class="fragment fade-up" data-fragment-index="3">
-                <strong>Trazabilidad y Seguridad de Datos:</strong> Historial de versiones incremental e inmutable que facilita auditorías de ingeniería forense y control estricto de propiedad intelectual.
+                <strong>Gobernanza Total:</strong> Historial granular de versiones para auditorías forenses inmediatas.
               </li>
             </ul>
           </div>
           
-          <div class="glass-card" style="display: flex; flex-direction: column; justify-content: center; border-color: rgba(79, 172, 254, 0.3); padding: 25px;">
-            <h3 style="font-size: 0.85em; margin-bottom: 15px; text-align: center; color: var(--primary-accent);">Ecosistema de Extensibilidad</h3>
+          <div class="glass-card" style="border-color: rgba(79, 172, 254, 0.3); display: flex; flex-direction: column; justify-content: center; padding: 20px;">
+            <h3 style="font-size: 0.85em; margin-bottom: 12px; text-align: center; color: var(--primary-accent); text-transform: uppercase; letter-spacing: 0.05em;">EXTENSIBILIDAD CLAVE</h3>
             
-            <div style="background: rgba(15, 23, 42, 0.5); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 12px;" class="fragment fade-in" data-fragment-index="4">
-              <span style="font-family: monospace; font-size: 0.55em; color: var(--primary-accent); display: block; margin-bottom: 4px; font-weight: 700;">💡 Google Apps Script (Engine V8)</span>
-              <span style="font-size: 0.48em; color: var(--muted-text); display: block; line-height: 1.3;">
-                Automatización e inyección de lógica de ingeniería compleja en Javascript del lado del servidor para flujos relacionales customizados.
+            <div style="background: rgba(15, 23, 42, 0.6); padding: 10px; border-radius: 8px; border: 1px solid rgba(0,242,254,0.1); margin-bottom: 10px;" class="fragment fade-in" data-fragment-index="4">
+              <strong style="color: var(--primary-accent); font-size: 0.6em; display: block;">⚡ Google Apps Script (V8)</strong>
+              <span style="font-size: 0.45em; color: var(--muted-text); display: block; line-height: 1.3; margin-top: 2px;">
+                Automatización en Javascript del lado del servidor. Cero macros obsoletas.
               </span>
             </div>
             
-            <div style="background: rgba(15, 23, 42, 0.5); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);" class="fragment fade-in" data-fragment-index="5">
-              <span style="font-family: monospace; font-size: 0.55em; color: var(--secondary-accent); display: block; margin-bottom: 4px; font-weight: 700;">🔌 REST APIs & Conectores Web</span>
-              <span style="font-size: 0.48em; color: var(--muted-text); display: block; line-height: 1.3;">
-                Interoperabilidad bidireccional con bases de datos relacionales SQL externas, dispositivos IoT y sistemas SCADA de instrumentación.
+            <div style="background: rgba(15, 23, 42, 0.6); padding: 10px; border-radius: 8px; border: 1px solid rgba(0,242,254,0.1);" class="fragment fade-in" data-fragment-index="5">
+              <strong style="color: var(--secondary-accent); font-size: 0.6em; display: block;">🔌 REST APIs & Webhooks</strong>
+              <span style="font-size: 0.45em; color: var(--muted-text); display: block; line-height: 1.3; margin-top: 2px;">
+                Conexión fluida con sistemas SCADA, bases relacionales externas y ERPs.
               </span>
             </div>
           </div>
@@ -404,65 +473,47 @@
       <!-- ========================================================
            SLIDE 4: GOOGLE SHEETS (EJES ESTRATÉGICOS)
            ======================================================== -->
-      <!-- Visual flow detailing Quality Control in Venezuelan PyMEs -->
-      <section data-transition="slide">
-        <h2 style="font-size: 1.5em;">Google Sheets: Ejes Estratégicos y Despliegue Local</h2>
+      <section data-transition="slide-in fade-out">
+        <h2>Sheets en Acción: Control de Calidad</h2>
         
         <div class="grid-2">
-          <div class="glass-card" style="border-color: rgba(0, 242, 254, 0.3); padding: 22px;">
-            <h3 style="font-size: 0.85em; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; color: var(--primary-accent);">
-              Aplicación en PyMEs Venezolanas
-            </h3>
+          <div class="glass-card" style="border-color: rgba(0, 242, 254, 0.3); padding: 20px;">
+            <h3 style="font-size: 0.85em; margin-bottom: 15px; color: var(--primary-accent); text-transform: uppercase;">APLICACIÓN EN PyMEs</h3>
             
-            <div style="margin-bottom: 12px;">
-              <span style="font-size: 0.6em; font-weight: 700; color: #fff; display: block;">📈 Democratización de la Analítica</span>
-              <span style="font-size: 0.5em; color: var(--muted-text); display: block; line-height: 1.3; margin-top: 2px;">
-                Permite la adopción de análisis estadísticos avanzados y cuadros de mando en pequeñas y medianas empresas industriales sin costos prohibitivos de licenciamiento ERP.
+            <div style="margin-bottom: 15px;">
+              <span style="font-size: 0.58em; font-weight: 800; color: #fff; display: block;">📊 Analítica Democratizada</span>
+              <span style="font-size: 0.48em; color: var(--muted-text); display: block; line-height: 1.3; margin-top: 2px;">
+                Inteligencia de negocios avanzada sin costes de licenciamiento ERP o BI corporativos.
               </span>
             </div>
             
-            <div style="margin-bottom: 12px;">
-              <span style="font-size: 0.6em; font-weight: 700; color: #fff; display: block;">📲 Captura de Datos In-situ vía Formularios</span>
-              <span style="font-size: 0.5em; color: var(--muted-text); display: block; line-height: 1.3; margin-top: 2px;">
-                Vínculo nativo con Google Forms para la recolección directa de variables en piso de taller (temperatura, presión, holguras), eliminando la transcripción física de planillas.
+            <div style="margin-bottom: 15px;">
+              <span style="font-size: 0.58em; font-weight: 800; color: #fff; display: block;">📲 Captura In-Situ Móvil</span>
+              <span style="font-size: 0.48em; color: var(--muted-text); display: block; line-height: 1.3; margin-top: 2px;">
+                Formularios de Google en celulares del operador alimentan directamente la analítica de planta.
               </span>
             </div>
             
             <div>
-              <span style="font-size: 0.6em; font-weight: 700; color: #fff; display: block;">📊 Automatización de Control de Calidad (HSE)</span>
-              <span style="font-size: 0.5em; color: var(--muted-text); display: block; line-height: 1.3; margin-top: 2px;">
-                Cálculo automatizado de límites de control estadístico y trazado automático de Gráficos de Shewhart (promedios/rangos) y diagramas de Pareto en tiempo real.
+              <span style="font-size: 0.58em; font-weight: 800; color: #fff; display: block;">📈 Gráficos Automatizados</span>
+              <span style="font-size: 0.48em; color: var(--muted-text); display: block; line-height: 1.3; margin-top: 2px;">
+                Apps Script genera de forma instantánea Gráficos de Control Shewhart (LSC/LIC) y de Pareto.
               </span>
             </div>
           </div>
           
-          <div style="display: flex; flex-direction: column; justify-content: center;">
-            <h3 style="font-size: 0.85em; margin-bottom: 15px; text-align: left; color: var(--secondary-accent);">
-              Flujo de Automatización de Calidad
-            </h3>
+          <div style="display: flex; flex-direction: column; justify-content: center; text-align: left;">
+            <h3 style="font-size: 0.85em; margin-bottom: 15px; color: var(--secondary-accent); text-transform: uppercase;">FLUJO AUTOMATIZADO</h3>
             
-            <div style="display: flex; flex-direction: column; gap: 12px; font-size: 0.52em;">
-              <div style="display: flex; align-items: center;" class="fragment fade-left" data-fragment-index="1">
-                <div style="background: var(--glass-bg); border: 1.5px solid var(--primary-accent); border-radius: 8px; padding: 8px; flex: 1; text-align: center;">
-                  <strong>1. Entrada Móvil (Forms):</strong><br>
-                  <span style="color: var(--muted-text); font-size: 0.9em;">Operador de planta ingresa muestras en formulario web.</span>
-                </div>
-                <div style="margin: 0 8px; color: var(--primary-accent); font-weight: 700;">➡️</div>
+            <div style="display: flex; flex-direction: column; gap: 10px; font-size: 0.48em;">
+              <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--primary-accent); border-radius: 8px; padding: 10px;" class="fragment fade-left" data-fragment-index="1">
+                <strong>1. Registro Móvil:</strong> Operador reporta muestras de calidad en su celular.
               </div>
-              
-              <div style="display: flex; align-items: center;" class="fragment fade-left" data-fragment-index="2">
-                <div style="background: var(--glass-bg); border: 1.5px solid var(--secondary-accent); border-radius: 8px; padding: 8px; flex: 1; text-align: center;">
-                  <strong>2. Procesamiento SaaS:</strong><br>
-                  <span style="color: var(--muted-text); font-size: 0.9em;">Consolidación inmediata de base de datos en Sheets centralizado.</span>
-                </div>
-                <div style="margin: 0 8px; color: var(--secondary-accent); font-weight: 700;">➡️</div>
+              <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--secondary-accent); border-radius: 8px; padding: 10px;" class="fragment fade-left" data-fragment-index="2">
+                <strong>2. Consolidación:</strong> Datos ingresan de inmediato a Sheets sin transcribir.
               </div>
-              
-              <div style="display: flex; align-items: center;" class="fragment fade-left" data-fragment-index="3">
-                <div style="background: rgba(0, 242, 254, 0.1); border: 1.5px dashed var(--primary-accent); border-radius: 8px; padding: 8px; flex: 1; text-align: center;">
-                  <strong>3. Ejecución y Alerta:</strong><br>
-                  <span style="color: var(--text-color); font-size: 0.9em;">Cálculo de desviaciones y alerta por desviación fuera de límites.</span>
-                </div>
+              <div style="background: rgba(0, 242, 254, 0.08); border: 1.5px dashed var(--primary-accent); border-radius: 8px; padding: 10px;" class="fragment fade-left" data-fragment-index="3">
+                <strong>3. Cálculo de Desviaciones:</strong> Apps Script actualiza límites e inicia alertas de no-conformidad.
               </div>
             </div>
           </div>
@@ -470,55 +521,51 @@
       </section>
 
       <!-- ========================================================
-           SLIDE 5: HERRAMIENTA 2 - LUCIDCHART (MODELADO Y VSM)
+           SLIDE 5: HERRAMIENTA 2 - LUCIDCHART (VSM Y LEAN)
            ======================================================== -->
-      <!-- Visual simulation representing Lean Value Stream Mapping (VSM) -->
-      <section data-transition="slide">
-        <h2 style="font-size: 1.5em;">Lucidchart: Modelado de Procesos y VSM Digital</h2>
+      <section data-transition="slide-in fade-out">
+        <h2>Lucidchart: Visualización Inteligente</h2>
         
         <div class="grid-2">
           <div>
-            <p style="font-size: 0.68em; text-align: left; margin-bottom: 20px; line-height: 1.4;">
-              Herramienta inteligente de diagramación basada en vectores que se posiciona como el lienzo de optimización principal para ingenieros de procesos y equipos de manufactura Lean:
+            <p style="text-align: left; margin-bottom: 15px;">
+              Diagramación vectorial inteligente optimizada para la estandarización y agilidad industrial.
             </p>
             
-            <ul style="font-size: 0.62em;">
+            <ul style="font-size: 0.58em; line-height: 1.45;">
               <li class="fragment fade-up" data-fragment-index="1">
-                <strong>Mapeo Digital de Flujos de Valor (VSM):</strong> Facilita a los ingenieros la colaboración en vivo para diagramar los flujos de materiales e información directamente desde la planta.
+                <strong>VSM Digital Colaborativo:</strong> Mapeo del Flujo de Valor en vivo directo desde la planta por equipos multidisciplinarios.
               </li>
               <li class="fragment fade-up" data-fragment-index="2">
-                <strong>Eliminación Sistemática de Desperdicios (Muda):</strong> Visibilidad meridiana de cuellos de botella, esperas excesivas de material y pasos redundantes de inspección.
+                <strong>Eliminación de Mudas:</strong> Detección ágil de demoras, cuellos de botella y actividades sin valor agregado.
               </li>
               <li class="fragment fade-up" data-fragment-index="3">
-                <strong>Interoperabilidad Visual:</strong> Soporte avanzado para diagramación de Ingeniería de Planta mediante modelado P&ID e instrumentación estandarizada ISO.
+                <strong>Ingeniería Relacional:</strong> Plantillas P&ID, modelado de instrumentación y distribución en planta estandarizada.
               </li>
             </ul>
           </div>
           
-          <div class="glass-card" style="border-color: rgba(0, 242, 254, 0.2); display: flex; flex-direction: column; justify-content: space-between; padding: 20px;">
-            <h3 style="font-size: 0.78em; margin: 0 0 12px 0; text-align: center; color: var(--primary-accent);">Value Stream Mapping (VSM) Digitalizado</h3>
+          <div class="glass-card" style="border-color: rgba(0, 242, 254, 0.2); display: flex; flex-direction: column; justify-content: space-between; padding: 15px;">
+            <h3 style="font-size: 0.8em; margin: 0 0 10px 0; text-align: center; color: var(--primary-accent); text-transform: uppercase;">VALUE STREAM MAP (VSM)</h3>
             
-            <div style="background: rgba(10, 25, 47, 0.85); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.05); padding: 12px; font-size: 0.48em; display: flex; flex-direction: column; gap: 8px;">
-              
+            <div style="background: rgba(5, 8, 20, 0.9); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.05); padding: 10px; font-size: 0.42em; display: flex; flex-direction: column; gap: 8px;">
               <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div style="background: rgba(0, 242, 254, 0.08); border: 1px solid var(--primary-accent); padding: 5px 8px; border-radius: 4px; text-align: center; width: 44%;">
-                  <strong>Proceso A: Troquelado</strong><br>
-                  <span style="color: var(--muted-text); font-size: 0.85em;">T/C: 35s | Disp: 95%</span>
+                <div style="background: rgba(0, 242, 254, 0.05); border: 1px solid var(--primary-accent); padding: 4px; border-radius: 4px; text-align: center; width: 44%;">
+                  <strong>Corte Mecánico</strong><br><span style="color: var(--muted-text);">T/C: 45s | Setup: 5m</span>
                 </div>
-                <div style="color: var(--primary-accent); flex-grow: 1; text-align: center; font-size: 0.9em;">⚠️ Inv: 400 uds ➡️</div>
-                <div style="background: rgba(0, 242, 254, 0.08); border: 1px solid var(--primary-accent); padding: 5px 8px; border-radius: 4px; text-align: center; width: 44%;">
-                  <strong>Proceso B: Acabado</strong><br>
-                  <span style="color: var(--muted-text); font-size: 0.85em;">T/C: 95s | Disp: 98%</span>
+                <div style="color: var(--primary-accent); font-size: 0.9em;">⚠️ 300 uds ➡️</div>
+                <div style="background: rgba(0, 242, 254, 0.05); border: 1px solid var(--primary-accent); padding: 4px; border-radius: 4px; text-align: center; width: 44%;">
+                  <strong>Acabado Final</strong><br><span style="color: var(--muted-text);">T/C: 80s | Setup: 2m</span>
                 </div>
               </div>
               
-              <div style="border-top: 1px dashed rgba(255, 255, 255, 0.15); border-bottom: 1px dashed rgba(255, 255, 255, 0.15); padding: 4px 0; margin-top: 5px; text-align: center; display: flex; justify-content: space-around; font-size: 0.95em;">
-                <div><span style="color: var(--primary-accent); font-weight: 700;">T/C (VA):</span> 130 segundos</div>
-                <div><span style="color: #ef4444; font-weight: 700;">Lead Time (NVA):</span> 5.2 días</div>
+              <div style="border-top: 1px dashed rgba(255,255,255,0.1); border-bottom: 1px dashed rgba(255,255,255,0.1); padding: 3px 0; text-align: center; display: flex; justify-content: space-around;">
+                <div><span style="color: var(--primary-accent); font-weight: 700;">VA:</span> 125s</div>
+                <div><span style="color: #ff007f; font-weight: 700;">NVA (Espera):</span> 4.5 días</div>
               </div>
               
-              <div style="text-align: center; color: var(--muted-text); font-style: italic; font-size: 0.85em; line-height: 1.3;">
-                "La vinculación dinámica calcula automáticamente las métricas de eficiencia agregada en Lucidchart."
+              <div style="text-align: center; color: var(--muted-text); font-style: italic; font-size: 0.85em;">
+                "El VSM digital calcula y expone los cuellos de botella al instante."
               </div>
             </div>
           </div>
@@ -526,61 +573,58 @@
       </section>
 
       <!-- ========================================================
-           SLIDE 6: LUCIDCHART (INTEGRACIONES Y CAPACIDADES)
+           SLIDE 6: LUCIDCHART (INTEGRACIONES Y DATOS)
            ======================================================== -->
-      <!-- Integrations ecosystem for operations management and coordination -->
-      <section data-transition="slide">
-        <h2 style="font-size: 1.5em;">Lucidchart: Capacidades e Integraciones Estratégicas</h2>
+      <section data-transition="slide-in fade-out">
+        <h2>Lucidchart: Integración Dinámica</h2>
         
         <div class="grid-2">
-          <div class="glass-card" style="border-color: rgba(79, 172, 254, 0.3); padding: 22px;">
-            <h3 style="font-size: 0.85em; margin-bottom: 15px; color: var(--primary-accent); border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 8px;">
-              Ecosistema Operacional y Datos
+          <div class="glass-card" style="border-color: rgba(79, 172, 254, 0.3); padding: 20px;">
+            <h3 style="font-size: 0.8em; margin-bottom: 12px; color: var(--primary-accent); border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 5px; text-transform: uppercase;">
+              CONEXIÓN DIRECTA DE DATOS
             </h3>
             
-            <div style="margin-bottom: 12px;" class="fragment fade-in-then-semi-out" data-fragment-index="1">
-              <span style="font-size: 0.6em; font-weight: 700; color: #fff;">🔗 Vinculación de Datos Dinámicos:</span>
-              <span style="font-size: 0.5em; color: var(--muted-text); display: block; line-height: 1.3; margin-top: 2px;">
-                Permite asociar celdas y métricas de Google Sheets directamente a las formas del diagrama de VSM o diagramas de flujo, permitiendo que los datos operativos dinámicos actualicen automáticamente el layout visual.
+            <div style="margin-bottom: 10px;" class="fragment fade-in-then-semi-out" data-fragment-index="1">
+              <strong style="font-size: 0.58em; color: #fff; display: block;">🔗 Vinculación con Google Sheets</strong>
+              <span style="font-size: 0.45em; color: var(--muted-text); display: block; line-height: 1.3;">
+                Métricas del VSM se actualizan automáticamente en el diagrama visual al cambiar en la hoja de cálculo.
               </span>
             </div>
             
-            <div style="margin-bottom: 12px;" class="fragment fade-in-then-semi-out" data-fragment-index="2">
-              <span style="font-size: 0.6em; font-weight: 700; color: #fff;">📁 Bibliotecas Especializadas de Ingeniería:</span>
-              <span style="font-size: 0.5em; color: var(--muted-text); display: block; line-height: 1.3; margin-top: 2px;">
-                Soporte estandarizado para diagramación P&ID, modelados UML de ingeniería de software, esquemas de bases de datos relacionales y diagramas de distribución en planta (Plant Layouts).
+            <div style="margin-bottom: 10px;" class="fragment fade-in-then-semi-out" data-fragment-index="2">
+              <strong style="font-size: 0.58em; color: #fff; display: block;">⚙️ Bibliotecas Industriales</strong>
+              <span style="font-size: 0.45em; color: var(--muted-text); display: block; line-height: 1.3;">
+                Símbolos estandarizados ISA (P&ID) y modelado de datos relacionales integrados nativamente.
               </span>
             </div>
             
             <div class="fragment fade-in-then-semi-out" data-fragment-index="3">
-              <span style="font-size: 0.6em; font-weight: 700; color: #fff;">🔒 Gobierno y Permisos de Nivel Empresarial:</span>
-              <span style="font-size: 0.5em; color: var(--muted-text); display: block; line-height: 1.3; margin-top: 2px;">
-                Gestión estricta de accesos por roles, inicio de sesión único (SSO SAML) y cumplimiento normativo de ciberseguridad (ISO 27001) para la protección de metodologías y secretos industriales.
+              <strong style="font-size: 0.58em; color: #fff; display: block;">🛡️ Gobierno de Datos (ISO 27001)</strong>
+              <span style="font-size: 0.45em; color: var(--muted-text); display: block; line-height: 1.3;">
+                Cumplimiento estricto para proteger la propiedad intelectual y metodologías de la organización.
               </span>
             </div>
           </div>
           
-          <div style="display: flex; flex-direction: column; justify-content: center;">
-            <h3 style="font-size: 0.85em; margin-bottom: 15px; text-align: left; color: var(--secondary-accent);">
-              Integraciones en el Ciclo de Vida
-            </h3>
+          <div style="display: flex; flex-direction: column; justify-content: center; text-align: left;">
+            <h3 style="font-size: 0.8em; margin-bottom: 15px; color: var(--secondary-accent); text-transform: uppercase;">ECOSISTEMA DE CONECTORES</h3>
             
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 0.5em;">
-              <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--glass-border); padding: 12px; border-radius: 8px; text-align: center;" class="fragment zoom-in" data-fragment-index="4">
-                <span style="font-size: 1.4em; display: block; margin-bottom: 4px;">💬 Slack</span>
-                <span style="color: var(--muted-text); font-size: 0.85em;">Notificación síncrona de modificaciones en flujos críticos de la planta.</span>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.46em;">
+              <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--glass-border); padding: 10px; border-radius: 8px; text-align: center;" class="fragment zoom-in" data-fragment-index="4">
+                <span style="font-size: 1.3em; display: block; margin-bottom: 2px;">💬 Slack</span>
+                <span style="color: var(--muted-text);">Aprobación inmediata de cambios en flujos.</span>
               </div>
-              <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--glass-border); padding: 12px; border-radius: 8px; text-align: center;" class="fragment zoom-in" data-fragment-index="5">
-                <span style="font-size: 1.4em; display: block; margin-bottom: 4px;">🛠️ Jira Software</span>
-                <span style="color: var(--muted-text); font-size: 0.85em;">Asociación directa de tickets técnicos a pasos del mapa de procesos.</span>
+              <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--glass-border); padding: 10px; border-radius: 8px; text-align: center;" class="fragment zoom-in" data-fragment-index="5">
+                <span style="font-size: 1.3em; display: block; margin-bottom: 2px;">🛠️ Jira Software</span>
+                <span style="color: var(--muted-text);">Trazado de tareas a objetos del proceso.</span>
               </div>
-              <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--glass-border); padding: 12px; border-radius: 8px; text-align: center;" class="fragment zoom-in" data-fragment-index="6">
-                <span style="font-size: 1.4em; display: block; margin-bottom: 4px;">📂 Google Workspace</span>
-                <span style="color: var(--muted-text); font-size: 0.85em;">Embebido inmediato en documentos técnicos de Docs e informes de Slides.</span>
+              <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--glass-border); padding: 10px; border-radius: 8px; text-align: center;" class="fragment zoom-in" data-fragment-index="6">
+                <span style="font-size: 1.3em; display: block; margin-bottom: 2px;">📂 Workspace</span>
+                <span style="color: var(--muted-text);">Embebido directo en Docs y Slides de Google.</span>
               </div>
-              <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--glass-border); padding: 12px; border-radius: 8px; text-align: center;" class="fragment zoom-in" data-fragment-index="7">
-                <span style="font-size: 1.4em; display: block; margin-bottom: 4px;">🗃️ Importación SQL</span>
-                <span style="color: var(--muted-text); font-size: 0.85em;">Carga y renderizado automático de estructuras complejas de datos.</span>
+              <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--glass-border); padding: 10px; border-radius: 8px; text-align: center;" class="fragment zoom-in" data-fragment-index="7">
+                <span style="font-size: 1.3em; display: block; margin-bottom: 2px;">🔌 SQL / MySQL</span>
+                <span style="color: var(--muted-text);">Generación y mapeo automático de esquemas.</span>
               </div>
             </div>
           </div>
@@ -590,52 +634,47 @@
       <!-- ========================================================
            SLIDE 7: HERRAMIENTA 3 - AUTODESK CONSTRUCTION CLOUD (ECA)
            ======================================================== -->
-      <!-- Common Data Environment (CDE) for large scale AEC industry -->
-      <section data-transition="slide">
-        <h2 style="font-size: 1.5em;">Autodesk Construction Cloud: Ecosistema AEC</h2>
+      <section data-transition="slide-in fade-out">
+        <h2>Autodesk CC: Ecosistema AEC Integral</h2>
         
         <div class="grid-2">
           <div>
-            <p style="font-size: 0.7em; text-align: left; margin-bottom: 20px; line-height: 1.4; color: var(--muted-text);">
-              Representa la plataforma integral más robusta del mercado para consolidar e interconectar los datos operativos a lo largo del ciclo de vida en Arquitectura, Ingeniería y Construcción (AEC):
+            <p style="text-align: left; margin-bottom: 15px;">
+              La suite en la nube de referencia global para interconectar todas las fases en Arquitectura, Ingeniería y Construcción (AEC).
             </p>
             
-            <ul style="font-size: 0.62em;">
+            <ul style="font-size: 0.58em; line-height: 1.45;">
               <li class="fragment fade-up" data-fragment-index="1">
-                <strong>Entorno de Datos Común (CDE - Autodesk Docs):</strong> Almacén de información estandarizado y centralizado de acuerdo con la norma internacional <strong>ISO 19650</strong>.
+                <strong>Entorno de Datos Común (CDE):</strong> Gestión documental integrada y certificada bajo el estándar de calidad **ISO 19650**.
               </li>
               <li class="fragment fade-up" data-fragment-index="2">
-                <strong>Modelado y Visualización BIM 3D Avanzada:</strong> Motor web con gran capacidad para procesar modelos pesados de Revit y AutoCAD directamente desde el navegador de manera interactiva.
+                <strong>Visualización BIM 3D Avanzada:</strong> Motor tridimensional (Forge) que renderiza archivos de Revit y CAD directo en el navegador web.
               </li>
               <li class="fragment fade-up" data-fragment-index="3">
-                <strong>Gobernanza de Información Rigurosa:</strong> Esquema jerárquico de permisología estructurada por roles técnicos que impide la alteración o fuga accidental de planos y especificaciones.
+                <strong>Gobernanza Técnica Granular:</strong> Control de accesos de alta precisión para mitigar desactualizaciones de planos y especificaciones.
               </li>
             </ul>
           </div>
           
-          <div class="glass-card" style="border-color: rgba(0, 242, 254, 0.3); display: flex; flex-direction: column; justify-content: center; align-items: stretch; text-align: center; padding: 25px;">
-            <h3 style="font-size: 0.85em; margin-bottom: 18px; color: var(--primary-accent);">Núcleo del Entorno Común (CDE)</h3>
+          <div class="glass-card" style="border-color: rgba(0, 242, 254, 0.3); display: flex; flex-direction: column; justify-content: center; align-items: stretch; text-align: center; padding: 20px;">
+            <h3 style="font-size: 0.85em; margin-bottom: 12px; color: var(--primary-accent); text-transform: uppercase;">ENTORNO DE DATOS COMÚN</h3>
             
-            <div style="background: rgba(15, 23, 42, 0.6); padding: 15px; border-radius: 12px; border: 1px solid rgba(0, 242, 254, 0.15); display: flex; flex-direction: column; gap: 12px; font-size: 0.52em;">
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 1.4em;">⚙️</span>
+            <div style="background: rgba(15, 23, 42, 0.6); padding: 12px; border-radius: 12px; border: 1px solid rgba(0, 242, 254, 0.15); display: flex; flex-direction: column; gap: 8px; font-size: 0.46em;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 1.3em;">⚙️</span>
                 <div style="text-align: left;">
-                  <strong style="color: var(--primary-accent);">Modelado BIM Colaborativo</strong>
-                  <span style="color: var(--muted-text); display: block; font-size: 0.9em; line-height: 1.25;">
-                    Centralización federada de modelos de estructuras, HVAC, instalaciones eléctricas y sanitarias en la nube.
-                  </span>
+                  <strong style="color: var(--primary-accent); display: block;">Diseño BIM Federado</strong>
+                  <span style="color: var(--muted-text); font-size: 0.9em; line-height: 1.2;">Visualización síncrona de estructuras e instalaciones de ingeniería.</span>
                 </div>
               </div>
               
-              <div style="height: 1px; background: rgba(255, 255, 255, 0.1);"></div>
+              <div style="height: 1px; background: rgba(255, 255, 255, 0.08);"></div>
               
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 1.4em;">📝</span>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 1.3em;">📝</span>
                 <div style="text-align: left;">
-                  <strong style="color: var(--secondary-accent);">Estándar ISO 19650</strong>
-                  <span style="color: var(--muted-text); display: block; font-size: 0.9em; line-height: 1.25;">
-                    Trazabilidad de fases estructuradas: En Curso (WIP) ➡️ Compartido ➡️ Publicado ➡️ Archivado.
-                  </span>
+                  <strong style="color: var(--secondary-accent); display: block;">ISO 19650 Compliance</strong>
+                  <span style="color: var(--muted-text); font-size: 0.9em; line-height: 1.2;">Ciclo formal: WIP ➡️ Compartido ➡️ Publicado ➡️ Archivado.</span>
                 </div>
               </div>
             </div>
@@ -644,56 +683,47 @@
       </section>
 
       <!-- ========================================================
-           SLIDE 8: AUTODESK CONSTRUCTION CLOUD (FLUJOS CONTINUOS)
+           SLIDE 8: AUTODESK CONSTRUCTION CLOUD (FLUJOS Y TRABAJO)
            ======================================================== -->
-      <!-- Continuous lifecycle workflows from Design to Operation phases -->
-      <section data-transition="slide">
-        <h2 style="font-size: 1.5em;">Autodesk CC: Flujos Continuos y Gestión de Incidentes</h2>
-        <p style="font-size: 0.68em; color: var(--muted-text); margin-bottom: 25px; text-align: left; line-height: 1.4;">
-          Unificación completa de la cadena de valor constructiva, desde los primeros bosquejos tridimensionales del proyecto de ingeniería hasta el traspaso formal para la puesta en marcha:
+      <section data-transition="slide-in fade-out">
+        <h2>Ciclo del Activo & Incidentes Móviles</h2>
+        <p style="font-size: 0.62em; color: var(--muted-text); margin-bottom: 20px; text-align: left;">
+          Elimina por completo la pérdida de información entre el diseño tridimensional y la operación en sitio del activo de ingeniería:
         </p>
         
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
-          <!-- Fase 1: Diseñar -->
-          <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 15px; text-align: center; border-color: rgba(0, 242, 254, 0.1);">
-            <div style="font-size: 1.6em; color: var(--primary-accent); margin-bottom: 8px;">📐</div>
-            <h3 style="font-size: 0.72em; margin-bottom: 6px; text-align: center;">1. Diseñar</h3>
-            <p style="font-size: 0.48em; color: var(--muted-text); margin: 0; line-height: 1.3;">
-              Coautoría digital y detección inmediata de interferencias (clash detection) en Revit.
-            </p>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+          <!-- Fase 1 -->
+          <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 12px; text-align: center; border-color: rgba(0, 242, 254, 0.08);">
+            <div style="font-size: 1.3em; color: var(--primary-accent); margin-bottom: 4px;">📐</div>
+            <strong style="font-size: 0.58em; display: block; margin-bottom: 4px; text-transform: uppercase;">1. Diseñar</strong>
+            <span style="font-size: 0.42em; color: var(--muted-text); display: block; line-height: 1.2;">Coautoría y detección prematura de choques.</span>
           </div>
           
-          <!-- Fase 2: Planificar -->
-          <div class="glass-card fragment fade-up" data-fragment-index="2" style="padding: 15px; text-align: center; border-color: rgba(0, 242, 254, 0.15);">
-            <div style="font-size: 1.6em; color: var(--primary-accent); margin-bottom: 8px;">📅</div>
-            <h3 style="font-size: 0.72em; margin-bottom: 6px; text-align: center;">2. Planificar</h3>
-            <p style="font-size: 0.48em; color: var(--muted-text); margin: 0; line-height: 1.3;">
-              Coordinación cronológica (4D), cuantificación volumétrica (5D) y adjudicación contractual de subcontratas.
-            </p>
+          <!-- Fase 2 -->
+          <div class="glass-card fragment fade-up" data-fragment-index="2" style="padding: 12px; text-align: center; border-color: rgba(0, 242, 254, 0.12);">
+            <div style="font-size: 1.3em; color: var(--primary-accent); margin-bottom: 4px;">📅</div>
+            <strong style="font-size: 0.58em; display: block; margin-bottom: 4px; text-transform: uppercase;">2. Planificar</strong>
+            <span style="font-size: 0.42em; color: var(--muted-text); display: block; line-height: 1.2;">Coordinación 4D/5D, costos y materiales.</span>
           </div>
           
-          <!-- Fase 3: Construir -->
-          <div class="glass-card fragment fade-up" data-fragment-index="3" style="padding: 15px; text-align: center; border-color: rgba(0, 242, 254, 0.2);">
-            <div style="font-size: 1.6em; color: var(--primary-accent); margin-bottom: 8px;">🏗️</div>
-            <h3 style="font-size: 0.72em; margin-bottom: 6px; text-align: center;">3. Construir</h3>
-            <p style="font-size: 0.48em; color: var(--muted-text); margin: 0; line-height: 1.3;">
-              Control en sitio de incidentes en tiempo real a través de aplicaciones móviles offline y listas de control.
-            </p>
+          <!-- Fase 3 -->
+          <div class="glass-card fragment fade-up" data-fragment-index="3" style="padding: 12px; text-align: center; border-color: rgba(0, 242, 254, 0.16);">
+            <div style="font-size: 1.3em; color: var(--primary-accent); margin-bottom: 4px;">🏗️</div>
+            <strong style="font-size: 0.58em; display: block; margin-bottom: 4px; text-transform: uppercase;">3. Construir</strong>
+            <span style="font-size: 0.42em; color: var(--muted-text); display: block; line-height: 1.2;">Levantamiento móvil e inmediato de incidentes en sitio.</span>
           </div>
           
-          <!-- Fase 4: Operar -->
-          <div class="glass-card fragment fade-up" data-fragment-index="4" style="padding: 15px; text-align: center; border-color: rgba(0, 242, 254, 0.25);">
-            <div style="font-size: 1.6em; color: var(--primary-accent); margin-bottom: 8px;">⚙️</div>
-            <h3 style="font-size: 0.72em; margin-bottom: 6px; text-align: center;">4. Operar</h3>
-            <p style="font-size: 0.48em; color: var(--muted-text); margin: 0; line-height: 1.3;">
-              Transferencia del activo digital como Gemelo Digital (Digital Twin) para gestión de mantenimiento y FM.
-            </p>
+          <!-- Fase 4 -->
+          <div class="glass-card fragment fade-up" data-fragment-index="4" style="padding: 12px; text-align: center; border-color: rgba(0, 242, 254, 0.2);">
+            <div style="font-size: 1.3em; color: var(--primary-accent); margin-bottom: 4px;">⚙️</div>
+            <strong style="font-size: 0.58em; display: block; margin-bottom: 4px; text-transform: uppercase;">4. Operar</strong>
+            <span style="font-size: 0.42em; color: var(--muted-text); display: block; line-height: 1.2;">Gemelo Digital transferido para mantenimiento (FM).</span>
           </div>
         </div>
         
-        <div class="glass-card fragment fade-in" data-fragment-index="5" style="margin-top: 20px; padding: 12px; border-color: rgba(79, 172, 254, 0.3);">
-          <p style="font-size: 0.5em; color: var(--text-color); margin: 0; text-align: left; line-height: 1.4;">
-            🚨 <strong>Gestión Sistemática de Incidentes de Obra:</strong> Habilita a los ingenieros de inspección en campo a levantar de forma instantánea desviaciones constructivas o problemas de seguridad industrial directly from their cell phones, georreferenciando el problema en el plano con evidencia fotográfica y trazando responsabilidades puntuales hasta su validación final.
+        <div class="glass-card fragment fade-in" data-fragment-index="5" style="margin-top: 15px; padding: 10px; border-color: rgba(79, 172, 254, 0.3);">
+          <p style="font-size: 0.46em; color: var(--text-color); margin: 0; text-align: left; line-height: 1.35;">
+            🚨 <strong>Gestión Sistemática en Obra:</strong> Levantamiento inmediato de no conformidades desde dispositivos móviles. Se georreferencian sobre el plano, se añade fotografía como evidencia y se asignan responsabilidades con fechas límite en segundos.
           </p>
         </div>
       </section>
@@ -701,11 +731,10 @@
       <!-- ========================================================
            SLIDE 9: MATRIZ COMPARATIVA DE TECNOLOGÍAS
            ======================================================== -->
-      <!-- High-fidelity HTML table mapping purpose, architecture, limits and costs -->
-      <section data-transition="slide">
-        <h2 style="font-size: 1.5em; margin-bottom: 20px !important;">Matriz Comparativa de Tecnologías</h2>
-        <p style="font-size: 0.65em; color: var(--muted-text); margin-bottom: 20px; text-align: left; line-height: 1.35;">
-          Contraste estructural de los entornos de gestión analizados para apoyar la toma de decisiones relativas a la inversión digital en organizaciones y PYMES.
+      <section data-transition="slide-in fade-out">
+        <h2 style="margin-bottom: 15px !important;">El Tablero Comparativo</h2>
+        <p style="font-size: 0.58em; color: var(--muted-text); margin-bottom: 15px; text-align: left;">
+          Mapeo estratégico de capacidades de cada tecnología para guiar decisiones organizacionales.
         </p>
         
         <table class="custom-table fragment fade-in" data-fragment-index="1">
@@ -720,27 +749,27 @@
           <tbody>
             <tr>
               <td><strong>Propósito Central</strong></td>
-              <td>Procesamiento tabular, base de datos relacional liviana y analítica operativa.</td>
-              <td>Modelado e ingeniería visual de procesos, optimización VSM Lean en planta.</td>
-              <td>Entorno de Datos Común (CDE) y BIM 3D interactivo para activos AEC.</td>
+              <td>Analítica tabular síncrona y procesamiento operativo ágil.</td>
+              <td>Ingeniería visual, diagramación inteligente y mapas VSM Lean.</td>
+              <td>CDE integral de datos y modelos BIM para activos AEC globales.</td>
             </tr>
             <tr>
-              <td><strong>Arquitectura Tecnológica</strong></td>
-              <td>SaaS con motor JavaScript (V8) y control transaccional OT.</td>
-              <td>Motor gráfico SVG/HTML5 vectorial y vinculación dinámica a fuentes SaaS/SQL.</td>
-              <td>Visualizador 3D nativo Forge, planos dinámicos móviles y flujos ISO 19650.</td>
+              <td><strong>Arquitectura</strong></td>
+              <td>SaaS con motor JavaScript (V8) y algoritmo concurrente OT.</td>
+              <td>Renderizado SVG/HTML5 e importación de datos en tiempo real.</td>
+              <td>Visualizador 3D Forge, planos móviles y flujos ISO 19650.</td>
             </tr>
             <tr>
-              <td><strong>Escalabilidad y Límites</strong></td>
-              <td>Limitada (Restricción física de 10 millones de celdas).</td>
-              <td>Media-Alta (Excelente soporte para flujos y esquemas corporativos complejos).</td>
-              <td>Alta / Empresarial (Almacenamiento y almacenamiento documental ilimitados en la nube).</td>
+              <td><strong>Escalabilidad</strong></td>
+              <td>Baja-Media (Límite estricto de 10M de celdas).</td>
+              <td>Alta (Lienzos infinitos de diagramación técnica).</td>
+              <td>Empresarial (Modelos federados de almacenamiento ilimitado).</td>
             </tr>
             <tr>
-              <td><strong>Relación Costo / Curva</strong></td>
-              <td>Costo insignificante, adopción inmediata y alta familiaridad informática.</td>
-              <td>Costo bajo-moderado con licencias corporativas SaaS amortizables en Lean.</td>
-              <td>Inversión de capital sustancial que se justifica en megaproyectos industriales.</td>
+              <td><strong>Costo / Adopción</strong></td>
+              <td>Costo mínimo, curva de aprendizaje inmediata y universal.</td>
+              <td>Costo bajo-moderado con retorno ágil en optimización Lean.</td>
+              <td>Inversión de capital justificada en proyectos de alta complejidad.</td>
             </tr>
           </tbody>
         </table>
@@ -749,33 +778,32 @@
       <!-- ========================================================
            SLIDE 10: CONCLUSIÓN GENERAL (PLATAFORMAS E-LEARNING)
            ======================================================== -->
-      <!-- Critical academic conclusion regarding virtual collaboration and training -->
-      <section data-transition="slide">
-        <h2 style="font-size: 1.5em;">El Impacto de la Educación Virtual en el Postgrado</h2>
+      <section data-transition="slide-in fade-out">
+        <h2>E-Learning: El Aula como Planta Virtual</h2>
         
         <div class="grid-2">
           <div>
-            <p style="font-size: 0.68em; text-align: left; margin-bottom: 20px; line-height: 1.45; color: var(--muted-text);">
-              El despliegue de plataformas de e-learning e infraestructura de nube en los programas de postgrado en ingeniería representa una emulación indispensable del entorno industrial global moderno:
+            <p style="font-size: 0.65em; text-align: left; margin-bottom: 15px; line-height: 1.4; color: var(--muted-text);">
+              El despliegue de tecnologías de nube en el postgrado en ingeniería no es solo educación a distancia; es la simulación real de la Industria 4.0:
             </p>
             
-            <ul style="font-size: 0.58em; line-height: 1.4;">
+            <ul style="font-size: 0.55em; line-height: 1.35;">
               <li class="fragment fade-up" data-fragment-index="1">
-                <strong>Fomento de Equipos Distribuidos Síncronos:</strong> Adiestra nativamente al estudiante de maestría para liderar co-diseños de procesos, ingeniería concurrente y coordinación técnica cruzando fronteras geográficas.
+                <strong>Equipos Distribuidos Síncronos:</strong> Adiestramiento en ingeniería concurrente y co-diseño de procesos cruzando fronteras.
               </li>
               <li class="fragment fade-up" data-fragment-index="2">
-                <strong>Cultura de Control de Versiones e Integridad:</strong> Inculca disciplina metodológica respecto al versionado documental de proyectos y auditorías de datos, erradicando el desorden de archivos deslocalizados.
+                <strong>Gobernanza & Control de Versiones:</strong> Cultura técnica estricta de orden documental y trazabilidad de cambios en la nube.
               </li>
               <li class="fragment fade-up" data-fragment-index="3">
-                <strong>Gobernanza del Activo Intelectual:</strong> Alimenta y estructura repositorios digitales del conocimiento académico que sirven como base para la replicabilidad y transferencia de tecnología real a la industria.
+                <strong>Activos de Aprendizaje Centralizados:</strong> Creación de repositorios estructurados de conocimiento listos para transferir a la industria.
               </li>
             </ul>
           </div>
           
-          <div class="glass-card" style="border-color: rgba(79, 172, 254, 0.3); display: flex; flex-direction: column; justify-content: center; padding: 25px;">
-            <h3 style="font-size: 0.85em; margin-bottom: 12px; color: var(--primary-accent); text-align: center;">Síntesis Crítica Postgrado</h3>
-            <blockquote style="font-size: 0.52em; color: var(--text-color); border-left: 3px solid var(--primary-accent); padding-left: 12px; margin: 0; font-style: italic; line-height: 1.45;">
-              "El e-learning en los estudios superiores de ingeniería trasciende la mera entrega remota de contenidos formativos tradicionales. Es, en esencia, un catalizador operacional que sumerge de forma nativa a los ingenieros de postgrado en la gobernanza, control distribuido de activos digitales e interoperabilidad de nube, competencias cardinales y obligatorias para capitanear la ineludible transición hacia la Industria 4.0 global."
+          <div class="glass-card" style="border-color: rgba(79, 172, 254, 0.3); display: flex; flex-direction: column; justify-content: center; padding: 20px;">
+            <h3 style="font-size: 0.85em; margin-bottom: 10px; color: var(--primary-accent); text-align: center; text-transform: uppercase;">SÍNTESIS CRÍTICA</h3>
+            <blockquote style="font-size: 0.5em; color: var(--text-color); border-left: 2px solid var(--primary-accent); padding-left: 10px; margin: 0; font-style: italic; line-height: 1.4;">
+              "El e-learning en la ingeniería de procesos no es un canal pasivo de información. Es el catalizador operativo que entrena de forma nativa a los profesionales en control distribuido, gobernanza de datos y co-diseño de activos digitales, competencias esenciales para comandar la transformación industrial global."
             </blockquote>
           </div>
         </div>
@@ -784,54 +812,53 @@
       <!-- ========================================================
            SLIDE 11: ESTRATEGIA DE DEFENSA ORAL (5 MINUTOS)
            ======================================================== -->
-      <!-- Timeline and GenAI workflow defense framework -->
-      <section data-transition="slide">
-        <h2 style="font-size: 1.5em;">Estrategia de Defensa Oral (Síncrona en Zoom)</h2>
+      <section data-transition="slide-in fade-out">
+        <h2>Defensa de Alto Impacto (5 Minutos)</h2>
         
-        <p style="font-size: 0.6em; color: var(--muted-text); margin-bottom: 5px; text-align: left;">
-          Estructura de tiempo y roles técnicos definidos para una intervención colaborativa de 5 minutos exactos de duración:
+        <p style="font-size: 0.58em; color: var(--muted-text); margin-bottom: 5px; text-align: left;">
+          Estructura síncrona en Zoom ágil y sincronizada al segundo para captar la atención del jurado:
         </p>
         
         <div class="timeline-container fragment fade-in" data-fragment-index="1">
-          <!-- Minuto 1 -->
+          <!-- 1m -->
           <div class="timeline-step active">
             <div class="timeline-badge">1</div>
-            <div class="timeline-title">Minuto 0 - 1</div>
-            <div class="timeline-desc"><strong>Apertura y Contexto</strong><br>Indiana Salas: Introducción general y valor estratégico de la digitalización.</div>
+            <div class="timeline-title">0:00 - 1:00</div>
+            <div class="timeline-desc"><strong>Apertura</strong><br>Indiana Salas: Introducción, valor estratégico e Industria 4.0.</div>
           </div>
           
-          <!-- Minuto 2 -->
+          <!-- 2m -->
           <div class="timeline-step active">
             <div class="timeline-badge">2</div>
-            <div class="timeline-title">Minuto 1 - 2</div>
-            <div class="timeline-desc"><strong>Google Sheets</strong><br>Homer Perozo: SaaS, concurrencia en PyMEs, control estadístico automatizado.</div>
+            <div class="timeline-title">1:00 - 2:00</div>
+            <div class="timeline-desc"><strong>Google Sheets</strong><br>Homer Perozo: SaaS, OT, PyMEs y control Shewhart/Pareto.</div>
           </div>
           
-          <!-- Minuto 3 -->
+          <!-- 3m -->
           <div class="timeline-step active">
             <div class="timeline-badge">3</div>
-            <div class="timeline-title">Minuto 2 - 3</div>
-            <div class="timeline-desc"><strong>Lucidchart</strong><br>Ruby Medina: VSM digital en taller, lean manufacturing e integraciones.</div>
+            <div class="timeline-title">2:00 - 3:00</div>
+            <div class="timeline-desc"><strong>Lucidchart</strong><br>Ruby Medina: VSM digital interactivo y Lean Manufacturing.</div>
           </div>
           
-          <!-- Minuto 4 -->
+          <!-- 4m -->
           <div class="timeline-step active">
             <div class="timeline-badge">4</div>
-            <div class="timeline-title">Minuto 3 - 4</div>
-            <div class="timeline-desc"><strong>Autodesk CC</strong><br>Dalia Rojas: CDE Docs, BIM 3D web, ISO 19650 e incidentes móviles.</div>
+            <div class="timeline-title">3:00 - 4:00</div>
+            <div class="timeline-desc"><strong>Autodesk CC</strong><br>Dalia Rojas: CDE Docs, BIM 3D e incidentes de obra.</div>
           </div>
           
-          <!-- Minuto 5 -->
+          <!-- 5m -->
           <div class="timeline-step active">
             <div class="timeline-badge">5</div>
-            <div class="timeline-title">Minuto 4 - 5</div>
-            <div class="timeline-desc"><strong>Comparativa y Cierre</strong><br>Intervención conjunta: Matriz de selección, conclusiones y preguntas.</div>
+            <div class="timeline-title">4:00 - 5:00</div>
+            <div class="timeline-desc"><strong>Cierre</strong><br>Intervención grupal: Tablero comparativo, conclusiones e IA.</div>
           </div>
         </div>
         
-        <div class="glass-card fragment fade-up" data-fragment-index="2" style="margin-top: 25px; padding: 12px; border-color: rgba(0, 242, 254, 0.3);">
-          <p style="font-size: 0.5em; color: var(--text-color); margin: 0; text-align: left; line-height: 1.4;">
-            🤖 <strong>Co-creación Avanzada mediante Inteligencia Artificial Generativa:</strong> El desarrollo y conceptualización de este proyecto integró activamente metodologías ágiles de asistencia cognitiva con IA (utilizando Antigravity). Esto aceleró exponencialmente el desarrollo de código limpio RevealJS, iteró con precisión sobre el refinamiento visual premium y garantizó un texto técnico de altísimo rigor. El flujo demuestra empíricamente cómo la sinergia entre ingenieros de procesos y sistemas de automatización cognitiva potencia de manera disruptiva la productividad académica y organizativa.
+        <div class="glass-card fragment fade-up" data-fragment-index="2" style="margin-top: 20px; padding: 10px; border-color: rgba(0, 242, 254, 0.3);">
+          <p style="font-size: 0.44em; color: var(--text-color); margin: 0; text-align: left; line-height: 1.35;">
+            🤖 <strong>Co-creación Digital con Inteligencia Artificial Generativa:</strong> Este proyecto integró metodologías de desarrollo acelerado con IA cognitiva (mediante Antigravity). Esto nos permitió prototipar velozmente el código RevealJS de alto impacto estético e iterar y sintetizar contenido académico riguroso en tiempo récord. El flujo demuestra empíricamente cómo la sinergia hombre-máquina amplifica disruptivamente la eficiencia técnica del ingeniero moderno.
           </p>
         </div>
       </section>
@@ -839,32 +866,31 @@
       <!-- ========================================================
            SLIDE 12: REFERENCIAS BIBLIOGRÁFICAS
            ======================================================== -->
-      <!-- Strict APA formatted academic reference records -->
-      <section data-transition="slide">
-        <h2 style="font-size: 1.5em; margin-bottom: 20px !important;">Referencias Bibliográficas</h2>
+      <section data-transition="slide-in">
+        <h2 style="margin-bottom: 20px !important;">Referencias Clave</h2>
         
-        <div class="glass-card" style="border-color: rgba(79, 172, 254, 0.2); max-width: 950px; margin: 0 auto; padding: 22px;">
-          <ul style="font-size: 0.5em; list-style-type: none; margin: 0 !important; padding: 0; line-height: 1.55;">
-            <li style="margin-bottom: 10px; padding-left: 30px; text-indent: -30px; color: #f8fafc;">
+        <div class="glass-card" style="border-color: rgba(79, 172, 254, 0.2); max-width: 950px; margin: 0 auto; padding: 18px;">
+          <ul style="font-size: 0.48em; list-style-type: none; margin: 0 !important; padding: 0; line-height: 1.5;">
+            <li style="margin-bottom: 8px; padding-left: 25px; text-indent: -25px; color: #f8fafc;">
               • Autodesk Inc. (2025). <em>Autodesk Construction Cloud: BIM Collaboration and Common Data Environments (CDE) under ISO 19650</em>. Autodesk Technical Whitepapers.
             </li>
-            <li style="margin-bottom: 10px; padding-left: 30px; text-indent: -30px; color: #f8fafc;">
-              • Eastman, C., Teicholz, P., Sacks, R., & Liston, K. (2018). <em>BIM Handbook: A guide to building information modeling for owners, designers, engineers, contractors, and facility managers</em> (3rd ed.). John Wiley & Sons. <a href="https://doi.org/10.1002/9781119287568" style="color: var(--primary-accent); text-decoration: none;" target="_blank">https://doi.org/10.1002/9781119287568</a>
+            <li style="margin-bottom: 8px; padding-left: 25px; text-indent: -25px; color: #f8fafc;">
+              • Eastman, C., Sacks, R., & Liston, K. (2018). <em>BIM Handbook: A guide to building information modeling</em> (3rd ed.). John Wiley & Sons. <a href="https://doi.org/10.1002/9781119287568" style="color: var(--primary-accent); text-decoration: none;" target="_blank">https://doi.org/10.1002/9781119287568</a>
             </li>
-            <li style="margin-bottom: 10px; padding-left: 30px; text-indent: -30px; color: #f8fafc;">
+            <li style="margin-bottom: 8px; padding-left: 25px; text-indent: -25px; color: #f8fafc;">
               • Google Cloud (2025). <em>Google Sheets API, Apps Script Extensibility and SaaS Concurrency Control using Operational Transformation</em>. Google Developer Documentation.
             </li>
-            <li style="margin-bottom: 10px; padding-left: 30px; text-indent: -30px; color: #f8fafc;">
-              • Lucid Software Inc. (2025). <em>Process Mapping, Systems Interoperability, and Collaborative Value Stream Mapping (VSM) in Industrial Environments</em>. Lucidchart Learning Center.
+            <li style="margin-bottom: 8px; padding-left: 25px; text-indent: -25px; color: #f8fafc;">
+              • Lucid Software Inc. (2025). <em>Process Mapping and Collaborative Value Stream Mapping (VSM) in Industrial Environments</em>. Lucidchart Learning Center.
             </li>
-            <li style="margin-bottom: 10px; padding-left: 30px; text-indent: -30px; color: #f8fafc;">
-              • Mell, P., & Grance, T. (2011). <em>The NIST Definition of Cloud Computing</em> (Special Publication 800-145). National Institute of Standards and Technology, U.S. Department of Commerce.
+            <li style="margin-bottom: 8px; padding-left: 25px; text-indent: -25px; color: #f8fafc;">
+              • Mell, P., & Grance, T. (2011). <em>The NIST Definition of Cloud Computing</em> (Special Publication 800-145). National Institute of Standards and Technology.
             </li>
           </ul>
         </div>
         
-        <p style="font-size: 0.42em; color: var(--muted-text); margin-top: 25px; text-align: center; font-weight: 500;">
-          Generado con Rigor Académico en Formato APA • Programa de Postgrado en Ingeniería de Procesos
+        <p style="font-size: 0.38em; color: var(--muted-text); margin-top: 20px; text-align: center; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">
+          Rigor Académico APA • Programa de Postgrado en Ingeniería de Procesos
         </p>
       </section>
 
@@ -894,7 +920,7 @@
       // Scale options to ensure responsiveness in multi-device zooms
       width: 1050,
       height: 700,
-      margin: 0.1,
+      margin: 0.08,
       minScale: 0.2,
       maxScale: 2.0,
 
