@@ -11,8 +11,10 @@ const DEFAULT_SUPABASE_ANON_KEY = "sb_publishable__pV5l2sQPXzWwx90UsQTrw_PKRwzFm
 
 window.addEventListener('DOMContentLoaded', async () => {
   // Read config from hardcoded constants or local storage override (if any)
-  const sbUrl = localStorage.getItem('supabase_url') || DEFAULT_SUPABASE_URL;
-  const sbKey = localStorage.getItem('supabase_anon_key') || DEFAULT_SUPABASE_ANON_KEY;
+  const cachedUrl = localStorage.getItem('supabase_url');
+  const cachedKey = localStorage.getItem('supabase_anon_key');
+  const sbUrl = cachedUrl === 'none' ? '' : (cachedUrl || DEFAULT_SUPABASE_URL);
+  const sbKey = cachedKey === 'none' ? '' : (cachedKey || DEFAULT_SUPABASE_ANON_KEY);
 
   // If Supabase is NOT configured, run in open single-user mode (fallback compatible)
   if (!sbUrl || !sbKey) {

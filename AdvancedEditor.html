@@ -1086,6 +1086,8 @@
   <!-- Supabase & Global Auth Gatekeeper -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="auth-gatekeeper.js"></script>
+  <!-- PptxGenJS Client-Side PowerPoint Library -->
+  <script src="https://cdn.jsdelivr.net/gh/gitbrent/PptxGenJS@3.12.0/dist/pptxgen.bundle.js"></script>
 </head>
 
 <body>
@@ -1658,6 +1660,9 @@
         <button class="btn btn-secondary" style="width: 100%; justify-content: center; font-size: 0.72rem;" onclick="downloadUpdatedHtml()">
           📄 Descargar index.html
         </button>
+        <button class="btn btn-secondary" style="width: 100%; justify-content: center; font-size: 0.72rem; margin-top: 8px;" onclick="exportToPPTX()">
+          📊 Exportar como PPTX
+        </button>
       </div>
 
     </div>
@@ -1859,8 +1864,10 @@
     }
 
     async function initSupabaseAuthUI() {
-      const sbUrl = localStorage.getItem('supabase_url') || DEFAULT_SUPABASE_URL;
-      const sbKey = localStorage.getItem('supabase_anon_key') || DEFAULT_SUPABASE_ANON_KEY;
+      const cachedUrl = localStorage.getItem('supabase_url');
+      const cachedKey = localStorage.getItem('supabase_anon_key');
+      const sbUrl = cachedUrl === 'none' ? '' : (cachedUrl || DEFAULT_SUPABASE_URL);
+      const sbKey = cachedKey === 'none' ? '' : (cachedKey || DEFAULT_SUPABASE_ANON_KEY);
       const wrapper = document.getElementById('ai-copilot-dynamic-wrapper');
       
       if (!wrapper) return;
@@ -2102,8 +2109,10 @@
 
     function executeCoritoGeneration() {
       if (activeAiSubTab === 'text') {
-        const sbUrl = localStorage.getItem('supabase_url') || DEFAULT_SUPABASE_URL;
-        const sbKey = localStorage.getItem('supabase_anon_key') || DEFAULT_SUPABASE_ANON_KEY;
+        const cachedUrl = localStorage.getItem('supabase_url');
+        const cachedKey = localStorage.getItem('supabase_anon_key');
+        const sbUrl = cachedUrl === 'none' ? '' : (cachedUrl || DEFAULT_SUPABASE_URL);
+        const sbKey = cachedKey === 'none' ? '' : (cachedKey || DEFAULT_SUPABASE_ANON_KEY);
         if (sbUrl && sbKey) {
           return generateElementWithSupabaseEdgeFunction();
         } else {
@@ -3496,8 +3505,10 @@
     // 🤖 GOOGLE GEMINI AI COPILOT WRITER CLIENT SYSTEM
     // =========================================================================
     async function generateElementWithGeminiAI() {
-      const sbUrl = localStorage.getItem('supabase_url');
-      const sbKey = localStorage.getItem('supabase_anon_key');
+      const cachedUrl = localStorage.getItem('supabase_url');
+      const cachedKey = localStorage.getItem('supabase_anon_key');
+      const sbUrl = cachedUrl === 'none' ? '' : (cachedUrl || DEFAULT_SUPABASE_URL);
+      const sbKey = cachedKey === 'none' ? '' : (cachedKey || DEFAULT_SUPABASE_ANON_KEY);
       if (sbUrl && sbKey) {
         return generateElementWithSupabaseEdgeFunction();
       }
@@ -3884,6 +3895,715 @@ Reglas obligatorias:
         console.error('GitHub publishing failed:', err);
         showToast(`Fallo al publicar: ${err.message}`, '❌', 6000);
       }
+    }
+
+    // =========================================================================
+    // 📊 CLIENT-SIDE POWERPOINT (PPTX) EXPORT ENGINE
+    // =========================================================================
+    function exportToPPTX(customData) {
+      const slidesToExport = customData || (typeof slides !== 'undefined' ? slides : SLIDES_DATA);
+      if (!slidesToExport || !slidesToExport.length) {
+        alert("No hay diapositivas para exportar.");
+        return;
+      }
+
+      // Initialize PptxGenJS
+      let pptx = new PptxGenJS();
+      pptx.layout = 'LAYOUT_16x9';
+      pptx.title = 'Herramientas Digitales para el E-Learning';
+
+      // Helper function to strip HTML tags
+      function stripHtml(html) {
+        if (!html) return '';
+        let text = html.replace(/<[^>]*>/g, '');
+        text = text.replace(/&nbsp;/g, ' ')
+                   .replace(/&amp;/g, '&')
+                   .replace(/&lt;/g, '<')
+                   .replace(/&gt;/g, '>')
+                   .replace(/&quot;/g, '"');
+        return text.trim();
+      }
+
+      // Iterate over each slide data
+      slidesToExport.forEach((slide) => {
+        let pptxSlide = pptx.addSlide();
+        pptxSlide.background = { fill: '030f26' };
+
+        // Standard Template mappings
+        if (slide.type === 'cover') {
+          pptxSlide.addText(stripHtml(slide.title), {
+            x: 0.5, y: 1.2, w: 9.0, h: 1.5,
+            fontSize: 32, fontFace: 'Arial', bold: true, color: '00f2fe',
+            align: 'center', margin: 0
+          });
+          pptxSlide.addText(stripHtml(slide.subtitle), {
+            x: 0.5, y: 2.7, w: 9.0, h: 0.8,
+            fontSize: 16, fontFace: 'Arial', color: '94a3b8',
+            align: 'center'
+          });
+          pptxSlide.addShape(pptx.shapes.RECTANGLE, {
+            x: 1.0, y: 3.7, w: 8.0, h: 0.02,
+            fill: { color: '8b5cf6' }
+          });
+          let authorsText = "EQUIPO DE PROYECTO:\n" + (slide.authors || []).map(a => `• ${a}`).join('\n');
+          pptxSlide.addText(authorsText, {
+            x: 1.0, y: 4.0, w: 4.5, h: 1.2,
+            fontSize: 10, fontFace: 'Arial', color: 'ffffff'
+          });
+          pptxSlide.addText(stripHtml(slide.institution), {
+            x: 5.5, y: 4.2, w: 3.5, h: 1.0,
+            fontSize: 10, fontFace: 'Arial', color: '00f2fe',
+            align: 'right'
+          });
+
+        } else if (slide.type === 'categories') {
+          pptxSlide.addText(stripHtml(slide.title), {
+            x: 0.5, y: 0.4, w: 9.0, h: 0.6,
+            fontSize: 24, fontFace: 'Arial', bold: true, color: '00f2fe'
+          });
+          pptxSlide.addText(stripHtml(slide.description), {
+            x: 0.5, y: 1.0, w: 9.0, h: 0.5,
+            fontSize: 11, fontFace: 'Arial', color: '94a3b8'
+          });
+
+          const cardWidth = 2.8;
+          const cardGap = 0.3;
+          const startX = 0.5;
+          const cardY = 1.6;
+          const cardHeight = 2.2;
+
+          (slide.cards || []).forEach((card, i) => {
+            let currentX = startX + i * (cardWidth + cardGap);
+            pptxSlide.addShape(pptx.shapes.ROUNDED_RECTANGLE, {
+              x: currentX, y: cardY, w: cardWidth, h: cardHeight,
+              fill: { color: '0a0f1e' },
+              line: { color: '00f2fe', width: 1 }
+            });
+            pptxSlide.addText(card.emoji || '', {
+              x: currentX + 0.15, y: cardY + 0.15, w: 0.6, h: 0.4,
+              fontSize: 20
+            });
+            pptxSlide.addText(stripHtml(card.label), {
+              x: currentX + 0.15, y: cardY + 0.6, w: cardWidth - 0.3, h: 0.3,
+              fontSize: 12, fontFace: 'Arial', bold: true, color: '00f2fe'
+            });
+            pptxSlide.addText(stripHtml(card.desc), {
+              x: currentX + 0.15, y: cardY + 0.95, w: cardWidth - 0.3, h: 1.1,
+              fontSize: 9.5, fontFace: 'Arial', color: 'ffffff'
+            });
+          });
+
+          const kpiY = 4.1;
+          const kpiHeight = 1.0;
+          (slide.kpis || []).forEach((kpi, i) => {
+            let currentX = startX + i * (cardWidth + cardGap);
+            pptxSlide.addShape(pptx.shapes.RECTANGLE, {
+              x: currentX, y: kpiY, w: cardWidth, h: kpiHeight,
+              fill: { color: '0a0f1e' },
+              line: { color: '8b5cf6', width: 1 }
+            });
+            pptxSlide.addText(`${kpi.icon || ''} ${stripHtml(kpi.title)}: ${stripHtml(kpi.desc)}`, {
+              x: currentX + 0.1, y: kpiY + 0.1, w: cardWidth - 0.2, h: kpiHeight - 0.2,
+              fontSize: 9, fontFace: 'Arial', color: 'ffffff'
+            });
+          });
+
+        } else if (slide.type === 'split_chart') {
+          pptxSlide.addText(stripHtml(slide.title), {
+            x: 0.5, y: 0.4, w: 9.0, h: 0.6,
+            fontSize: 24, fontFace: 'Arial', bold: true, color: '00f2fe'
+          });
+          pptxSlide.addText(stripHtml(slide.description), {
+            x: 0.5, y: 1.1, w: 4.2, h: 0.8,
+            fontSize: 11, fontFace: 'Arial', color: '94a3b8'
+          });
+          let bulletText = (slide.bullets || []).map(b => stripHtml(b)).join('\n\n');
+          pptxSlide.addText(bulletText, {
+            x: 0.5, y: 2.0, w: 4.2, h: 3.2,
+            fontSize: 10, fontFace: 'Arial', color: 'ffffff'
+          });
+
+          const rightX = 5.2;
+          pptxSlide.addShape(pptx.shapes.ROUNDED_RECTANGLE, {
+            x: rightX, y: 1.1, w: 4.3, h: 4.1,
+            fill: { color: '0a0f1e' },
+            line: { color: '00f2fe', width: 1 }
+          });
+          pptxSlide.addText(stripHtml(slide.chart_title), {
+            x: rightX + 0.2, y: 1.25, w: 3.9, h: 0.3,
+            fontSize: 11, fontFace: 'Arial', bold: true, color: '00f2fe', align: 'center'
+          });
+
+          const chartHeightMax = 1.3;
+          const barY = 1.6 + chartHeightMax;
+          const barWidth = 0.5;
+          const barGap = 0.4;
+          const chartStartX = rightX + 0.6;
+
+          (slide.chart_data || []).forEach((bar, i) => {
+            let currentX = chartStartX + i * (barWidth + barGap);
+            let barHeight = (bar.value / 100) * chartHeightMax;
+            pptxSlide.addShape(pptx.shapes.RECTANGLE, {
+              x: currentX, y: barY - barHeight, w: barWidth, h: barHeight,
+              fill: { color: '00f2fe' }
+            });
+            pptxSlide.addText(`${bar.value}%`, {
+              x: currentX - 0.1, y: barY - barHeight - 0.22, w: barWidth + 0.2, h: 0.2,
+              fontSize: 8, fontFace: 'Arial', bold: true, color: 'ffffff', align: 'center'
+            });
+            pptxSlide.addText(bar.label, {
+              x: currentX - 0.2, y: barY + 0.05, w: barWidth + 0.4, h: 0.2,
+              fontSize: 8, fontFace: 'Arial', color: '94a3b8', align: 'center'
+            });
+          });
+
+          (slide.detail_cards || []).forEach((card, i) => {
+            let cardY = 3.4 + i * 0.8;
+            pptxSlide.addShape(pptx.shapes.ROUNDED_RECTANGLE, {
+              x: rightX + 0.2, y: cardY, w: 3.9, h: 0.7,
+              fill: { color: '031638' },
+              line: { color: '8b5cf6', width: 1 }
+            });
+            pptxSlide.addText(`${card.icon || ''} ${stripHtml(card.title)}: ${stripHtml(card.desc)}`, {
+              x: rightX + 0.3, y: cardY + 0.05, w: 3.7, h: 0.6,
+              fontSize: 8.5, fontFace: 'Arial', color: 'ffffff'
+            });
+          });
+
+        } else if (slide.type === 'split_flow') {
+          pptxSlide.addText(stripHtml(slide.title), {
+            x: 0.5, y: 0.4, w: 9.0, h: 0.6,
+            fontSize: 24, fontFace: 'Arial', bold: true, color: '00f2fe'
+          });
+
+          const leftX = 0.5;
+          pptxSlide.addShape(pptx.shapes.ROUNDED_RECTANGLE, {
+            x: leftX, y: 1.2, w: 4.2, h: 4.0,
+            fill: { color: '0a0f1e' },
+            line: { color: '00f2fe', width: 1 }
+          });
+          pptxSlide.addText(stripHtml(slide.left_title), {
+            x: leftX + 0.2, y: 1.4, w: 3.8, h: 0.3,
+            fontSize: 13, fontFace: 'Arial', bold: true, color: '00f2fe'
+          });
+
+          (slide.left_cards || []).forEach((card, i) => {
+            let cardY = 1.8 + i * 1.05;
+            pptxSlide.addText(`${card.icon || ''} ${stripHtml(card.title)}`, {
+              x: leftX + 0.2, y: cardY, w: 3.8, h: 0.25,
+              fontSize: 11, fontFace: 'Arial', bold: true, color: 'ffffff'
+            });
+            pptxSlide.addText(stripHtml(card.desc), {
+              x: leftX + 0.2, y: cardY + 0.25, w: 3.8, h: 0.7,
+              fontSize: 9.5, fontFace: 'Arial', color: '94a3b8'
+            });
+          });
+
+          const rightX = 5.2;
+          pptxSlide.addText(stripHtml(slide.right_title), {
+            x: rightX, y: 1.2, w: 4.3, h: 0.3,
+            fontSize: 13, fontFace: 'Arial', bold: true, color: '8b5cf6'
+          });
+
+          const stepWidth = 1.3;
+          const stepGap = 0.15;
+          (slide.right_steps || []).forEach((step, i) => {
+            let currentX = rightX + i * (stepWidth + stepGap);
+            pptxSlide.addShape(pptx.shapes.ROUNDED_RECTANGLE, {
+              x: currentX, y: 1.7, w: stepWidth, h: 3.3,
+              fill: { color: '0a0f1e' },
+              line: { color: '8b5cf6', width: 1 }
+            });
+            pptxSlide.addText(stripHtml(step.title), {
+              x: currentX + 0.1, y: 1.85, w: stepWidth - 0.2, h: 0.5,
+              fontSize: 10, fontFace: 'Arial', bold: true, color: 'ffffff'
+            });
+            pptxSlide.addText(stripHtml(step.desc), {
+              x: currentX + 0.1, y: 2.4, w: stepWidth - 0.2, h: 2.4,
+              fontSize: 8.5, fontFace: 'Arial', color: '94a3b8'
+            });
+          });
+
+        } else if (slide.type === 'split_road') {
+          pptxSlide.addText(stripHtml(slide.title), {
+            x: 0.5, y: 0.4, w: 9.0, h: 0.6,
+            fontSize: 24, fontFace: 'Arial', bold: true, color: '00f2fe'
+          });
+          pptxSlide.addText(stripHtml(slide.description), {
+            x: 0.5, y: 1.1, w: 4.2, h: 0.8,
+            fontSize: 11, fontFace: 'Arial', color: '94a3b8'
+          });
+          let bulletText = (slide.bullets || []).map(b => stripHtml(b)).join('\n\n');
+          pptxSlide.addText(bulletText, {
+            x: 0.5, y: 2.0, w: 4.2, h: 3.2,
+            fontSize: 10, fontFace: 'Arial', color: 'ffffff'
+          });
+
+          const rightX = 5.2;
+          pptxSlide.addShape(pptx.shapes.ROUNDED_RECTANGLE, {
+            x: rightX, y: 1.1, w: 4.3, h: 4.1,
+            fill: { color: '0a0f1e' },
+            line: { color: '00f2fe', width: 1 }
+          });
+          pptxSlide.addText(stripHtml(slide.road_title), {
+            x: rightX + 0.2, y: 1.25, w: 3.9, h: 0.3,
+            fontSize: 11, fontFace: 'Arial', bold: true, color: '00f2fe', align: 'center'
+          });
+
+          const roadNodeHeight = 0.7;
+          (slide.road_nodes || []).forEach((node, i) => {
+            let nodeY = 1.7 + i * 0.9;
+            if (i > 0) {
+              pptxSlide.addShape(pptx.shapes.DOWN_ARROW, {
+                x: rightX + 2.0, y: nodeY - 0.25, w: 0.3, h: 0.2,
+                fill: { color: '00f2fe' }
+              });
+            }
+            pptxSlide.addShape(pptx.shapes.ROUNDED_RECTANGLE, {
+              x: rightX + 0.6, y: nodeY, w: 3.1, h: roadNodeHeight,
+              fill: { color: '031638' },
+              line: { color: '00f2fe', width: 1 }
+            });
+            pptxSlide.addText(`${node.type.toUpperCase()}: ${stripHtml(node.title)} - ${stripHtml(node.desc)}`, {
+              x: rightX + 0.75, y: nodeY + 0.05, w: 2.8, h: roadNodeHeight - 0.1,
+              fontSize: 9, fontFace: 'Arial', color: 'ffffff', align: 'center'
+            });
+          });
+
+          const heatY = 4.4;
+          const heatWidth = 1.2;
+          const heatGap = 0.15;
+          (slide.heat_row || []).forEach((pill, i) => {
+            let currentX = rightX + 0.3 + i * (heatWidth + heatGap);
+            pptxSlide.addShape(pptx.shapes.ROUNDED_RECTANGLE, {
+              x: currentX, y: heatY, w: heatWidth, h: 0.5,
+              fill: { color: '8b5cf6' }
+            });
+            pptxSlide.addText(`${stripHtml(pill.text)} (${pill.fill}%)`, {
+              x: currentX, y: heatY + 0.05, w: heatWidth, h: 0.4,
+              fontSize: 7.5, fontFace: 'Arial', color: 'ffffff', align: 'center', bold: true
+            });
+          });
+
+        } else if (slide.type === 'split_network') {
+          pptxSlide.addText(stripHtml(slide.title), {
+            x: 0.5, y: 0.4, w: 9.0, h: 0.6,
+            fontSize: 24, fontFace: 'Arial', bold: true, color: '00f2fe'
+          });
+
+          const leftX = 0.5;
+          pptxSlide.addShape(pptx.shapes.ROUNDED_RECTANGLE, {
+            x: leftX, y: 1.2, w: 4.2, h: 4.0,
+            fill: { color: '0a0f1e' },
+            line: { color: '00f2fe', width: 1 }
+          });
+          pptxSlide.addText(stripHtml(slide.left_title), {
+            x: leftX + 0.2, y: 1.35, w: 3.8, h: 0.3,
+            fontSize: 13, fontFace: 'Arial', bold: true, color: '00f2fe'
+          });
+
+          (slide.left_chips || []).forEach((chip, i) => {
+            let chipY = 1.75 + i * 1.05;
+            pptxSlide.addText(`${chip.icon || ''} ${stripHtml(chip.title)}`, {
+              x: leftX + 0.2, y: chipY, w: 3.8, h: 0.25,
+              fontSize: 11, fontFace: 'Arial', bold: true, color: 'ffffff'
+            });
+            pptxSlide.addText(stripHtml(chip.desc), {
+              x: leftX + 0.2, y: chipY + 0.25, w: 3.8, h: 0.75,
+              fontSize: 9, fontFace: 'Arial', color: '94a3b8'
+            });
+          });
+
+          const rightX = 5.2;
+          pptxSlide.addText(stripHtml(slide.right_title), {
+            x: rightX, y: 1.2, w: 4.3, h: 0.3,
+            fontSize: 13, fontFace: 'Arial', bold: true, color: '8b5cf6'
+          });
+          pptxSlide.addShape(pptx.shapes.ROUNDED_RECTANGLE, {
+            x: rightX, y: 1.6, w: 4.3, h: 3.6,
+            fill: { color: '0a0f1e' },
+            line: { color: '8b5cf6', width: 1 }
+          });
+
+          const hubX = rightX + 1.5;
+          const hubY = 3.1;
+          const hubW = 1.3;
+          const hubH = 0.7;
+
+          const nodes = [
+            { title: 'Chat', x: rightX + 0.3, y: 2.0 },
+            { title: 'Tareas', x: rightX + 2.7, y: 2.0 },
+            { title: 'Docs', x: rightX + 0.3, y: 4.2 },
+            { title: 'Exportar', x: rightX + 2.7, y: 4.2 }
+          ];
+
+          nodes.forEach(node => {
+            pptxSlide.addShape(pptx.shapes.ROUNDED_RECTANGLE, {
+              x: node.x, y: node.y, w: 1.3, h: 0.5,
+              fill: { color: '031638' },
+              line: { color: '00f2fe', width: 1 }
+            });
+            pptxSlide.addText(node.title, {
+              x: node.x, y: node.y + 0.1, w: 1.3, h: 0.3,
+              fontSize: 9, fontFace: 'Arial', color: 'ffffff', align: 'center', bold: true
+            });
+          });
+
+          pptxSlide.addShape(pptx.shapes.OVAL, {
+            x: hubX, y: hubY, w: hubW, h: hubH,
+            fill: { color: '00f2fe' }
+          });
+          pptxSlide.addText('Lucidchart', {
+            x: hubX, y: hubY + 0.15, w: hubW, h: hubH - 0.3,
+            fontSize: 10, fontFace: 'Arial', color: '030f26', align: 'center', bold: true
+          });
+
+        } else if (slide.type === 'split_pipeline') {
+          pptxSlide.addText(stripHtml(slide.title), {
+            x: 0.5, y: 0.4, w: 9.0, h: 0.6,
+            fontSize: 24, fontFace: 'Arial', bold: true, color: '00f2fe'
+          });
+          pptxSlide.addText(stripHtml(slide.description), {
+            x: 0.5, y: 1.1, w: 4.2, h: 0.8,
+            fontSize: 11, fontFace: 'Arial', color: '94a3b8'
+          });
+          let bulletText = (slide.bullets || []).map(b => stripHtml(b)).join('\n\n');
+          pptxSlide.addText(bulletText, {
+            x: 0.5, y: 2.0, w: 4.2, h: 3.2,
+            fontSize: 10, fontFace: 'Arial', color: 'ffffff'
+          });
+
+          const rightX = 5.2;
+          pptxSlide.addShape(pptx.shapes.ROUNDED_RECTANGLE, {
+            x: rightX, y: 1.1, w: 4.3, h: 4.1,
+            fill: { color: '0a0f1e' },
+            line: { color: '00f2fe', width: 1 }
+          });
+          pptxSlide.addText(stripHtml(slide.right_title), {
+            x: rightX + 0.2, y: 1.25, w: 3.9, h: 0.3,
+            fontSize: 11, fontFace: 'Arial', bold: true, color: '00f2fe', align: 'center'
+          });
+
+          (slide.sources || []).forEach((src, i) => {
+            let chipY = 1.7 + i * 1.0;
+            pptxSlide.addShape(pptx.shapes.ROUNDED_RECTANGLE, {
+              x: rightX + 0.3, y: chipY, w: 1.0, h: 0.5,
+              fill: { color: '031638' },
+              line: { color: '8b5cf6', width: 1 }
+            });
+            pptxSlide.addText(src, {
+              x: rightX + 0.3, y: chipY + 0.1, w: 1.0, h: 0.3,
+              fontSize: 8.5, fontFace: 'Arial', color: 'ffffff', align: 'center'
+            });
+            pptxSlide.addShape(pptx.shapes.RIGHT_ARROW, {
+              x: rightX + 1.35, y: chipY + 0.15, w: 0.2, h: 0.15,
+              fill: { color: '8b5cf6' }
+            });
+          });
+
+          const coreX = rightX + 1.6;
+          const coreY = 2.4;
+          pptxSlide.addShape(pptx.shapes.OVAL, {
+            x: coreX, y: coreY, w: 1.1, h: 1.1,
+            fill: { color: '00f2fe' }
+          });
+          pptxSlide.addText(`${slide.core_title}\n(${slide.core_desc})`, {
+            x: coreX - 0.1, y: coreY + 0.25, w: 1.3, h: 0.7,
+            fontSize: 8.5, fontFace: 'Arial', color: '030f26', align: 'center', bold: true
+          });
+
+          (slide.outputs || []).forEach((out, i) => {
+            let chipY = 1.7 + i * 1.0;
+            pptxSlide.addShape(pptx.shapes.RIGHT_ARROW, {
+              x: rightX + 2.75, y: chipY + 0.15, w: 0.2, h: 0.15,
+              fill: { color: '00f2fe' }
+            });
+            pptxSlide.addShape(pptx.shapes.ROUNDED_RECTANGLE, {
+              x: rightX + 3.0, y: chipY, w: 1.0, h: 0.5,
+              fill: { color: '031638' },
+              line: { color: '00f2fe', width: 1 }
+            });
+            pptxSlide.addText(out, {
+              x: rightX + 3.0, y: chipY + 0.1, w: 1.0, h: 0.3,
+              fontSize: 8.5, fontFace: 'Arial', color: 'ffffff', align: 'center'
+            });
+          });
+
+        } else if (slide.type === 'grid_conclusion') {
+          pptxSlide.addText(stripHtml(slide.title), {
+            x: 0.5, y: 0.4, w: 9.0, h: 0.6,
+            fontSize: 24, fontFace: 'Arial', bold: true, color: '00f2fe'
+          });
+          pptxSlide.addText(stripHtml(slide.description), {
+            x: 0.5, y: 1.0, w: 9.0, h: 0.4,
+            fontSize: 11, fontFace: 'Arial', color: '94a3b8'
+          });
+
+          const cardWidth = 2.8;
+          const cardGap = 0.3;
+          const startX = 0.5;
+          const cardY = 1.5;
+          const cardHeight = 1.7;
+
+          (slide.cards || []).forEach((card, i) => {
+            let currentX = startX + i * (cardWidth + cardGap);
+            pptxSlide.addShape(pptx.shapes.ROUNDED_RECTANGLE, {
+              x: currentX, y: cardY, w: cardWidth, h: cardHeight,
+              fill: { color: '0a0f1e' },
+              line: { color: '00f2fe', width: 1 }
+            });
+            pptxSlide.addText(`${card.emoji || ''} ${stripHtml(card.title)}`, {
+              x: currentX + 0.15, y: cardY + 0.15, w: cardWidth - 0.3, h: 0.35,
+              fontSize: 11, fontFace: 'Arial', bold: true, color: '00f2fe'
+            });
+            pptxSlide.addText(stripHtml(card.desc), {
+              x: currentX + 0.15, y: cardY + 0.55, w: cardWidth - 0.3, h: 1.0,
+              fontSize: 9, fontFace: 'Arial', color: 'ffffff'
+            });
+          });
+
+          const highlightY = 3.35;
+          pptxSlide.addShape(pptx.shapes.ROUNDED_RECTANGLE, {
+            x: 0.5, y: highlightY, w: 9.0, h: 0.8,
+            fill: { color: '031638' },
+            line: { color: '8b5cf6', width: 1 }
+          });
+          pptxSlide.addText(stripHtml(slide.ia_text), {
+            x: 0.65, y: highlightY + 0.05, w: 8.7, h: 0.7,
+            fontSize: 9, fontFace: 'Arial', color: 'ffffff'
+          });
+
+          const heatY = 4.3;
+          const heatWidth = 2.8;
+          const heatGap = 0.3;
+          (slide.heat_row || []).forEach((pill, i) => {
+            let currentX = 0.5 + i * (heatWidth + heatGap);
+            pptxSlide.addShape(pptx.shapes.ROUNDED_RECTANGLE, {
+              x: currentX, y: heatY, w: heatWidth, h: 0.45,
+              fill: { color: '00f2fe' }
+            });
+            pptxSlide.addText(`${stripHtml(pill.text)} (${pill.fill}%)`, {
+              x: currentX, y: heatY + 0.08, w: heatWidth, h: 0.3,
+              fontSize: 8.5, fontFace: 'Arial', color: '030f26', align: 'center', bold: true
+            });
+          });
+
+        } else if (slide.type === 'comparison_table') {
+          pptxSlide.addText(stripHtml(slide.title), {
+            x: 0.5, y: 0.4, w: 9.0, h: 0.6,
+            fontSize: 24, fontFace: 'Arial', bold: true, color: '00f2fe'
+          });
+          pptxSlide.addText(stripHtml(slide.description), {
+            x: 0.5, y: 0.95, w: 9.0, h: 0.4,
+            fontSize: 11, fontFace: 'Arial', color: '94a3b8'
+          });
+
+          let tableRows = [];
+          let headerCells = [];
+          (slide.table_headers || []).forEach((hdr) => {
+            headerCells.push({
+              text: hdr,
+              options: { fill: '00f2fe', color: '030f26', bold: true, align: 'center', fontFace: 'Arial', fontSize: 10 }
+            });
+          });
+          tableRows.push(headerCells);
+
+          (slide.table_rows || []).forEach((row) => {
+            let rowCells = [];
+            rowCells.push({
+              text: stripHtml(row.criteria),
+              options: { fill: '031638', color: '00f2fe', bold: true, fontFace: 'Arial', fontSize: 9.5 }
+            });
+            (row.cols || []).forEach((col) => {
+              rowCells.push({
+                text: stripHtml(col),
+                options: { fill: '0a0f1e', color: 'ffffff', fontFace: 'Arial', fontSize: 8.5 }
+              });
+            });
+            tableRows.push(rowCells);
+          });
+
+          pptxSlide.addTable(tableRows, {
+            x: 0.5, y: 1.45, w: 9.0, h: 3.0,
+            colW: [2.0, 2.3, 2.3, 2.4],
+            border: { type: 'solid', color: '8b5cf6', width: 1 }
+          });
+
+          const heatY = 4.6;
+          const heatWidth = 2.8;
+          const heatGap = 0.3;
+          (slide.heat_row || []).forEach((pill, i) => {
+            let currentX = 0.5 + i * (heatWidth + heatGap);
+            pptxSlide.addShape(pptx.shapes.ROUNDED_RECTANGLE, {
+              x: currentX, y: heatY, w: heatWidth, h: 0.45,
+              fill: { color: '8b5cf6' }
+            });
+            pptxSlide.addText(`${stripHtml(pill.text)} (${pill.fill}%)`, {
+              x: currentX, y: heatY + 0.08, w: heatWidth, h: 0.3,
+              fontSize: 8.5, fontFace: 'Arial', color: 'ffffff', align: 'center', bold: true
+            });
+          });
+
+        } else if (slide.type === 'conclusion') {
+          pptxSlide.addText(stripHtml(slide.title), {
+            x: 0.5, y: 0.4, w: 9.0, h: 0.6,
+            fontSize: 24, fontFace: 'Arial', bold: true, color: '00f2fe'
+          });
+
+          pptxSlide.addText(stripHtml(slide.description), {
+            x: 0.5, y: 1.1, w: 4.2, h: 0.8,
+            fontSize: 11, fontFace: 'Arial', color: '94a3b8'
+          });
+
+          let bulletText = (slide.bullets || []).map(b => stripHtml(b)).join('\n\n');
+          pptxSlide.addText(bulletText, {
+            x: 0.5, y: 2.0, w: 4.2, h: 3.2,
+            fontSize: 10, fontFace: 'Arial', color: 'ffffff'
+          });
+
+          const rightX = 5.2;
+          pptxSlide.addShape(pptx.shapes.ROUNDED_RECTANGLE, {
+            x: rightX, y: 1.1, w: 4.3, h: 4.1,
+            fill: { color: '0a0f1e' },
+            line: { color: '00f2fe', width: 1 }
+          });
+          pptxSlide.addText(stripHtml(slide.right_title), {
+            x: rightX + 0.2, y: 1.25, w: 3.9, h: 0.3,
+            fontSize: 11, fontFace: 'Arial', bold: true, color: '00f2fe', align: 'center'
+          });
+
+          pptxSlide.addText(`“${stripHtml(slide.quote)}”`, {
+            x: rightX + 0.3, y: 1.7, w: 3.7, h: 2.0,
+            fontSize: 9.5, fontFace: 'Arial', color: 'ffffff', italic: true
+          });
+
+          const kpiWidth = 1.2;
+          const kpiGap = 0.15;
+          (slide.kpis || []).forEach((kpi, i) => {
+            let currentX = rightX + 0.3 + i * (kpiWidth + kpiGap);
+            pptxSlide.addShape(pptx.shapes.ROUNDED_RECTANGLE, {
+              x: currentX, y: 3.9, w: kpiWidth, h: 1.1,
+              fill: { color: '031638' },
+              line: { color: '8b5cf6', width: 1 }
+            });
+            pptxSlide.addText(`${stripHtml(kpi.title)}: ${stripHtml(kpi.desc)}`, {
+              x: currentX + 0.05, y: 3.95, w: kpiWidth - 0.1, h: 1.0,
+              fontSize: 7.5, fontFace: 'Arial', color: 'ffffff', align: 'center'
+            });
+          });
+
+        } else if (slide.type === 'custom') {
+          (slide.elements || []).forEach((el) => {
+            let xVal = (el.x / 100) * 10.0;
+            let yVal = (el.y / 100) * 5.625;
+            let wVal = (el.w / 100) * 10.0;
+            let hVal = (el.h / 100) * 5.625;
+
+            let cleanText = stripHtml(el.content);
+            let isHeader = el.content.includes('<h1') || el.content.includes('<h2');
+            let cardColor = 'ffffff';
+            if (el.color) {
+              cardColor = el.color.replace('#', '').trim();
+            } else if (isHeader) {
+              cardColor = '00f2fe';
+            }
+
+            let hasBg = el.bg || el.content.includes('glass-card') || el.content.includes('mini-kpi');
+            if (hasBg) {
+              let bgFill = '0a0f1e';
+              let borderCol = '00f2fe';
+              if (el.bg) {
+                bgFill = el.bg.replace('#', '').trim();
+                if (bgFill.includes('rgba')) bgFill = '0a0f1e';
+              }
+              if (el.border) borderCol = '8b5cf6';
+              pptxSlide.addShape(pptx.shapes.ROUNDED_RECTANGLE, {
+                x: xVal, y: yVal, w: wVal, h: hVal,
+                fill: { color: bgFill },
+                line: { color: borderCol, width: 1 }
+              });
+              xVal += 0.15;
+              wVal -= 0.3;
+              yVal += 0.15;
+              hVal -= 0.3;
+            }
+
+            pptxSlide.addText(cleanText, {
+              x: xVal, y: yVal, w: wVal, h: hVal,
+              fontSize: isHeader ? 14 : (el.fontSize ? parseInt(el.fontSize) * 8 : 10),
+              fontFace: 'Arial',
+              bold: isHeader || el.content.includes('<strong>'),
+              color: cardColor,
+              align: el.textAlign || 'left'
+            });
+          });
+
+        } else if (slide.type === 'farewell') {
+          pptxSlide.addShape(pptx.shapes.OVAL, {
+            x: 4.5, y: 0.6, w: 1.0, h: 1.0,
+            fill: { color: '031638' },
+            line: { color: '00f2fe', width: 2 }
+          });
+          pptxSlide.addText(slide.emblem || '🚀', {
+            x: 4.5, y: 0.85, w: 1.0, h: 0.5,
+            fontSize: 28, align: 'center'
+          });
+
+          pptxSlide.addText(stripHtml(slide.title), {
+            x: 0.5, y: 1.8, w: 9.0, h: 0.8,
+            fontSize: 32, fontFace: 'Arial', bold: true, color: '00f2fe', align: 'center'
+          });
+
+          pptxSlide.addShape(pptx.shapes.RECTANGLE, {
+            x: 1.5, y: 2.7, w: 7.0, h: 1.1,
+            fill: { color: '0a0f1e' },
+            line: { color: '8b5cf6', width: 1 }
+          });
+          pptxSlide.addText(`“${stripHtml(slide.quote)}”\n${stripHtml(slide.quote_author)}`, {
+            x: 1.7, y: 2.8, w: 6.6, h: 0.9,
+            fontSize: 10, fontFace: 'Arial', color: 'ffffff', align: 'center', italic: true
+          });
+
+          pptxSlide.addShape(pptx.shapes.ROUNDED_RECTANGLE, {
+            x: 1.5, y: 4.0, w: 3.3, h: 0.5,
+            fill: { color: '031638' },
+            line: { color: '00f2fe', width: 1 }
+          });
+          pptxSlide.addText(stripHtml(slide.btn_text), {
+            x: 1.5, y: 4.1, w: 3.3, h: 0.3,
+            fontSize: 9, fontFace: 'Arial', bold: true, color: '00f2fe', align: 'center'
+          });
+
+          pptxSlide.addShape(pptx.shapes.ROUNDED_RECTANGLE, {
+            x: 5.2, y: 4.0, w: 3.3, h: 0.5,
+            fill: { color: '8b5cf6' }
+          });
+          pptxSlide.addText(stripHtml(slide.pptx_text || '📊 Descargar PPTX'), {
+            x: 5.2, y: 4.1, w: 3.3, h: 0.3,
+            fontSize: 9, fontFace: 'Arial', bold: true, color: 'ffffff', align: 'center'
+          });
+
+          let footerTxt = "Autores del Proyecto: " + stripHtml(slide.footer_text).replace(/\n/g, ' • ');
+          pptxSlide.addText(footerTxt, {
+            x: 0.5, y: 4.8, w: 9.0, h: 0.5,
+            fontSize: 8.5, fontFace: 'Arial', color: '94a3b8', align: 'center'
+          });
+        }
+      });
+
+      // Save file
+      pptx.writeFile({ fileName: 'Herramientas_Digitales_E-Learning.pptx' })
+        .then(() => {
+          if (typeof showToast !== 'undefined') {
+            showToast('PowerPoint generado con éxito!', '📊');
+          } else {
+            alert('Presentación PowerPoint descargada con éxito!');
+          }
+        })
+        .catch(err => {
+          console.error('PptxGenJS Export Error:', err);
+          alert('Error al generar el PowerPoint.');
+        });
     }
 
     // Start-up triggers

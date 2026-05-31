@@ -4,6 +4,8 @@ const { chromium } = require('playwright');
   console.log('🚀 Starting advanced Gemini AI Copilot & Visual Library verification...');
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
+  page.on('console', msg => console.log('PAGE LOG:', msg.text()));
+  page.on('pageerror', err => console.log('PAGE ERROR:', err.toString()));
   
   // High fidelity viewport
   await page.setViewportSize({ width: 1400, height: 900 });
@@ -11,7 +13,11 @@ const { chromium } = require('playwright');
   try {
     console.log('🔗 Navigating to http://localhost:8080/AdvancedEditor.html...');
     await page.goto('http://localhost:8080/AdvancedEditor.html');
-    await page.evaluate(() => localStorage.clear());
+    await page.evaluate(() => {
+      localStorage.clear();
+      localStorage.setItem('supabase_url', 'none');
+      localStorage.setItem('supabase_anon_key', 'none');
+    });
     await page.reload({ waitUntil: 'networkidle' });
 
 
