@@ -1494,7 +1494,7 @@
           <!-- Collapsible Supabase Team Configuration Panel -->
           <div id="supabase-config-panel" style="display: none; padding: 10px; border-radius: 8px; background: rgba(5,7,18,0.5); border: 1px solid rgba(255,255,255,0.05); flex-direction: column; gap: 8px; margin-bottom: 4px;">
             <div style="font-size:0.58rem; color:var(--primary-accent); font-weight:700; text-transform:uppercase; margin-bottom:2px;">⚙️ Servidor del Equipo (Supabase)</div>
-            <p style="font-size: 0.52rem; color: var(--muted-text); margin: 0 0 4px 0; line-height: 1.3;">Vincula tu proyecto de Supabase para habilitar SSO de Google y un Copiloto IA compartido de forma segura sin revelar tu clave Gemini.</p>
+            <p style="font-size: 0.52rem; color: var(--muted-text); margin: 0 0 4px 0; line-height: 1.3;">Vincula tu proyecto de Supabase para habilitar un Copiloto IA compartido de forma segura mediante Edge Functions sin revelar tu clave Gemini.</p>
             <div class="form-group">
               <label for="sb-url-input" style="font-size: 0.52rem;">Supabase URL:</label>
               <input type="text" id="sb-url-input" class="form-input" placeholder="https://xxxx.supabase.co" style="padding: 4px; font-size: 0.6rem;">
@@ -1832,7 +1832,7 @@
     }
 
     // =========================================================================
-    // ☁️ SUPABASE AUTH GOOGLE SSO & EDGE FUNCTIONS INTEGRATION
+    // ☁️ SUPABASE EDGE FUNCTIONS INTEGRATION
     // =========================================================================
     let supabaseClient = null;
 
@@ -1952,88 +1952,55 @@
       try {
         supabaseClient = supabase.createClient(sbUrl, sbKey);
         
-        // Get active session
-        const { data: { session } } = await supabaseClient.auth.getSession();
-        
-        if (!session || !session.user) {
-          // NOT LOGGED IN MODE
-          wrapper.innerHTML = `
-            <div style="padding: 20px; border-radius: 12px; border: 1px solid rgba(0, 242, 254, 0.2); background: rgba(10,15,30,0.85); display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center;">
-              <div style="font-size: 2.2rem; filter: drop-shadow(0 0 8px rgba(0, 242, 254, 0.45));">🦜</div>
-              <strong style="font-size: 0.72rem; color: #fff; font-family: Outfit;">Asistente de Equipo Corito</strong>
-              <p style="font-size: 0.58rem; color: var(--muted-text); margin: 0; line-height: 1.45;">Inicia sesión con tu cuenta de Gmail autorizada para usar a Corito - Asistente IA de equipo.</p>
-              
-              <button class="btn btn-primary" style="width: 100%; padding: 10px; justify-content: center; gap: 10px; font-weight: 800; font-family: Outfit; font-size: 0.72rem;" onclick="loginWithGoogleSSO()">
-                🔴 Iniciar Sesión con Google
-              </button>
-            </div>
-          `;
-        } else {
-          // LOGGED IN MODE
-          const user = session.user;
-          const userAvatar = user.user_metadata?.avatar_url || 'https://www.gravatar.com/avatar/?d=mp';
-          
-          wrapper.innerHTML = `
-            <!-- Connected Team Member Banner -->
-            <div class="glass-card" style="padding: 8px 12px; border-color: rgba(139, 92, 246, 0.25); display: flex; align-items: center; justify-content: space-between; gap: 10px; background: rgba(139,92,246,0.04);">
-              <div style="display:flex; align-items:center; gap:8px; overflow:hidden;">
-                <img src="${userAvatar}" style="width:20px; height:20px; border-radius:50%; border:1px solid var(--secondary-accent);" alt="Avatar">
-                <div style="text-align:left; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:0.56rem; flex-grow:1;">
-                  <strong style="color:#fff; display:block; line-height:1.2;">Miembro Conectado</strong>
-                  <span style="color:var(--muted-text); font-size:0.85em; display:block; overflow:hidden; text-overflow:ellipsis;">${user.email}</span>
-                </div>
-              </div>
-              <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.5rem; border-color:rgba(255,255,255,0.08); text-transform:none; flex-shrink:0;" onclick="logoutTeamSession()">Salir 🚪</button>
-            </div>
+        // Render Corito Assistant Workspace directly since Google Auth is completely removed!
+        wrapper.innerHTML = `
+          <!-- Sub-Tabs Selector for Corito -->
+          <div class="ai-sub-tabs" style="display:flex; gap:4px; margin-bottom:8px; padding: 2px; background: rgba(5,7,18,0.4); border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); margin-top:6px;">
+            <button id="ai-sub-tab-text" class="btn btn-secondary active" style="flex:1; font-size:0.6rem; padding:5px; justify-content:center; border:none; background:rgba(0,242,254,0.1); color:#fff; font-weight:700;" onclick="switchAiSubTab('text')">Texto 📝</button>
+            <button id="ai-sub-tab-image" class="btn btn-secondary" style="flex:1; font-size:0.6rem; padding:5px; justify-content:center; border:none; background:transparent; color:var(--muted-text);" onclick="switchAiSubTab('image')">Imagen 🖼️</button>
+          </div>
 
-            <!-- Sub-Tabs Selector for Corito -->
-            <div class="ai-sub-tabs" style="display:flex; gap:4px; margin-bottom:8px; padding: 2px; background: rgba(5,7,18,0.4); border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); margin-top:6px;">
-              <button id="ai-sub-tab-text" class="btn btn-secondary active" style="flex:1; font-size:0.6rem; padding:5px; justify-content:center; border:none; background:rgba(0,242,254,0.1); color:#fff; font-weight:700;" onclick="switchAiSubTab('text')">Texto 📝</button>
-              <button id="ai-sub-tab-image" class="btn btn-secondary" style="flex:1; font-size:0.6rem; padding:5px; justify-content:center; border:none; background:transparent; color:var(--muted-text);" onclick="switchAiSubTab('image')">Imagen 🖼️</button>
-            </div>
-
-            <!-- Standard Prompt inputs -->
-            <div class="form-group">
-              <label for="ai-prompt-box">¿Qué deseas redactar y diseñar?</label>
-              <textarea id="ai-prompt-box" class="form-input" placeholder="e.g. 3 beneficios de usar Google Sheets colaborativo con emojis..." style="min-height: 90px; font-size:0.7rem; line-height:1.45; margin-bottom:6px;"></textarea>
-              
-              <div class="ai-suggestions-box" style="margin-top: 2px;">
-                <div style="font-size: 0.58rem; color: var(--muted-text); margin-bottom: 4px; font-weight: 700;">💡 Sugerencias Rápidas:</div>
-                <div id="ai-suggestions-list" style="display: flex; flex-wrap: wrap; gap: 4px;">
-                  <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.52rem; border-color: rgba(255,255,255,0.06); text-transform:none; font-weight: 500;" onclick="setAiPrompt('Crear lista de 3 viñetas con emojis sobre IA y Educación')">📝 Viñetas con Emojis</button>
-                  <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.52rem; border-color: rgba(255,255,255,0.06); text-transform:none; font-weight: 500;" onclick="setAiPrompt('Diseñar métrica KPI de 92% de éxito académico con icono')">📈 KPI de Éxito</button>
-                  <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.52rem; border-color: rgba(255,255,255,0.06); text-transform:none; font-weight: 500;" onclick="setAiPrompt('Generar cita de quote inspiradora en caja esmerilada')">💡 Cita Académica</button>
-                  <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.52rem; border-color: rgba(255,255,255,0.06); text-transform:none; font-weight: 500;" onclick="setAiPrompt('Comparación rápida de Enfoque Rígido vs Lienzo Libre')">⚖️ Comparar Enfoques</button>
-                  <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.52rem; border-color: rgba(255,255,255,0.06); text-transform:none; font-weight: 500;" onclick="setAiPrompt('Crear terminal de consola tech con logs del compilador')">💻 Consola Tech</button>
-                </div>
+          <!-- Standard Prompt inputs -->
+          <div class="form-group">
+            <label for="ai-prompt-box">¿Qué deseas redactar y diseñar?</label>
+            <textarea id="ai-prompt-box" class="form-input" placeholder="e.g. 3 beneficios de usar Google Sheets colaborativo con emojis..." style="min-height: 90px; font-size:0.7rem; line-height:1.45; margin-bottom:6px;"></textarea>
+            
+            <div class="ai-suggestions-box" style="margin-top: 2px;">
+              <div style="font-size: 0.58rem; color: var(--muted-text); margin-bottom: 4px; font-weight: 700;">💡 Sugerencias Rápidas:</div>
+              <div id="ai-suggestions-list" style="display: flex; flex-wrap: wrap; gap: 4px;">
+                <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.52rem; border-color: rgba(255,255,255,0.06); text-transform:none; font-weight: 500;" onclick="setAiPrompt('Crear lista de 3 viñetas con emojis sobre IA y Educación')">📝 Viñetas con Emojis</button>
+                <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.52rem; border-color: rgba(255,255,255,0.06); text-transform:none; font-weight: 500;" onclick="setAiPrompt('Diseñar métrica KPI de 92% de éxito académico con icono')">📈 KPI de Éxito</button>
+                <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.52rem; border-color: rgba(255,255,255,0.06); text-transform:none; font-weight: 500;" onclick="setAiPrompt('Generar cita de quote inspiradora en caja esmerilada')">💡 Cita Académica</button>
+                <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.52rem; border-color: rgba(255,255,255,0.06); text-transform:none; font-weight: 500;" onclick="setAiPrompt('Comparación rápida de Enfoque Rígido vs Lienzo Libre')">⚖️ Comparar Enfoques</button>
+                <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.52rem; border-color: rgba(255,255,255,0.06); text-transform:none; font-weight: 500;" onclick="setAiPrompt('Crear terminal de consola tech con logs del compilador')">💻 Consola Tech</button>
               </div>
             </div>
+          </div>
 
-            <button id="btn-generate-ai" class="btn btn-primary" style="width:100%; justify-content:center; padding: 10px 15px; font-family:var(--font-outfit); font-weight:800; font-size:0.75rem;" onclick="executeCoritoGeneration()">
-              ✨ Generar con Asistente IA
-            </button>
+          <button id="btn-generate-ai" class="btn btn-primary" style="width:100%; justify-content:center; padding: 10px 15px; font-family:var(--font-outfit); font-weight:800; font-size:0.75rem;" onclick="executeCoritoGeneration()">
+            ✨ Generar con Asistente IA
+          </button>
 
-            <div id="ai-status-loader" style="display:none; text-align:center; padding: 8px;">
-              <div style="font-size:0.6rem; color:var(--muted-text); display:flex; align-items:center; justify-content:center; gap:8px;">
-                <span style="width:8px; height:8px; border-radius:50%; background:var(--primary-accent); display:inline-block; animation: heartbeat 1s infinite alternate;"></span>
-                Corito diseñando...
-              </div>
+          <div id="ai-status-loader" style="display:none; text-align:center; padding: 8px;">
+            <div style="font-size:0.6rem; color:var(--muted-text); display:flex; align-items:center; justify-content:center; gap:8px;">
+              <span style="width:8px; height:8px; border-radius:50%; background:var(--primary-accent); display:inline-block; animation: heartbeat 1s infinite alternate;"></span>
+              Corito diseñando...
             </div>
+          </div>
 
-            <div id="ai-result-box" style="display: none; flex-direction: column; gap: 8px; margin-top: 5px;">
-              <div style="font-size: 0.65rem; font-weight: 700; color: var(--primary-accent); text-transform: uppercase;">Resultado (Arrastra al lienzo o inserta):</div>
-              <div id="ai-html-preview" class="miniature-preview-box" draggable="true" ondragstart="handleAiDragStart(event)" style="padding: 10px; max-height: 120px; overflow-y: auto; text-align: left; align-items: flex-start; justify-content: flex-start; cursor: grab;" title="¡Mantén presionado y arrastra al lienzo libre!"></div>
-              <div class="form-group" style="margin-top: 4px;">
-                <label for="ai-sandbox-code" style="font-size: 0.58rem; color: var(--muted-text);">Código Sandbox (Edición Directa):</label>
-                <textarea id="ai-sandbox-code" class="form-input" style="font-family: monospace; font-size: 0.6rem; min-height: 80px; line-height: 1.35; background: rgba(5,7,18,0.6);" oninput="lastAiGeneratedHtml = this.value; document.getElementById('ai-html-preview').innerHTML = this.value;"></textarea>
-              </div>
-              <div style="display: flex; gap: 6px;">
-                <button class="btn btn-secondary" style="flex: 1; justify-content: center; font-size: 0.62rem;" onclick="previewAiSandboxCode()">👁️ Vista Previa</button>
-                <button class="btn btn-primary" style="flex: 2; justify-content: center; font-size: 0.62rem; padding: 6px 10px;" onclick="insertAiGeneratedElement()">➕ Insertar</button>
-              </div>
+          <div id="ai-result-box" style="display: none; flex-direction: column; gap: 8px; margin-top: 5px;">
+            <div style="font-size: 0.65rem; font-weight: 700; color: var(--primary-accent); text-transform: uppercase;">Resultado (Arrastra al lienzo o inserta):</div>
+            <div id="ai-html-preview" class="miniature-preview-box" draggable="true" ondragstart="handleAiDragStart(event)" style="padding: 10px; max-height: 120px; overflow-y: auto; text-align: left; align-items: flex-start; justify-content: flex-start; cursor: grab;" title="¡Mantén presionado y arrastra al lienzo libre!"></div>
+            <div class="form-group" style="margin-top: 4px;">
+              <label for="ai-sandbox-code" style="font-size: 0.58rem; color: var(--muted-text);">Código Sandbox (Edición Directa):</label>
+              <textarea id="ai-sandbox-code" class="form-input" style="font-family: monospace; font-size: 0.6rem; min-height: 80px; line-height: 1.35; background: rgba(5,7,18,0.6);" oninput="lastAiGeneratedHtml = this.value; document.getElementById('ai-html-preview').innerHTML = this.value;"></textarea>
             </div>
-          `;
-        }
+            <div style="display: flex; gap: 6px;">
+              <button class="btn btn-secondary" style="flex: 1; justify-content: center; font-size: 0.62rem;" onclick="previewAiSandboxCode()">👁️ Vista Previa</button>
+              <button class="btn btn-primary" style="flex: 2; justify-content: center; font-size: 0.62rem; padding: 6px 10px;" onclick="insertAiGeneratedElement()">➕ Insertar</button>
+            </div>
+          </div>
+        `;
       } catch (err) {
         console.error('Supabase Initialization Error:', err);
       }
@@ -2246,13 +2213,12 @@
         showToast('Supabase no está conectado.', '❌');
         return;
       }
+      const cachedPass = localStorage.getItem('team_auth_password');
+      if (!cachedPass) {
+        showToast('Introduce la contraseña de equipo para guardar.', '🔑');
+        return;
+      }
       try {
-        const { data: { session } } = await window.supabaseClient.auth.getSession();
-        if (!session || !session.user) {
-          showToast('Inicia sesión para guardar en la nube.', '🔑');
-          return;
-        }
-        
         showToast('Guardando presentación en la nube...', '☁️');
         
         const { error } = await window.supabaseClient
@@ -2262,7 +2228,7 @@
             name: 'Presentación Principal del Equipo',
             slides_data: slides,
             compiled_html: compileUpdatedPresentationHtml(),
-            owner_email: session.user.email,
+            owner_email: 'equipo@corito.ai',
             updated_at: new Date()
           }, { onConflict: 'id' });
           
@@ -2279,13 +2245,12 @@
         showToast('Supabase no está conectado.', '❌');
         return;
       }
+      const cachedPass = localStorage.getItem('team_auth_password');
+      if (!cachedPass) {
+        showToast('Introduce la contraseña de equipo para cargar.', '🔑');
+        return;
+      }
       try {
-        const { data: { session } } = await window.supabaseClient.auth.getSession();
-        if (!session || !session.user) {
-          showToast('Inicia sesión para cargar de la nube.', '🔑');
-          return;
-        }
-        
         showToast('Descargando de la nube...', '📂');
         
         const { data, error } = await window.supabaseClient
@@ -2312,25 +2277,6 @@
         console.error('Cloud Load Error:', err);
         showToast(err.message || 'Fallo al cargar de la nube.', '❌');
       }
-    }
-
-    async function loginWithGoogleSSO() {
-
-      if (!supabaseClient) return;
-      showToast('Redireccionando a Google SSO...', '🔴');
-      await supabaseClient.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: window.location.origin + window.location.pathname + "?tab=ai"
-        }
-      });
-    }
-
-    async function logoutTeamSession() {
-      if (!supabaseClient) return;
-      await supabaseClient.auth.signOut();
-      showToast('Sesión de equipo finalizada.', '🚪');
-      setTimeout(() => window.location.reload(), 1000);
     }
 
     async function generateElementWithSupabaseEdgeFunction() {
