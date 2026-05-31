@@ -6,8 +6,8 @@
  */
 
 // ⚙️ INGRESA AQUÍ LAS CREDENCIALES PÚBLICAS DE TU PROYECTO DE SUPABASE
-const DEFAULT_SUPABASE_URL = ""; 
-const DEFAULT_SUPABASE_ANON_KEY = "";
+const DEFAULT_SUPABASE_URL = "https://wsmktslxrgnoxzpycymj.supabase.co"; 
+const DEFAULT_SUPABASE_ANON_KEY = "sb_publishable__pV5l2sQPXzWwx90UsQTrw_PKRwzFm1";
 
 window.addEventListener('DOMContentLoaded', async () => {
   // Read config from hardcoded constants or local storage override (if any)
