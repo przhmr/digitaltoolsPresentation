@@ -988,298 +988,386 @@
     // parses and edits this JSON array to dynamically update the presentation.
     const SLIDES_DATA = [
       {
-        id: 'slide_1',
-        type: 'cover',
-        title: 'Herramientas Digitales para el E-Learning',
-        subtitle: 'Aprendizaje digital, colaboración e inteligencia artificial',
-        authors: [
-          'Ing. Dalia Rojas D.',
-          'Ing. Homer Perozo N.',
-          'Ing. Indiana Salas P.',
-          'Lic. Ruby Medina L.'
+        "id": "slide_1",
+        "type": "cover",
+        "title": "Herramientas Digitales para el E-Learning",
+        "subtitle": "Aprendizaje digital, colaboración e inteligencia artificial",
+        "authors": [
+          "Ing. Dalia Rojas D.",
+          "Ing. Homer Perozo Naveda",
+          "Ing. Indiana Salas P.",
+          "Lic. Ruby Medina L."
         ],
-        institution: 'Universidad Nacional Experimental Francisco de Miranda • 2026'
+        "institution": "Universidad Nacional Experimental Francisco de Miranda • 2026"
       },
       {
-        id: 'slide_2',
-        type: 'categories',
-        title: 'Ecosistema de Categorías Digitales',
-        description: 'El desarrollo académico y profesional se apoya en tres tipos de herramientas que facilitan el análisis, la organización visual y la gestión de la información.',
-        cards: [
+        "id": "slide_2",
+        "type": "categories",
+        "title": "Ecosistema de Categorías Digitales",
+        "description": "El desarrollo académico y profesional se apoya en tres tipos de herramientas que facilitan el análisis, la organización visual y la gestión de la información.",
+        "cards": [
           {
-            emoji: '📊',
-            label: 'Análisis y Organización',
-            desc: '<strong>Google Sheets</strong>: Permite ordenar datos, automatizar tareas y compartir hojas de cálculo en equipo al instante.'
+            "emoji": "📊",
+            "label": "Análisis y Organización",
+            "desc": "<strong>Google Sheets</strong>: Permite ordenar datos, automatizar tareas y compartir hojas de cálculo en equipo al instante."
           },
           {
-            emoji: '✏️',
-            label: 'Organización Visual',
-            desc: '<strong>Lucidchart</strong>: Facilita el diseño de diagramas, mapas conceptuales y planificación de proyectos paso a paso.'
+            "emoji": "✏️",
+            "label": "Organización Visual",
+            "desc": "<strong>Lucidchart</strong>: Facilita el diseño de diagramas, mapas conceptuales y planificación de proyectos paso a paso."
           },
           {
-            emoji: '🤖',
-            label: 'Inteligencia Artificial',
-            desc: '<strong>NotebookLM</strong>: Permite resumir lecturas extensas, resolver dudas y sintetizar artículos de estudio.'
+            "emoji": "🤖",
+            "label": "Inteligencia Artificial",
+            "desc": "<strong>NotebookLM</strong>: Permite resumir lecturas extensas, resolver dudas y sintetizar artículos de estudio."
           }
         ],
-        kpis: [
+        "kpis": [
           {
-            icon: '🎛️',
-            title: 'Control',
-            desc: 'La información pasa de dispersa a medible.'
+            "icon": "🎛️",
+            "title": "Control",
+            "desc": "La información pasa de dispersa a medible."
           },
           {
-            icon: '🤝',
-            title: 'Coordinación',
-            desc: 'El equipo comparte una misma lectura del proceso.'
+            "icon": "🤝",
+            "title": "Coordinación",
+            "desc": "El equipo comparte una misma lectura del proceso."
           },
           {
-            icon: '🎓',
-            title: 'Aprendizaje',
-            desc: 'Las fuentes se convierten en estudio guiado.'
-          }
-        ]
-      },
-      {
-        id: 'slide_3',
-        type: 'split_chart',
-        title: 'Google Sheets: Análisis de Datos y Control',
-        description: 'Una hoja de cálculo inteligente en la nube que facilita el análisis de información y el trabajo colaborativo sin instalar programas.',
-        bullets: [
-          '<strong>Acceso desde Cualquier Dispositivo:</strong> Consulta y edita tus archivos desde tu celular, tablet o laptop con total sincronización.',
-          '<strong>Colaboración en Tiempo Real:</strong> Varios compañeros pueden trabajar sobre el mismo archivo a la vez sin perder información.',
-          '<strong>Historial Seguro de Cambios:</strong> Todo cambio se guarda automáticamente. Si hay un error, puedes volver a la versión anterior en un clic.'
-        ],
-        chart_title: 'Automatización Práctica',
-        chart_data: [
-          { label: 'Datos', value: 52 },
-          { label: 'Fórmulas', value: 78 },
-          { label: 'Equipo', value: 88 },
-          { label: 'Reportes', value: 66 }
-        ],
-        detail_cards: [
-          {
-            icon: '⚡',
-            title: 'Automatización y Fórmulas',
-            desc: 'Permite programar cálculos automáticos para ahorrar tiempo en tareas repetitivas.'
-          },
-          {
-            icon: '🔌',
-            title: 'Integración con Formularios',
-            desc: 'Vincula formularios web para recolectar datos desde tu celular directamente a la hoja.'
+            "icon": "🎓",
+            "title": "Aprendizaje",
+            "desc": "Las fuentes se convierten en estudio guiado."
           }
         ]
       },
       {
-        id: 'slide_4',
-        type: 'split_flow',
-        title: 'Sheets: Practicidad y Flujo de Trabajo',
-        left_title: 'Uso del Recurso',
-        left_cards: [
+        "id": "slide_3",
+        "type": "split_chart",
+        "title": "Google Sheets: Análisis de Datos y Control",
+        "description": "Una hoja de cálculo inteligente en la nube que facilita el análisis de información y el trabajo colaborativo sin instalar programas.",
+        "bullets": [
+          "<strong>Acceso desde Cualquier Dispositivo:</strong> Consulta y edita tus archivos desde tu celular, tablet o laptop con total sincronización.",
+          "<strong>Colaboración en Tiempo Real:</strong> Varios compañeros pueden trabajar sobre el mismo archivo a la vez sin perder información.",
+          "<strong>Historial Seguro de Cambios:</strong> Todo cambio se guarda automáticamente. Si hay un error, puedes volver a la versión anterior en un clic."
+        ],
+        "chart_title": "Automatización Práctica",
+        "chart_data": [
           {
-            icon: '📊',
-            title: 'Accesibilidad Sin Costo',
-            desc: 'Permite a cualquier persona u organización estructurar información y llevar controles de forma gratuita.'
+            "label": "Datos",
+            "value": 52
           },
           {
-            icon: '📲',
-            title: 'Formularios Móviles',
-            desc: 'Permite recolectar respuestas, opiniones o datos de campo desde teléfonos e integrarlos al instante.'
+            "label": "Fórmulas",
+            "value": 78
           },
           {
-            icon: '📈',
-            title: 'Visualización Rápida',
-            desc: 'Genera gráficos y reportes automáticos al instante a medida que agregas o modificas datos.'
+            "label": "Equipo",
+            "value": 88
+          },
+          {
+            "label": "Reportes",
+            "value": 66
           }
         ],
-        right_title: 'Flujo de Trabajo Simplificado',
-        right_steps: [
+        "detail_cards": [
           {
-            title: '1. Registro Sencillo',
-            desc: 'Se ingresan datos de forma amigable a través de un formulario móvil o web.'
+            "icon": "⚡",
+            "title": "Automatización y Fórmulas",
+            "desc": "Permite programar cálculos automáticos para ahorrar tiempo en tareas repetitivas."
           },
           {
-            title: '2. Guardado en la Nube',
-            desc: 'La información ingresa automáticamente a Sheets, sin transcribir en papel.'
-          },
-          {
-            title: '3. Gráficos Automaticos',
-            desc: 'La hoja actualiza los reportes al instante para facilitar lectura y análisis.'
+            "icon": "🔌",
+            "title": "Integración con Formularios",
+            "desc": "Vincula formularios web para recolectar datos desde tu celular directamente a la hoja."
           }
         ]
       },
       {
-        id: 'slide_5',
-        type: 'split_road',
-        title: 'Lucidchart: Organización y Diseño Visual',
-        description: 'Lienzo digital intuitivo que ayuda a estructurar ideas, planificar actividades y coordinar proyectos de forma visual y legible:',
-        bullets: [
-          '<strong>Flujos de Trabajo Claros:</strong> Diseña de manera interactiva diagramas y cronogramas para ordenar tareas.',
-          '<strong>Colaboración Interactiva:</strong> Trabaja con tus compañeros de estudio sobre un lienzo infinito, colocando formas y notas en vivo.',
-          '<strong>Plantillas Inteligentes:</strong> Acceso a miles de diseños prediseñados listos para adaptar, ahorrando tiempo de diseño manual.'
-        ],
-        road_title: 'Ejemplo Visual de Flujo',
-        road_nodes: [
-          { type: 'start', title: 'Inicio', desc: 'Idea o tarea inicial' },
-          { type: 'middle', title: 'Ruta', desc: 'Revisión, conexión y decisiones' },
-          { type: 'end', title: 'Meta', desc: 'Desarrollo y entrega final' }
-        ],
-        heat_row: [
-          { text: 'Idea clara', fill: 76 },
-          { text: 'Equipo alineado', fill: 84 },
-          { text: 'Entrega visible', fill: 72 }
-        ]
-      },
-      {
-        id: 'slide_6',
-        type: 'split_network',
-        title: 'Lucidchart: Conectividad y Ecosistema',
-        left_title: 'Conexión Directa',
-        left_chips: [
+        "id": "slide_4",
+        "type": "split_flow",
+        "title": "Sheets: Practicidad y Flujo de Trabajo",
+        "left_title": "Uso del Recurso",
+        "left_cards": [
           {
-            icon: '🔗',
-            title: 'Datos en Vivo',
-            desc: 'Vincula las figuras de tus diagramas a celdas de Sheets. Si cambias los datos numéricos, el diagrama se actualiza de inmediato.'
+            "icon": "📊",
+            "title": "Accesibilidad Sin Costo",
+            "desc": "Permite a cualquier persona u organización estructurar información y llevar controles de forma gratuita."
           },
           {
-            icon: '🌐',
-            title: 'Diseños Listos',
-            desc: 'Acceso a plantillas y formas universales que facilitan estructurar mapas mentales u organigramas al instante.'
+            "icon": "📲",
+            "title": "Formularios Móviles",
+            "desc": "Permite recolectar respuestas, opiniones o datos de campo desde teléfonos e integrarlos al instante."
           },
           {
-            icon: '🛡️',
-            title: 'Exportación Sencilla',
-            desc: 'Descarga tus esquemas en formatos interactivos (PDF o imagen) para incluirlos de inmediato en tus documentos de estudio.'
+            "icon": "📈",
+            "title": "Visualización Rápida",
+            "desc": "Genera gráficos y reportes automáticos al instante a medida que agregas o modificas datos."
           }
         ],
-        right_title: 'Integración con Aplicaciones',
-        network_cards: [
-          { title: 'Chat', subtitle: 'cambios' },
-          { title: "Tareas", subtitle: "actividad" },
-          { title: 'Docs', subtitle: 'inserción' },
-          { title: 'Exportar', subtitle: 'PDF/imagen' },
-          { title: 'Lucidchart', subtitle: 'ecosistema' }
+        "right_title": "Flujo de Trabajo Simplificado",
+        "right_steps": [
+          {
+            "title": "1. Registro Sencillo",
+            "desc": "Se ingresan datos de forma amigable a través de un formulario móvil o web."
+          },
+          {
+            "title": "2. Guardado en la Nube",
+            "desc": "La información ingresa automáticamente a Sheets, sin transcribir en papel."
+          },
+          {
+            "title": "3. Gráficos Automaticos",
+            "desc": "La hoja actualiza los reportes al instante para facilitar lectura y análisis."
+          }
         ]
       },
       {
-        id: 'slide_7',
-        type: 'split_pipeline',
-        title: 'NotebookLM: Estudio Inteligente con IA',
-        description: 'Un asistente de Google potenciado por Inteligencia Artificial que te ayuda a resumir, organizar y analizar fuentes de estudio complejas:',
-        bullets: [
-          '<strong>Respuestas Basadas en tus Archivos:</strong> Sube tus PDFs, apuntes o libros. La IA te responderá basándose estrictamente en el contenido que subiste.',
-          '<strong>Precisión sin Inventos:</strong> A diferencia de otros chats, cada respuesta incluye citas directas y enlaces a la página exacta de tu documento original.',
-          '<strong>Síntesis Automática:</strong> Crea resúmenes cruzados, guías de estudio interactivas y cuestionarios de práctica en segundos.'
+        "id": "slide_5",
+        "type": "split_road",
+        "title": "Lucidchart: Organización y Diseño Visual",
+        "description": "Lienzo digital intuitivo que ayuda a estructurar ideas, planificar actividades y coordinar proyectos de forma visual y legible:",
+        "bullets": [
+          "<strong>Flujos de Trabajo Claros:</strong> Diseña de manera interactiva diagramas y cronogramas para ordenar tareas.",
+          "<strong>Colaboración Interactiva:</strong> Trabaja con tus compañeros de estudio sobre un lienzo infinito, colocando formas y notas en vivo.",
+          "<strong>Plantillas Inteligentes:</strong> Acceso a miles de diseños prediseñados listos para adaptar, ahorrando tiempo de diseño manual."
         ],
-        right_title: 'Ventajas Principales',
-        sources: ['PDFs', 'Apuntes', 'Artículos'],
-        core_title: 'NotebookLM',
-        core_desc: 'IA con citas',
-        outputs: ['Resumen', 'Respuesta', 'Guía']
-      },
-      {
-        id: 'slide_8',
-        type: 'grid_conclusion',
-        title: 'NotebookLM: Aliado en el Aprendizaje',
-        description: 'Optimiza la comprensión de lecturas densas y materiales de estudio en tu postgrado:',
-        cards: [
+        "road_title": "Ejemplo Visual de Flujo",
+        "road_nodes": [
           {
-            emoji: '📖',
-            title: 'Lecturas Densas',
-            desc: 'Encuentra y extrae conceptos o definiciones clave de manuales extensos en segundos.'
+            "type": "start",
+            "title": "Inicio",
+            "desc": "Idea o tarea inicial"
           },
           {
-            emoji: '📝',
-            title: 'Apoyo en Tesis',
-            desc: 'Analiza artículos científicos para estructurar tus marcos teóricos de forma ágil y ordenada.'
+            "type": "middle",
+            "title": "Ruta",
+            "desc": "Revisión, conexión y decisiones"
           },
           {
-            emoji: '🎙️',
-            title: 'Repaso Práctico',
-            desc: 'Genera glosarios automáticos, resúmenes y preguntas de práctica para estudiar temas específicos.'
+            "type": "end",
+            "title": "Meta",
+            "desc": "Desarrollo y entrega final"
           }
         ],
-        ia_text: '🤖 <strong>Uso Estratégico de Inteligencia Artificial:</strong> Cumplimiento de las directrices del postgrado al integrar herramientas de IA generativa para potenciar la productividad y el aprendizaje académico autónomo.',
-        heat_row: [
-          { text: 'Leer', fill: 70 },
-          { text: 'Sintetizar', fill: 82 },
-          { text: 'Practicar', fill: 88 }
+        "heat_row": [
+          {
+            "text": "Idea clara",
+            "fill": 76
+          },
+          {
+            "text": "Equipo alineado",
+            "fill": 84
+          },
+          {
+            "text": "Entrega visible",
+            "fill": 72
+          }
         ]
       },
       {
-        id: 'slide_9',
-        type: 'comparison_table',
-        title: 'El Tablero Comparativo',
-        description: 'Una vista simplificada de los principales beneficios de las tres herramientas analizadas:',
-        table_headers: ['Criterio', 'Google Sheets', 'Lucidchart', 'NotebookLM'],
-        table_rows: [
+        "id": "slide_6",
+        "type": "split_network",
+        "title": "Lucidchart: Conectividad y Ecosistema",
+        "left_title": "Conexión Directa",
+        "left_chips": [
           {
-            criteria: 'Propósito Principal',
-            cols: [
-              'Organizar y analizar datos tabulares.',
-              'Diseñar diagramas y flujos visuales.',
-              'Sintetizar y consultar documentos con IA.'
+            "icon": "🔗",
+            "title": "Datos en Vivo",
+            "desc": "Vincula las figuras de tus diagramas a celdas de Sheets. Si cambias los datos numéricos, el diagrama se actualiza de inmediato."
+          },
+          {
+            "icon": "🌐",
+            "title": "Diseños Listos",
+            "desc": "Acceso a plantillas y formas universales que facilitan estructurar mapas mentales u organigramas al instante."
+          },
+          {
+            "icon": "🛡️",
+            "title": "Exportación Sencilla",
+            "desc": "Descarga tus esquemas en formatos interactivos (PDF o imagen) para incluirlos de inmediato en tus documentos de estudio."
+          }
+        ],
+        "right_title": "Integración con Aplicaciones",
+        "network_cards": [
+          {
+            "title": "Chat",
+            "subtitle": "cambios"
+          },
+          {
+            "title": "Tareas",
+            "subtitle": "actividad"
+          },
+          {
+            "title": "Docs",
+            "subtitle": "inserción"
+          },
+          {
+            "title": "Exportar",
+            "subtitle": "PDF/imagen"
+          },
+          {
+            "title": "Lucidchart",
+            "subtitle": "ecosistema"
+          }
+        ]
+      },
+      {
+        "id": "slide_7",
+        "type": "split_pipeline",
+        "title": "NotebookLM: Estudio Inteligente con IA",
+        "description": "Un asistente de Google potenciado por Inteligencia Artificial que te ayuda a resumir, organizar y analizar fuentes de estudio complejas:",
+        "bullets": [
+          "<strong>Respuestas Basadas en tus Archivos:</strong> Sube tus PDFs, apuntes o libros. La IA te responderá basándose estrictamente en el contenido que subiste.",
+          "<strong>Precisión sin Inventos:</strong> A diferencia de otros chats, cada respuesta incluye citas directas y enlaces a la página exacta de tu documento original.",
+          "<strong>Síntesis Automática:</strong> Crea resúmenes cruzados, guías de estudio interactivas y cuestionarios de práctica en segundos."
+        ],
+        "right_title": "Ventajas Principales",
+        "sources": [
+          "PDFs",
+          "Apuntes",
+          "Artículos"
+        ],
+        "core_title": "NotebookLM",
+        "core_desc": "IA con citas",
+        "outputs": [
+          "Resumen",
+          "Respuesta",
+          "Guía"
+        ]
+      },
+      {
+        "id": "slide_8",
+        "type": "grid_conclusion",
+        "title": "NotebookLM: Aliado en el Aprendizaje",
+        "description": "Optimiza la comprensión de lecturas densas y materiales de estudio en tu postgrado:",
+        "cards": [
+          {
+            "emoji": "📖",
+            "title": "Lecturas Densas",
+            "desc": "Encuentra y extrae conceptos o definiciones clave de manuales extensos en segundos."
+          },
+          {
+            "emoji": "📝",
+            "title": "Apoyo en Tesis",
+            "desc": "Analiza artículos científicos para estructurar tus marcos teóricos de forma ágil y ordenada."
+          },
+          {
+            "emoji": "🎙️",
+            "title": "Repaso Práctico",
+            "desc": "Genera glosarios automáticos, resúmenes y preguntas de práctica para estudiar temas específicos."
+          }
+        ],
+        "ia_text": "🤖 <strong>Uso Estratégico de Inteligencia Artificial:</strong> Cumplimiento de las directrices del postgrado al integrar herramientas de IA generativa para potenciar la productividad y el aprendizaje académico autónomo.",
+        "heat_row": [
+          {
+            "text": "Leer",
+            "fill": 70
+          },
+          {
+            "text": "Sintetizar",
+            "fill": 82
+          },
+          {
+            "text": "Practicar",
+            "fill": 88
+          }
+        ]
+      },
+      {
+        "id": "slide_9",
+        "type": "comparison_table",
+        "title": "El Tablero Comparativo",
+        "description": "Una vista simplificada de los principales beneficios de las tres herramientas analizadas:",
+        "table_headers": [
+          "Criterio",
+          "Google Sheets",
+          "Lucidchart",
+          "NotebookLM"
+        ],
+        "table_rows": [
+          {
+            "criteria": "Propósito Principal",
+            "cols": [
+              "Organizar y analizar datos tabulares.",
+              "Diseñar diagramas y flujos visuales.",
+              "Sintetizar y consultar documentos con IA."
             ]
           },
           {
-            criteria: '¿Cómo te ayuda?',
-            cols: [
-              'Realiza cálculos rápidos y lleva un control ordenado.',
-              'Permite estructurar ideas y planificar proyectos.',
-              'Facilita el estudio de libros y lecturas extensas.'
+            "criteria": "¿Cómo te ayuda?",
+            "cols": [
+              "Realiza cálculos rápidos y lleva un control ordenado.",
+              "Permite estructurar ideas y planificar proyectos.",
+              "Facilita el estudio de libros y lecturas extensas."
             ]
           },
           {
-            criteria: 'Punto Fuerte',
-            cols: [
-              'Trabajo en equipo y fórmulas en tiempo real.',
-              'Lienzo interactivo muy intuitivo (arrastrar y soltar).',
-              'Respuestas confiables basadas sólo en tus propios PDFs.'
+            "criteria": "Punto Fuerte",
+            "cols": [
+              "Trabajo en equipo y fórmulas en tiempo real.",
+              "Lienzo interactivo muy intuitivo (arrastrar y soltar).",
+              "Respuestas confiables basadas sólo en tus propios PDFs."
             ]
           },
           {
-            criteria: 'Facilidad de Uso',
-            cols: [
-              'Alta (Familiar para todos).',
-              'Alta (Sencillo de aprender).',
-              'Excelente (Se conversa en lenguaje natural).'
+            "criteria": "Facilidad de Uso",
+            "cols": [
+              "Alta (Familiar para todos).",
+              "Alta (Sencillo de aprender).",
+              "Excelente (Se conversa en lenguaje natural)."
             ]
           }
         ],
-        heat_row: [
-          { text: 'Sheets: datos', fill: 78 },
-          { text: 'Lucidchart: diagramas', fill: 78 },
-          { text: 'NotebookLM: fuentes', fill: 78 }
+        "heat_row": [
+          {
+            "text": "Sheets: datos",
+            "fill": 78
+          },
+          {
+            "text": "Lucidchart: diagramas",
+            "fill": 78
+          },
+          {
+            "text": "NotebookLM: fuentes",
+            "fill": 78
+          }
         ]
       },
       {
-        id: 'slide_10',
-        type: 'conclusion',
-        title: 'Conclusión: El Valor Digital en el Postgrado',
-        description: 'El uso estratégico de herramientas digitales en la educación a distancia ofrece ventajas indispensables para los profesionales de postgrado:',
-        bullets: [
-          '<strong>Trabajo Virtual Colaborativo:</strong> Prepara a los estudiantes para desempeñarse en equipos remotos y distribuidos de forma eficiente.',
-          '<strong>Organización y Control de Datos:</strong> Desarrolla la disciplina de estructurar la información y compartirla con el equipo de forma segura y clara.',
-          '<strong>Aprendizaje Acelerado con IA:</strong> Optimiza el análisis de textos densos y literatura especializada, acelerando la redacción de tesis e investigaciones.'
+        "id": "slide_10",
+        "type": "conclusion",
+        "title": "Conclusión: El Valor Digital en el Postgrado",
+        "description": "El uso estratégico de herramientas digitales en la educación a distancia ofrece ventajas indispensables para los profesionales de postgrado:",
+        "bullets": [
+          "<strong>Trabajo Virtual Colaborativo:</strong> Prepara a los estudiantes para desempeñarse en equipos remotos y distribuidos de forma eficiente.",
+          "<strong>Organización y Control de Datos:</strong> Desarrolla la disciplina de estructurar la información y compartirla con el equipo de forma segura y clara.",
+          "<strong>Aprendizaje Acelerado con IA:</strong> Optimiza el análisis de textos densos y literatura especializada, acelerando la redacción de tesis e investigaciones."
         ],
-        right_title: 'Síntesis de Valor',
-        quote: 'Las herramientas digitales en el e-learning son laboratorios de aprendizaje práctico. A través de ellas, los estudiantes desarrollan habilidades indispensables para el mercado actual: la analítica de datos en la nube, la planificación visual de ideas y el uso ético, seguro y productivo de la Inteligencia Artificial cognitiva.',
-        kpis: [
-          { title: 'Nube', desc: 'Trabajo remoto con trazabilidad.' },
-          { title: 'Visual', desc: 'Procesos comprensibles.' },
-          { title: 'IA', desc: 'Estudio acelerado y citado.' }
+        "right_title": "Síntesis de Valor",
+        "quote": "Las herramientas digitales en el e-learning son laboratorios de aprendizaje práctico. A través de ellas, los estudiantes desarrollan habilidades indispensables para el mercado actual: la analítica de datos en la nube, la planificación visual de ideas y el uso ético, seguro y productivo de la Inteligencia Artificial cognitiva.",
+        "kpis": [
+          {
+            "title": "Nube",
+            "desc": "Trabajo remoto con trazabilidad."
+          },
+          {
+            "title": "Visual",
+            "desc": "Procesos comprensibles."
+          },
+          {
+            "title": "IA",
+            "desc": "Estudio acelerado y citado."
+          }
         ]
       },
       {
-        id: 'slide_11',
-        type: 'farewell',
-        emblem: '🚀',
-        title: '¡Muchas Gracias!',
-        quote: '“Cualquier tecnología suficientemente avanzada es indistinguible de la magia.”',
-        quote_author: '— Arthur C. Clarke',
-        btn_text: '💬 Espacio para Preguntas y Debate',
-        pdf_text: '📄 Descargar PDF',
-        footer_text: 'Autores del Proyecto:\nIng. Dalia Rojas D. • Ing. Homer Perozo N. • Ing. Indiana Salas P. • Lic. Ruby Medina L.'
+        "id": "slide_11",
+        "type": "farewell",
+        "emblem": "🚀",
+        "title": "¡Muchas Gracias!",
+        "quote": "“Cualquier tecnología suficientemente avanzada es indistinguible de la magia.”",
+        "quote_author": "— Arthur C. Clarke",
+        "btn_text": "💬 Espacio para Preguntas y Debate",
+        "pdf_text": "📄 Descargar PDF",
+        "footer_text": "Autores del Proyecto:\nIng. Dalia Rojas D. • Ing. Homer Perozo N. • Ing. Indiana Salas P. • Lic. Ruby Medina L."
       }
     ];
 
@@ -1869,6 +1957,25 @@
 
     // Launch the Custom 3D Motion Graphics Grid Engine
     drawFlowingGrid();
+
+    // Real-time slide preview message listener from editor.html
+    window.addEventListener('message', event => {
+      if (event.data && event.data.type === 'update-slides') {
+        const newSlides = event.data.data;
+        const activeIdx = event.data.activeIndex;
+        
+        // Re-render slides DOM dynamically
+        renderSlides(newSlides);
+        
+        // Force Reveal.js to synchronize and layout the updated slides
+        Reveal.sync();
+        
+        // Navigate instantly to the active slide being edited
+        if (typeof activeIdx === 'number' && activeIdx >= 0) {
+          Reveal.slide(activeIdx, 0);
+        }
+      }
+    });
 
     // Automatically open the print dialog when ?print-pdf is in the URL
     if (window.location.search.match(/print-pdf/gi)) {

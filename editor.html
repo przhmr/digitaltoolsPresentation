@@ -228,6 +228,65 @@
       color: #fff;
     }
 
+    /* Split workspace layout & responsive previews */
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 25px;
+      flex-grow: 1;
+      width: 100%;
+    }
+
+    .workspace-grid.split-mode {
+      grid-template-columns: 1.1fr 1fr;
+    }
+
+    .workspace-grid.preview-mode {
+      grid-template-columns: 1fr;
+    }
+
+    .workspace-preview {
+      display: none;
+      height: 100%;
+      min-height: 480px;
+    }
+
+    .workspace-grid.split-mode .workspace-preview,
+    .workspace-grid.preview-mode .workspace-preview {
+      display: block;
+    }
+
+    .workspace-grid.preview-mode #editor-form-wrapper {
+      display: none !important;
+    }
+
+    .view-mode-btn {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--muted-text);
+      background: transparent;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .view-mode-btn.active {
+      background: rgba(0, 242, 254, 0.12);
+      color: var(--primary-accent);
+      box-shadow: 0 0 10px rgba(0, 242, 254, 0.1);
+    }
+    
+    .view-mode-btn:hover:not(.active) {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
     /* Main Workspace Panel */
     .workspace {
       display: flex;
@@ -617,19 +676,43 @@
       </div>
     </div>
 
-    <!-- MAIN CENTER WORKSPACE: Form Editor -->
+    <!-- MAIN CENTER WORKSPACE: Form Editor + Preview -->
     <div class="workspace">
       <div class="workspace-header">
         <div class="workspace-title">
           <h2 id="current-slide-title">Selecciona una Diapositiva</h2>
           <span id="current-slide-subtitle">Elige una lámina en el panel izquierdo para comenzar a editarla.</span>
         </div>
+        
+        <!-- Premium View Mode Segmented Control -->
+        <div id="view-mode-selector" style="display: none; background: rgba(3, 11, 28, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 4px; gap: 4px;">
+          <button id="view-mode-form" class="view-mode-btn active" onclick="setViewMode('form')">📝 Edición</button>
+          <button id="view-mode-split" class="view-mode-btn" onclick="setViewMode('split')">🖥️ Dividido</button>
+          <button id="view-mode-preview" class="view-mode-btn" onclick="setViewMode('preview')">👁️ Vista Previa</button>
+        </div>
       </div>
       
-      <!-- Content form panels -->
-      <div id="editor-form-wrapper" style="display: none;">
-        <div class="editor-card" id="slide-form-container">
-          <!-- Populated dynamically according to active slide layout -->
+      <div class="workspace-grid" id="workspace-layout-grid">
+        <!-- Content form panels -->
+        <div id="editor-form-wrapper" style="display: none; height: 100%; overflow-y: auto; padding-right: 4px;">
+          <div class="editor-card" id="slide-form-container">
+            <!-- Populated dynamically according to active slide layout -->
+          </div>
+        </div>
+
+        <!-- Real-time Live Presentation Preview Pane -->
+        <div class="workspace-preview" id="preview-pane-container">
+          <div style="background: rgba(3, 11, 28, 0.7); border: 1px solid var(--glass-border); border-radius: 12px; height: 100%; display: flex; flex-direction: column; overflow: hidden; box-shadow: var(--card-shadow); height: 100%;">
+            <div style="padding: 10px 15px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; align-items: center; background: rgba(2, 6, 18, 0.8);">
+              <span style="font-size: 0.72rem; font-weight: 700; color: var(--primary-accent); text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 6px;">
+                <span style="width: 8px; height: 8px; border-radius: 50%; background: #00f2fe; display: inline-block; box-shadow: 0 0 8px #00f2fe;"></span> Previsualización en Vivo
+              </span>
+              <button id="btn-refresh-preview" class="action-btn-mini" title="Recargar Previsualización" onclick="refreshPreviewIframe()">🔄</button>
+            </div>
+            <div style="flex-grow: 1; position: relative; background: #000; display: flex; align-items: center; justify-content: center;">
+              <iframe id="preview-iframe" src="index.html" style="width: 100%; height: 100%; border: none; background: #030f26;"></iframe>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -777,6 +860,51 @@
     const newSlideTitle = document.getElementById('new-slide-title');
     const btnAddSlideConfirm = document.getElementById('btn-add-slide-confirm');
 
+    // Active Layout Mode
+    let currentViewMode = 'form'; // 'form', 'split', 'preview'
+
+    function setViewMode(mode) {
+      currentViewMode = mode;
+      const grid = document.getElementById('workspace-layout-grid');
+      
+      // Update active classes on layout grid
+      grid.className = 'workspace-grid';
+      if (mode === 'split') grid.classList.add('split-mode');
+      if (mode === 'preview') grid.classList.add('preview-mode');
+      
+      // Update active buttons styling
+      document.getElementById('view-mode-form').className = 'view-mode-btn' + (mode === 'form' ? ' active' : '');
+      document.getElementById('view-mode-split').className = 'view-mode-btn' + (mode === 'split' ? ' active' : '');
+      document.getElementById('view-mode-preview').className = 'view-mode-btn' + (mode === 'preview' ? ' active' : '');
+      
+      // Sync slides preview content
+      syncPreview();
+    }
+
+    function syncPreview() {
+      const iframe = document.getElementById('preview-iframe');
+      if (iframe && iframe.contentWindow) {
+        iframe.contentWindow.postMessage({
+          type: 'update-slides',
+          data: slides,
+          activeIndex: activeSlideIndex
+        }, '*');
+      }
+    }
+
+    function refreshPreviewIframe() {
+      const iframe = document.getElementById('preview-iframe');
+      if (iframe) {
+        iframe.src = 'index.html';
+        showToast('Previsualización recargada.', '🔄');
+        
+        // Wait for iframe load to sync
+        iframe.onload = () => {
+          syncPreview();
+        };
+      }
+    }
+
     // 1. Toast notifications helper
     function showToast(message, icon = '✨', duration = 3000) {
       const toast = document.getElementById('editor-toast');
@@ -908,11 +1036,14 @@
           activeSlideIndex = null;
           editorFormWrapper.style.display = 'none';
           noSlideCard.style.display = 'block';
+          document.getElementById('view-mode-selector').style.display = 'none';
+          document.getElementById('workspace-layout-grid').className = 'workspace-grid';
         } else if (activeSlideIndex > index) {
           activeSlideIndex--;
         }
         renderSlidesList();
         showToast('Diapositiva eliminada.', '🗑️');
+        syncPreview();
       }
     }
 
@@ -938,6 +1069,10 @@
       
       noSlideCard.style.display = 'none';
       editorFormWrapper.style.display = 'block';
+      document.getElementById('view-mode-selector').style.display = 'flex';
+      
+      // Keep view mode state active
+      setViewMode(currentViewMode);
       
       currentSlideTitle.textContent = `Edición Lámina ${index + 1} (${slide.type.toUpperCase()})`;
       currentSlideSubtitle.textContent = `Ajusta el contenido del formato prediseñado para la lámina de tipo ${slide.type}.`;
@@ -1969,6 +2104,19 @@
       
       // Auto load fallback
       loadFallbackTemplate();
+
+      // Real-time input synchronization binding
+      slideFormContainer.addEventListener('input', () => {
+        syncPreview();
+      });
+      
+      // Sync preview once iframe finishes loading
+      const iframe = document.getElementById('preview-iframe');
+      if (iframe) {
+        iframe.onload = () => {
+          syncPreview();
+        };
+      }
     });
 
     btnSaveGithub.onclick = async () => {
