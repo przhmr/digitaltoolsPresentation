@@ -2108,21 +2108,91 @@
       if (loaderText) {
         loaderText.innerHTML = `
           <span style="width:8px; height:8px; border-radius:50%; background:var(--secondary-accent); display:inline-block; animation: heartbeat 1s infinite alternate;"></span>
-          Coritos pintando con IA...
+          Coritos pensando con Gemini 2.5 Flash...
         `;
       }
       loader.style.display = 'block';
       resultBox.style.display = 'none';
       
       try {
+        let optimizedPrompt = `Professional modern presentation slide asset, clean educational vector style, high-fidelity: ${prompt}`;
+        
+        // Use Gemini 2.5 Flash to optimize the prompt if API Key or Supabase is active!
+        const cachedUrl = localStorage.getItem('supabase_url');
+        const cachedKey = localStorage.getItem('supabase_anon_key');
+        const sbUrl = cachedUrl === 'none' ? '' : (cachedUrl || DEFAULT_SUPABASE_URL);
+        const sbKey = cachedKey === 'none' ? '' : (cachedKey || DEFAULT_SUPABASE_ANON_KEY);
+        const apiKey = localStorage.getItem('gemini_api_key') || (document.getElementById('ai-gemini-key') ? document.getElementById('ai-gemini-key').value.trim() : '');
+        
+        const systemInstruction = `You are a world-class prompt engineer for AI image generators.
+Translate and optimize the user description: "${prompt}" into a highly detailed, professional, flat vector style presentation graphic prompt in English.
+Requirements:
+1. Focus strictly on academic, professional, or tech presentation graphics (vector art, flat design, clean shapes, glassmorphism, corporate-friendly).
+2. Output ONLY the optimized final prompt in English.
+3. Absolutely DO NOT include any introductory or conversational text, nor markdown tags (\`\`\` or similar). Just the raw text.`;
+
+        let geminiResponseText = '';
+        
+        if (sbUrl && sbKey) {
+          const cachedPass = localStorage.getItem('team_auth_password');
+          if (cachedPass) {
+            try {
+              const functionUrl = `${sbUrl}/functions/v1/gemini-copilot`;
+              const response = await fetch(functionUrl, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${cachedPass}`,
+                  'apikey': sbKey
+                },
+                body: JSON.stringify({ prompt: systemInstruction })
+              });
+              if (response.ok) {
+                const resData = await response.json().catch(() => ({}));
+                if (resData && resData.html) {
+                  geminiResponseText = resData.html.trim();
+                }
+              }
+            } catch (e) {
+              console.log("Edge Function prompt optimization failed, falling back:", e);
+            }
+          }
+        } else if (apiKey) {
+          try {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+            const response = await fetch(url, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                contents: [{ parts: [{ text: systemInstruction }] }]
+              })
+            });
+            if (response.ok) {
+              const resData = await response.json();
+              geminiResponseText = resData.candidates[0].content.parts[0].text.trim();
+            }
+          } catch (e) {
+            console.log("Local Gemini prompt optimization failed, falling back:", e);
+          }
+        }
+        
+        if (geminiResponseText) {
+          optimizedPrompt = geminiResponseText.replace(/```/g, '').replace(/```text/gi, '').trim();
+          console.log("🚀 Optimized prompt from Gemini 2.5 Flash:", optimizedPrompt);
+        }
+        
+        if (loaderText) {
+          loaderText.innerHTML = `
+            <span style="width:8px; height:8px; border-radius:50%; background:var(--primary-accent); display:inline-block; animation: heartbeat 1s infinite alternate;"></span>
+            Coritos pintando con IA...
+          `;
+        }
+
         const seed = Math.floor(Math.random() * 100000);
-        // Styled prompt to force clean professional presentation assets in Pollinations AI!
-        const styledPrompt = `Professional modern presentation slide asset, clean educational vector style, high-fidelity: ${prompt}`;
-        const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(styledPrompt)}?width=600&height=400&nologo=true&seed=${seed}`;
+        const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(optimizedPrompt)}?width=600&height=400&nologo=true&seed=${seed}`;
         
         const img = new Image();
         img.onload = () => {
-          // Changed object-fit from cover to contain and constrained max-height to fit perfectly in presentation slides
           const generatedHtml = `<div class="glass-card" style="padding:10px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; width:100%; height:100%; border:1px solid rgba(0, 242, 254, 0.25); background:rgba(10,15,30,0.85); overflow:hidden;"><img src="${imageUrl}" style="max-width:100%; max-height:80%; border-radius:6px; border:1px solid rgba(255,255,255,0.06); object-fit:contain;" alt="${prompt}"><span style="font-size:0.42em; color:var(--muted-text); font-style:italic; text-align:center; display:block; line-height:1.2; margin-top:2px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:95%;">${prompt}</span></div>`;
           
           lastAiGeneratedHtml = generatedHtml;
