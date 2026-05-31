@@ -1108,6 +1108,7 @@
       <div id="github-status" class="status-badge">🌐 GitHub: Desconectado</div>
       
       <!-- Toggle Editors -->
+      <a href="generator.html" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.68rem; font-weight: 800; background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent)); border-color: rgba(255,255,255,0.05); box-shadow: 0 4px 10px rgba(0, 242, 254, 0.25);" title="Generar presentación completa desde cero con IA">🔮 Creador IA</a>
       <a href="editor.html" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.68rem;" title="Cambiar al editor estándar de formularios Canva">📝 Formulario Canva</a>
       <a href="index.html" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.68rem;" target="_blank">💻 Presentación</a>
     </div>
@@ -2429,6 +2430,39 @@ Requirements:
 
     // Initialize application templates
     async function loadPresentationOnStart() {
+      // Check if there is an AI-generated presentation slides in sessionStorage first!
+      const generatedSlides = sessionStorage.getItem('ai_generated_presentation_slides');
+      if (generatedSlides) {
+        try {
+          slides = JSON.parse(generatedSlides);
+          sessionStorage.removeItem('ai_generated_presentation_slides'); // Wipe after consume
+          
+          // Still fetch index.html to keep indexHtmlContent cached for compilation and save purposes!
+          const response = await fetch('index.html');
+          if (response.ok) {
+            indexHtmlContent = await response.text();
+          }
+          
+          renderSlidesNavigator();
+          selectSlide(0);
+          showToast('Presentación generada por IA cargada.', '✨');
+          
+          // Proceed with other settings initialization
+          const cachedPat = localStorage.getItem('github_pat');
+          const cachedRepo = localStorage.getItem('github_repo');
+          if (cachedPat) inputGithubPat.value = cachedPat;
+          if (cachedRepo) inputGithubRepo.value = cachedRepo;
+          if (cachedPat && cachedRepo) {
+            githubStatusBadge.textContent = '🌐 GitHub: Autenticado';
+            githubStatusBadge.classList.add('success');
+          }
+          await initSupabaseAuthUI();
+          return; // Skip standard template extraction
+        } catch (e) {
+          console.error("Failed to parse sessionStorage slides:", e);
+        }
+      }
+
       try {
         const response = await fetch('index.html');
         if (response.ok) {
