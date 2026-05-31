@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-  <title>Herramientas Digitales para la Ingeniería</title>
+  <title>Herramientas Digitales para el E-Learning</title>
   
-  <meta name="description" content="Presentación de postgrado de alto impacto sobre herramientas digitales en la ingeniería.">
+  <meta name="description" content="Presentación de postgrado sobre herramientas digitales aplicadas al e-learning.">
   <meta name="author" content="Ing. Dalia Rojas, Ing. Homer Perozo, Ing. Indiana Salas, Lic. Ruby Medina">
 
   <!-- Google Fonts for Modern Typography -->
@@ -217,6 +217,102 @@
       line-height: 1.25;
     }
 
+    .mini-kpi.with-icon {
+      min-height: 116px;
+      align-items: flex-start;
+      text-align: left;
+      background: linear-gradient(145deg, rgba(7, 20, 47, 0.86), rgba(5, 13, 31, 0.72));
+      border-color: rgba(0, 242, 254, 0.18);
+      box-shadow: var(--card-shadow);
+      padding: 14px;
+    }
+
+    .mini-kpi.with-icon .mini-icon {
+      font-size: 1.15em;
+      line-height: 1;
+      margin-bottom: 4px;
+      filter: drop-shadow(0 0 10px rgba(0, 242, 254, 0.35));
+    }
+
+    .mini-kpi.with-icon strong {
+      font-size: 0.58em;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .road-flow {
+      position: relative;
+      min-height: 230px;
+      border-radius: 10px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 18%, rgba(0, 242, 254, 0.14), transparent 30%),
+        linear-gradient(180deg, rgba(2, 8, 24, 0.96), rgba(4, 16, 42, 0.92));
+      border: 1px solid rgba(0, 242, 254, 0.2);
+    }
+
+    .road-path {
+      position: absolute;
+      left: 50%;
+      bottom: -14px;
+      width: 58%;
+      height: 94%;
+      transform: translateX(-50%) perspective(420px) rotateX(58deg);
+      transform-origin: bottom;
+      background: linear-gradient(90deg, transparent 0 6%, rgba(0, 242, 254, 0.2) 6% 7%, rgba(12, 21, 47, 0.96) 7% 93%, rgba(0, 242, 254, 0.2) 93% 94%, transparent 94% 100%);
+      clip-path: polygon(39% 0, 61% 0, 100% 100%, 0 100%);
+      box-shadow: 0 0 35px rgba(0, 242, 254, 0.14);
+    }
+
+    .road-path::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: -30%;
+      width: 4px;
+      height: 160%;
+      transform: translateX(-50%);
+      background: repeating-linear-gradient(to bottom, rgba(255,255,255,0.92) 0 20px, transparent 20px 42px);
+      animation: roadDash 2.8s linear infinite;
+    }
+
+    .road-node {
+      position: absolute;
+      width: 132px;
+      padding: 9px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(0, 242, 254, 0.32);
+      background: rgba(3, 22, 56, 0.9);
+      box-shadow: 0 0 24px rgba(0, 242, 254, 0.16);
+      text-align: center;
+      font-size: 0.42em;
+      line-height: 1.2;
+      color: #fff;
+    }
+
+    .road-node strong {
+      display: block;
+      color: var(--primary-accent);
+      font-size: 1.08em;
+      margin-bottom: 2px;
+    }
+
+    .road-node.start { left: 4%; bottom: 24px; }
+    .road-node.middle { left: calc(50% - 66px); top: 64px; }
+    .road-node.end { right: 4%; bottom: 24px; }
+
+    .road-car {
+      position: absolute;
+      left: 50%;
+      bottom: 16px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--primary-accent);
+      box-shadow: 0 0 22px rgba(0, 242, 254, 0.85);
+      animation: driveRoad 5.2s ease-in-out infinite;
+    }
+
     .orbit-system {
       position: relative;
       min-height: 260px;
@@ -300,7 +396,7 @@
       background: linear-gradient(180deg, var(--primary-accent), rgba(139, 92, 246, 0.72));
       box-shadow: 0 0 24px rgba(0, 242, 254, 0.22);
       transform-origin: bottom;
-      animation: growBar 1.2s ease-out both;
+      animation: growBar 3.6s ease-out both;
     }
 
     .bar span {
@@ -664,6 +760,19 @@
       }
     }
 
+    @keyframes roadDash {
+      from { transform: translateX(-50%) translateY(0); }
+      to { transform: translateX(-50%) translateY(42px); }
+    }
+
+    @keyframes driveRoad {
+      0% { transform: translate(-50%, 0) scale(1); opacity: 0; }
+      15% { opacity: 1; }
+      50% { transform: translate(-50%, -96px) scale(0.72); opacity: 1; }
+      85% { opacity: 1; }
+      100% { transform: translate(-50%, -172px) scale(0.42); opacity: 0; }
+    }
+
     /* Highly responsive media queries for vertical / mobile screens */
     @media (max-width: 768px), (max-aspect-ratio: 13/9) {
       .reveal .slides {
@@ -819,9 +928,9 @@
            ======================================================== -->
       <section>
         <div class="glass-card" style="text-align: center; max-width: 950px; margin: 0 auto; border-color: rgba(0, 242, 254, 0.3); padding: 40px;">
-          <h1>Herramientas Digitales para la Ingeniería</h1>
+          <h1>Herramientas Digitales para el E-Learning</h1>
           <h3 style="font-size: 1.05em; color: var(--muted-text); font-weight: 500; margin-bottom: 40px; letter-spacing: 0.02em;">
-            Optimización, Colaboración e Inteligencia Artificial en el Postgrado
+            Aprendizaje digital, colaboración e inteligencia artificial
           </h3>
 
           <div class="insight-strip fragment fade-up" data-fragment-index="1" style="margin: 0 0 24px 0;">
@@ -835,7 +944,7 @@
             </div>
             <div class="mini-kpi">
               <strong>Sintetizar</strong>
-              <span>IA aplicada al estudio y la investigacion.</span>
+              <span>IA aplicada al estudio y la investigación.</span>
             </div>
           </div>
           
@@ -850,7 +959,7 @@
               </div>
             </div>
             <div style="text-align: right; display: flex; flex-direction: column; justify-content: center; line-height: 1.4;">
-              <span style="color: var(--primary-accent); font-weight: 800; display: block; margin-top: 3px; letter-spacing: 0.02em; font-size: 0.82em;">Universidad Francisco de Miranda • 2026</span>
+              <span style="color: var(--primary-accent); font-weight: 800; display: block; margin-top: 3px; letter-spacing: 0.02em; font-size: 0.82em;">Universidad Nacional Experimental Francisco de Miranda • 2026</span>
             </div>
           </div>
         </div>
@@ -889,15 +998,18 @@
         </div>
 
         <div class="insight-strip">
-          <div class="mini-kpi fragment fade-up" data-fragment-index="4">
+          <div class="mini-kpi with-icon fragment fade-up" data-fragment-index="4">
+            <div class="mini-icon">🎛️</div>
             <strong>Control</strong>
-            <span>La informacion pasa de dispersa a medible.</span>
+            <span>La información pasa de dispersa a medible.</span>
           </div>
-          <div class="mini-kpi fragment fade-up" data-fragment-index="5">
-            <strong>Coordinacion</strong>
+          <div class="mini-kpi with-icon fragment fade-up" data-fragment-index="5">
+            <div class="mini-icon">🤝</div>
+            <strong>Coordinación</strong>
             <span>El equipo comparte una misma lectura del proceso.</span>
           </div>
-          <div class="mini-kpi fragment fade-up" data-fragment-index="6">
+          <div class="mini-kpi with-icon fragment fade-up" data-fragment-index="6">
+            <div class="mini-icon">🎓</div>
             <strong>Aprendizaje</strong>
             <span>Las fuentes se convierten en estudio guiado.</span>
           </div>
@@ -933,7 +1045,7 @@
 
             <div class="bar-chart">
               <div class="bar" style="--bar-height: 52%; animation-delay: 0.05s;"><span>Datos</span></div>
-              <div class="bar" style="--bar-height: 78%; animation-delay: 0.18s;"><span>Formulas</span></div>
+              <div class="bar" style="--bar-height: 78%; animation-delay: 0.18s;"><span>Fórmulas</span></div>
               <div class="bar" style="--bar-height: 88%; animation-delay: 0.31s;"><span>Equipo</span></div>
               <div class="bar" style="--bar-height: 66%; animation-delay: 0.44s;"><span>Reportes</span></div>
             </div>
@@ -993,15 +1105,15 @@
             <div class="process-flow">
               <div class="flow-step fragment fade-left" data-fragment-index="1">
                 <strong>1. Registro Sencillo</strong>
-                <span>Se ingresan datos de forma amigable a traves de un formulario movil o web.</span>
+                <span>Se ingresan datos de forma amigable a través de un formulario móvil o web.</span>
               </div>
               <div class="flow-step fragment fade-left" data-fragment-index="2">
                 <strong>2. Guardado en la Nube</strong>
-                <span>La informacion ingresa automaticamente a Sheets, sin transcribir en papel.</span>
+                <span>La información ingresa automáticamente a Sheets, sin transcribir en papel.</span>
               </div>
               <div class="flow-step fragment fade-left" data-fragment-index="3">
-                <strong>3. Graficos Automaticos</strong>
-                <span>La hoja actualiza los reportes al instante para facilitar lectura y analisis.</span>
+                <strong>3. Gráficos Automaticos</strong>
+                <span>La hoja actualiza los reportes al instante para facilitar lectura y análisis.</span>
               </div>
             </div>
           </div>
@@ -1036,23 +1148,24 @@
           <div class="glass-card" style="border-color: rgba(0, 242, 254, 0.2); display: flex; flex-direction: column; justify-content: space-between; padding: 15px;">
             <h3 style="font-size: 0.8em; margin: 0 0 10px 0; text-align: center; color: var(--primary-accent); text-transform: uppercase;">Ejemplo Visual de Flujo</h3>
             
-            <div style="background: rgba(5, 8, 20, 0.9); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.05); padding: 10px; font-size: 0.42em; display: flex; flex-direction: column; gap: 8px;">
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div style="background: rgba(0, 242, 254, 0.05); border: 1px solid var(--primary-accent); padding: 4px; border-radius: 4px; text-align: center; width: 44%;">
-                  <strong>Idea o Tarea Inicial</strong><br><span style="color: var(--muted-text);">Inicio de Proyecto</span>
-                </div>
-                <div style="color: var(--primary-accent); font-size: 0.9em;">Aprobado ➡️</div>
-                <div style="background: rgba(0, 242, 254, 0.05); border: 1px solid var(--primary-accent); padding: 4px; border-radius: 4px; text-align: center; width: 44%;">
-                  <strong>Desarrollo y Entrega</strong><br><span style="color: var(--muted-text);">Resultado Final</span>
-                </div>
+            <div class="road-flow fragment fade-in" data-fragment-index="1">
+              <div class="road-path"></div>
+              <div class="road-car"></div>
+              <div class="road-node start fragment fade-up" data-fragment-index="2">
+                <strong>Inicio</strong>
+                Idea o tarea inicial
               </div>
-              
-              <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 5px; text-align: center;">
-                <span style="color: var(--primary-accent); font-weight: 700;">"Organizar las tareas visualmente mejora la comunicación y evita confusiones en el equipo."</span>
+              <div class="road-node middle fragment zoom-in" data-fragment-index="3">
+                <strong>Ruta</strong>
+                Revisión, conexión y decisiones
+              </div>
+              <div class="road-node end fragment fade-up" data-fragment-index="4">
+                <strong>Meta</strong>
+                Desarrollo y entrega final
               </div>
             </div>
 
-            <div class="heat-row fragment fade-up" data-fragment-index="4">
+            <div class="heat-row fragment fade-up" data-fragment-index="5">
               <div class="heat-pill" style="--fill: 76%;">Idea clara</div>
               <div class="heat-pill" style="--fill: 84%;">Equipo alineado</div>
               <div class="heat-pill" style="--fill: 72%;">Entrega visible</div>
@@ -1101,7 +1214,7 @@
             <div class="pulse-network">
               <div class="network-card">Chat<br><span style="color: var(--muted-text); font-weight: 500;">cambios</span></div>
               <div class="network-card">Tareas<br><span style="color: var(--muted-text); font-weight: 500;">actividad</span></div>
-              <div class="network-card">Docs<br><span style="color: var(--muted-text); font-weight: 500;">insercion</span></div>
+              <div class="network-card">Docs<br><span style="color: var(--muted-text); font-weight: 500;">inserción</span></div>
               <div class="network-card">Exportar<br><span style="color: var(--muted-text); font-weight: 500;">PDF/imagen</span></div>
               <div class="network-card">Lucidchart<br><span style="color: var(--muted-text); font-weight: 500;">ecosistema</span></div>
             </div>
@@ -1141,13 +1254,13 @@
               <div class="source-stack">
                 <div class="source-chip">PDFs</div>
                 <div class="source-chip">Apuntes</div>
-                <div class="source-chip">Articulos</div>
+                <div class="source-chip">Artículos</div>
               </div>
               <div class="ai-core">NotebookLM<br><span style="color: var(--muted-text); font-size: 0.7em;">IA con citas</span></div>
               <div class="ai-output">
                 <div class="output-chip">Resumen</div>
                 <div class="output-chip">Respuesta</div>
-                <div class="output-chip">Guia</div>
+                <div class="output-chip">Guía</div>
               </div>
             </div>
           </div>
@@ -1316,9 +1429,10 @@
             ¡Muchas Gracias!
           </h1>
           
-          <h3 style="font-size: 0.9em !important; color: var(--muted-text); font-weight: 500; margin-bottom: 30px; letter-spacing: 0.05em; text-transform: uppercase;">
-            Innovación, Colaboración y Optimización sin Límites
-          </h3>
+          <blockquote style="font-size: 0.62em; color: var(--text-color); font-weight: 500; margin: 0 auto 30px auto; max-width: 680px; line-height: 1.45; font-style: italic; border-left: 3px solid var(--primary-accent); padding-left: 18px; text-align: left;">
+            “Cualquier tecnología suficientemente avanzada es indistinguible de la magia.”<br>
+            <span style="display: block; margin-top: 8px; color: var(--primary-accent); font-style: normal; font-weight: 800; text-align: right;">— Arthur C. Clarke</span>
+          </blockquote>
           
           <div style="background: rgba(15, 23, 42, 0.6); padding: 15px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.05); display: inline-block; font-size: 0.48em; letter-spacing: 0.1em; color: var(--primary-accent); font-weight: 800; text-transform: uppercase; margin-bottom: 30px;" class="fragment zoom-in" data-fragment-index="1">
             💬 Espacio para Preguntas y Debate
