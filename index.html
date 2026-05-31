@@ -31,6 +31,8 @@
       --glass-bg: rgba(10, 15, 30, 0.65);
       --glass-border: rgba(0, 242, 254, 0.12);
       --card-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.4);
+      --tilt-x: 0px;
+      --tilt-y: 0px;
     }
 
     html,
@@ -331,15 +333,29 @@
     .flow-step::after {
       content: '';
       position: absolute;
-      left: 0;
-      bottom: 0;
-      height: 3px;
-      width: 100%;
-      background: linear-gradient(90deg, var(--primary-accent), var(--secondary-accent));
-      animation: scanLine 2.8s ease-in-out infinite;
+      inset: -45%;
+      width: 72%;
+      height: 190%;
+      background: linear-gradient(115deg, transparent 32%, rgba(255, 255, 255, 0.13) 48%, rgba(0, 242, 254, 0.08) 54%, transparent 68%);
+      opacity: 0.2;
+      transform: translate3d(calc(-18% + var(--tilt-x)), calc(-5% + var(--tilt-y)), 0) rotate(8deg);
+      animation: subtleReflection 9s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .flow-step::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: radial-gradient(circle at calc(50% + var(--tilt-x)) calc(12% + var(--tilt-y)), rgba(255, 255, 255, 0.07), transparent 42%);
+      opacity: 0.18;
+      pointer-events: none;
     }
 
     .flow-step strong {
+      position: relative;
+      z-index: 1;
       display: block;
       color: #fff;
       font-size: 0.58em;
@@ -347,6 +363,8 @@
     }
 
     .flow-step span {
+      position: relative;
+      z-index: 1;
       display: block;
       color: var(--muted-text);
       font-size: 0.42em;
@@ -615,12 +633,14 @@
       }
     }
 
-    @keyframes scanLine {
+    @keyframes subtleReflection {
       0%, 100% {
-        transform: translateX(-100%);
+        opacity: 0.12;
+        transform: translate3d(calc(-22% + var(--tilt-x)), calc(-8% + var(--tilt-y)), 0) rotate(8deg);
       }
       50% {
-        transform: translateX(0);
+        opacity: 0.2;
+        transform: translate3d(calc(6% + var(--tilt-x)), calc(2% + var(--tilt-y)), 0) rotate(8deg);
       }
     }
 
@@ -870,16 +890,16 @@
 
         <div class="insight-strip">
           <div class="mini-kpi fragment fade-up" data-fragment-index="4">
-            <strong>Datos</strong>
-            <span>Orden y automatizacion para tareas repetitivas.</span>
+            <strong>Control</strong>
+            <span>La informacion pasa de dispersa a medible.</span>
           </div>
           <div class="mini-kpi fragment fade-up" data-fragment-index="5">
-            <strong>Procesos</strong>
-            <span>Mapas visuales que alinean al equipo.</span>
+            <strong>Coordinacion</strong>
+            <span>El equipo comparte una misma lectura del proceso.</span>
           </div>
           <div class="mini-kpi fragment fade-up" data-fragment-index="6">
-            <strong>Conocimiento</strong>
-            <span>Lecturas convertidas en respuestas utiles.</span>
+            <strong>Aprendizaje</strong>
+            <span>Las fuentes se convierten en estudio guiado.</span>
           </div>
         </div>
       </section>
@@ -1033,9 +1053,9 @@
             </div>
 
             <div class="heat-row fragment fade-up" data-fragment-index="4">
-              <div class="heat-pill" style="--fill: 74%;">Claridad</div>
-              <div class="heat-pill" style="--fill: 86%;">Coordinacion</div>
-              <div class="heat-pill" style="--fill: 68%;">Entrega</div>
+              <div class="heat-pill" style="--fill: 76%;">Idea clara</div>
+              <div class="heat-pill" style="--fill: 84%;">Equipo alineado</div>
+              <div class="heat-pill" style="--fill: 72%;">Entrega visible</div>
             </div>
           </div>
         </div>
@@ -1173,9 +1193,9 @@
         </div>
 
         <div class="heat-row fragment fade-up" data-fragment-index="5">
-          <div class="heat-pill" style="--fill: 82%;">Comprension</div>
-          <div class="heat-pill" style="--fill: 76%;">Sintesis</div>
-          <div class="heat-pill" style="--fill: 88%;">Repaso</div>
+          <div class="heat-pill" style="--fill: 70%;">Leer</div>
+          <div class="heat-pill" style="--fill: 82%;">Sintetizar</div>
+          <div class="heat-pill" style="--fill: 88%;">Practicar</div>
         </div>
       </section>
 
@@ -1226,9 +1246,9 @@
         </table>
 
         <div class="heat-row fragment fade-up" data-fragment-index="2">
-          <div class="heat-pill" style="--fill: 78%;">Sheets: control de datos</div>
-          <div class="heat-pill" style="--fill: 72%;">Lucidchart: claridad visual</div>
-          <div class="heat-pill" style="--fill: 86%;">NotebookLM: aprendizaje IA</div>
+          <div class="heat-pill" style="--fill: 78%;">Sheets: datos</div>
+          <div class="heat-pill" style="--fill: 78%;">Lucidchart: procesos</div>
+          <div class="heat-pill" style="--fill: 78%;">NotebookLM: fuentes</div>
         </div>
       </section>
 
@@ -1477,6 +1497,18 @@
       });
       Reveal.layout();
     });
+
+    const setFlowReflection = (x = 0, y = 0) => {
+      document.documentElement.style.setProperty('--tilt-x', `${x.toFixed(1)}px`);
+      document.documentElement.style.setProperty('--tilt-y', `${y.toFixed(1)}px`);
+    };
+
+    window.addEventListener('deviceorientation', event => {
+      if (!window.matchMedia('(max-width: 768px)').matches) return;
+      const gamma = Math.max(-12, Math.min(12, event.gamma || 0));
+      const beta = Math.max(-12, Math.min(12, event.beta || 0));
+      setFlowReflection(gamma * 0.55, beta * 0.25);
+    }, { passive: true });
 
     // 3D Flowing Perspective Grid & Particle Stream Engine (Motion Graphics Background)
     const canvas = document.getElementById('network-canvas');
