@@ -1121,7 +1121,7 @@
       <div class="sidebar-tabs">
         <button id="tab-slides" class="sidebar-tab-btn active" onclick="switchSidebarTab('slides')">Láminas</button>
         <button id="tab-library" class="sidebar-tab-btn" onclick="switchSidebarTab('library')">Biblioteca</button>
-        <button id="tab-ai" class="sidebar-tab-btn" onclick="switchSidebarTab('ai')" style="background: linear-gradient(135deg, rgba(0, 242, 254, 0.08), rgba(139, 92, 246, 0.12)); border: 1px solid rgba(0, 242, 254, 0.15); color: #fff;">🦜 Corito IA</button>
+        <button id="tab-ai" class="sidebar-tab-btn" onclick="switchSidebarTab('ai')" style="background: linear-gradient(135deg, rgba(0, 242, 254, 0.08), rgba(139, 92, 246, 0.12)); border: 1px solid rgba(0, 242, 254, 0.15); color: #fff;">🐐 PresentaFacil</button>
       </div>
       
       <div class="sidebar-content-pane" id="sidebar-content-pane">
@@ -1487,7 +1487,7 @@
         <!-- PANE 3: 🤖 GOOGLE GEMINI AI COPILOT WRITER DRAWER -->
         <div id="pane-ai" style="display: none; flex-direction: column; gap: 12px; height: 100%;">
           <div class="sidebar-header" style="justify-content: space-between; align-items: center;">
-            <span>Corito - Asistente IA 🦜</span>
+            <span>PresentaFacil - Asistente IA 🐐</span>
             <button class="btn-icon-mini" id="btn-toggle-supabase-config" onclick="toggleSupabaseConfigPanel()" title="Configuración de Servidor de Equipo (Supabase)" style="border-radius: 50%; font-size:0.68rem; background:rgba(255,255,255,0.06); width:22px; height:22px; border-color:rgba(255,255,255,0.1); cursor:pointer; display: flex; align-items: center; justify-content: center; color: var(--muted-text);">⚙️</button>
           </div>
 
@@ -1825,7 +1825,9 @@
 
     // HTML Sandbox Preview Helper
     function previewAiSandboxCode() {
-      const code = document.getElementById('ai-sandbox-code').value;
+      const sandbox = document.getElementById('ai-sandbox-code');
+      if (!sandbox) return;
+      const code = sandbox.value;
       lastAiGeneratedHtml = code;
       document.getElementById('ai-html-preview').innerHTML = code;
       showToast('Vista previa del Sandbox actualizada.', '👁️');
@@ -1892,7 +1894,7 @@
             <input type="password" id="ai-gemini-key" class="form-input" placeholder="AIzaSy..." style="padding: 6px;" oninput="saveGeminiApiKey(this.value)">
           </div>
 
-          <!-- Sub-Tabs Selector for Corito -->
+          <!-- Sub-Tabs Selector for PresentaFacil -->
           <div class="ai-sub-tabs" style="display:flex; gap:4px; margin-bottom:8px; padding: 2px; background: rgba(5,7,18,0.4); border-radius: 6px; border: 1px solid rgba(255,255,255,0.05);">
             <button id="ai-sub-tab-text" class="btn btn-secondary active" style="flex:1; font-size:0.6rem; padding:5px; justify-content:center; border:none; background:rgba(0,242,254,0.1); color:#fff; font-weight:700;" onclick="switchAiSubTab('text')">Texto 📝</button>
             <button id="ai-sub-tab-image" class="btn btn-secondary" style="flex:1; font-size:0.6rem; padding:5px; justify-content:center; border:none; background:transparent; color:var(--muted-text);" onclick="switchAiSubTab('image')">Imagen 🖼️</button>
@@ -1914,14 +1916,14 @@
             </div>
           </div>
 
-          <button id="btn-generate-ai" class="btn btn-primary" style="width:100%; justify-content:center; padding: 10px 15px; font-family:var(--font-outfit); font-weight:800; font-size:0.75rem;" onclick="executeCoritoGeneration()">
+          <button id="btn-generate-ai" class="btn btn-primary" style="width:100%; justify-content:center; padding: 10px 15px; font-family:var(--font-outfit); font-weight:800; font-size:0.75rem;" onclick="executePresentaFacilGeneration()">
             ✨ Generar con Asistente IA
           </button>
 
           <div id="ai-status-loader" style="display:none; text-align:center; padding: 8px;">
             <div style="font-size:0.6rem; color:var(--muted-text); display:flex; align-items:center; justify-content:center; gap:8px;">
               <span style="width:8px; height:8px; border-radius:50%; background:var(--primary-accent); display:inline-block; animation: heartbeat 1s infinite alternate;"></span>
-              Corito diseñando...
+              PresentaFacil diseñando...
             </div>
           </div>
 
@@ -1947,9 +1949,9 @@
       try {
         supabaseClient = supabase.createClient(sbUrl, sbKey);
         
-        // Render Corito Assistant Workspace directly since Google Auth is completely removed!
+        // Render PresentaFacil Assistant Workspace directly since Google Auth is completely removed!
         wrapper.innerHTML = `
-          <!-- Sub-Tabs Selector for Corito -->
+          <!-- Sub-Tabs Selector for PresentaFacil -->
           <div class="ai-sub-tabs" style="display:flex; gap:4px; margin-bottom:8px; padding: 2px; background: rgba(5,7,18,0.4); border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); margin-top:6px;">
             <button id="ai-sub-tab-text" class="btn btn-secondary active" style="flex:1; font-size:0.6rem; padding:5px; justify-content:center; border:none; background:rgba(0,242,254,0.1); color:#fff; font-weight:700;" onclick="switchAiSubTab('text')">Texto 📝</button>
             <button id="ai-sub-tab-image" class="btn btn-secondary" style="flex:1; font-size:0.6rem; padding:5px; justify-content:center; border:none; background:transparent; color:var(--muted-text);" onclick="switchAiSubTab('image')">Imagen 🖼️</button>
@@ -1972,14 +1974,14 @@
             </div>
           </div>
 
-          <button id="btn-generate-ai" class="btn btn-primary" style="width:100%; justify-content:center; padding: 10px 15px; font-family:var(--font-outfit); font-weight:800; font-size:0.75rem;" onclick="executeCoritoGeneration()">
+          <button id="btn-generate-ai" class="btn btn-primary" style="width:100%; justify-content:center; padding: 10px 15px; font-family:var(--font-outfit); font-weight:800; font-size:0.75rem;" onclick="executePresentaFacilGeneration()">
             ✨ Generar con Asistente IA
           </button>
 
           <div id="ai-status-loader" style="display:none; text-align:center; padding: 8px;">
             <div style="font-size:0.6rem; color:var(--muted-text); display:flex; align-items:center; justify-content:center; gap:8px;">
               <span style="width:8px; height:8px; border-radius:50%; background:var(--primary-accent); display:inline-block; animation: heartbeat 1s infinite alternate;"></span>
-              Corito diseñando...
+              PresentaFacil diseñando...
             </div>
           </div>
 
@@ -1997,7 +1999,7 @@
     }
 
     // =========================================================================
-    // 🦜 CORITO IA ASSISTANT CORE ENGINE (Text, Images, Drag and Drop & Cloud Sync)
+    // 🐐 PRESENTAFACIL IA ASSISTANT CORE ENGINE (Text, Images, Drag and Drop & Cloud Sync)
     // =========================================================================
     let activeAiSubTab = 'text';
 
@@ -2049,22 +2051,22 @@
         }
         if (promptLabel) promptLabel.innerText = "¿Qué ilustración o foto deseas pintar?";
         if (promptArea) {
-          promptArea.placeholder = "e.g. Un loro cyberpunk brillante con gafas VR en fondo de neón oscuro...";
+          promptArea.placeholder = "e.g. Un chivito cyberpunk brillante con gafas VR en fondo de neón oscuro...";
           promptArea.value = '';
         }
-        if (generateBtn) generateBtn.innerHTML = "🎨 Generar Imagen con Corito";
+        if (generateBtn) generateBtn.innerHTML = "🎨 Generar Imagen con PresentaFacil";
         if (suggestionsBox) {
           suggestionsBox.innerHTML = `
-            <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.52rem; border-color: rgba(255,255,255,0.06); text-transform:none; font-weight: 500;" onclick="setAiPrompt('Ilustración 3D cyberpunk de un loro tecnificado en fondo oscuro con luces de neón')">🦜 Loro Tecnológico</button>
+            <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.52rem; border-color: rgba(255,255,255,0.06); text-transform:none; font-weight: 500;" onclick="setAiPrompt('Ilustración 3D cyberpunk de un chivito tecnificado en fondo oscuro con luces de neón')">🐐 Chivito Tecnológico</button>
             <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.52rem; border-color: rgba(255,255,255,0.06); text-transform:none; font-weight: 500;" onclick="setAiPrompt('Fondo abstracto con ondas de gradiente violeta, cian y rosa neón fluido 3D')">🔮 Ondas 3D</button>
-            <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.52rem; border-color: rgba(255,255,255,0.06); text-transform:none; font-weight: 500;" onclick="setAiPrompt('Icono brillante 3D de un cohete despegando con rastro de fuego cyberpunk cian')">🚀 Cohete Cyber</button>
+            <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.52rem; border-color: rgba(255,255,255,0.06); text-transform:none; font-weight: 500;" onclick="setAiPrompt('Icono brillante 3D de un chivito astronauta despegando en cohete con rastro cian')">🚀 Chivito Astronauta</button>
             <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.52rem; border-color: rgba(255,255,255,0.06); text-transform:none; font-weight: 500;" onclick="setAiPrompt('Ilustración esmerilada de un cerebro digital con conexiones neuronales violeta neón')">🧠 Cerebro Digital</button>
           `;
         }
       }
     }
 
-    function executeCoritoGeneration() {
+    function executePresentaFacilGeneration() {
       if (activeAiSubTab === 'text') {
         const cachedUrl = localStorage.getItem('supabase_url');
         const cachedKey = localStorage.getItem('supabase_anon_key');
@@ -2076,11 +2078,11 @@
           return generateElementWithGeminiAI();
         }
       } else {
-        return generateImageWithCorito();
+        return generateImageWithPresentaFacil();
       }
     }
 
-    async function generateImageWithCorito() {
+    async function generateImageWithPresentaFacil() {
       const prompt = document.getElementById('ai-prompt-box').value.trim();
       const loader = document.getElementById('ai-status-loader');
       const resultBox = document.getElementById('ai-result-box');
@@ -2096,7 +2098,7 @@
       if (loaderText) {
         loaderText.innerHTML = `
           <span style="width:8px; height:8px; border-radius:50%; background:var(--secondary-accent); display:inline-block; animation: heartbeat 1s infinite alternate;"></span>
-          Corito pintando con IA...
+          PresentaFacil pintando con IA...
         `;
       }
       loader.style.display = 'block';
@@ -2123,7 +2125,7 @@
           
           loader.style.display = 'none';
           resultBox.style.display = 'flex';
-          showToast('Imagen pintada con éxito por Corito.', '🎨');
+          showToast('Imagen pintada con éxito por PresentaFacil.', '🎨');
         };
         img.onerror = () => {
           loader.style.display = 'none';
@@ -2194,7 +2196,7 @@
             document.getElementById('ai-result-box').style.display = 'none';
             document.getElementById('ai-prompt-box').value = '';
             switchSidebarTab('slides');
-            showToast('Elemento soltado con éxito en el lienzo.', '🦜');
+            showToast('Elemento soltado con éxito en el lienzo.', '🐐');
           }
         });
       }
@@ -2221,7 +2223,7 @@
             name: 'Presentación Principal del Equipo',
             slides_data: slides,
             compiled_html: compileUpdatedPresentationHtml(),
-            owner_email: 'equipo@corito.ai',
+            owner_email: 'equipo@presentafacil.ai',
             updated_at: new Date()
           }, { onConflict: 'id' });
           
@@ -2324,13 +2326,14 @@
         if (resData && resData.html) {
           lastAiGeneratedHtml = resData.html;
           previewBox.innerHTML = resData.html;
-          document.getElementById('ai-sandbox-code').value = resData.html;
+          const sandbox = document.getElementById('ai-sandbox-code');
+          if (sandbox) sandbox.value = resData.html;
           
           previewBox.setAttribute('draggable', 'true');
           previewBox.setAttribute('ondragstart', 'handleAiDragStart(event)');
           previewBox.style.cursor = 'grab';
           
-          showToast('Elemento generado con éxito por Corito.', '✨');
+          showToast('Elemento generado con éxito por PresentaFacil.', '✨');
           loader.style.display = 'none';
           resultBox.style.display = 'flex';
         } else {
