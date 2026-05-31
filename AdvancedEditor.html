@@ -2340,20 +2340,22 @@
         return;
       }
 
+      const cachedPass = localStorage.getItem('team_auth_password');
+      if (!cachedPass) {
+        showToast('Debes ingresar la contraseña de equipo primero.', '🔑');
+        return;
+      }
+
       loader.style.display = 'block';
       resultBox.style.display = 'none';
 
       try {
-        const { data: { session } } = await supabaseClient.auth.getSession();
-        if (!session) {
-          showToast('Inicia sesión con Google para usar el copiloto de equipo.', '🔑');
-          loader.style.display = 'none';
-          return;
-        }
-
-        // Call Supabase Edge Function securely. It automatically includes the bearer token!
+        // Call Supabase Edge Function securely by passing the team password as the Bearer token!
         const { data, error } = await supabaseClient.functions.invoke('gemini-copilot', {
-          body: { prompt: prompt }
+          body: { prompt: prompt },
+          headers: {
+            'Authorization': `Bearer ${cachedPass}`
+          }
         });
 
         if (error) {
@@ -2365,7 +2367,11 @@
           previewBox.innerHTML = data.html;
           document.getElementById('ai-sandbox-code').value = data.html;
           
-          showToast('Elemento generado con éxito por Gemini del equipo.', '✨');
+          previewBox.setAttribute('draggable', 'true');
+          previewBox.setAttribute('ondragstart', 'handleAiDragStart(event)');
+          previewBox.style.cursor = 'grab';
+          
+          showToast('Elemento generado con éxito por Corito.', '✨');
           loader.style.display = 'none';
           resultBox.style.display = 'flex';
         } else if (data && data.error) {
@@ -2379,6 +2385,7 @@
         loader.style.display = 'none';
       }
     }
+
 
     // Initialize application templates
     async function loadPresentationOnStart() {

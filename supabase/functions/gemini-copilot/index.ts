@@ -7,7 +7,6 @@ const corsHeaders = {
 }
 
 Deno.serve(async (req) => {
-
   // Handle CORS preflight request
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders })
@@ -28,42 +27,40 @@ Deno.serve(async (req) => {
     // Initialize administrative Supabase client
     const supabase = createClient(supabaseUrl, supabaseServiceKey)
 
-    // 1. Extract and validate user authorization JWT token
+    // 1. Extract the team password from the Authorization Bearer header
     const authHeader = req.headers.get("Authorization")
     if (!authHeader) {
       return new Response(
-        JSON.stringify({ error: "Falta cabecera de Autorización Bearer." }),
+        JSON.stringify({ error: "Acceso denegado: Falta cabecera de Autorización." }),
         { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       )
     }
 
-    const token = authHeader.replace("Bearer ", "")
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token)
+    const inputPassword = authHeader.replace("Bearer ", "")
 
-    if (authError || !user) {
-      return new Response(
-        JSON.stringify({ error: "Sesión inválida o expirada. Por favor vuelve a iniciar sesión." }),
-        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      )
-    }
-
-    // 2. Query allowed_emails database to whitelist team members
-    const { data: allowed, error: dbError } = await supabase
-      .from("allowed_emails")
-      .select("email")
-      .eq("email", user.email)
+    // 2. Fetch the correct team password from the team_auth table
+    const { data: dbAuth, error: dbError } = await supabase
+      .from("team_auth")
+      .select("value")
+      .eq("key", "team_password")
       .single()
 
-    if (dbError || !allowed) {
+    if (dbError || !dbAuth) {
       return new Response(
-        JSON.stringify({
-          error: `Acceso restringido: Tu correo (${user.email}) no está autorizado en la lista blanca de este equipo.`
-        }),
-        { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ error: "Error en el servidor: No se pudo verificar la contraseña del equipo." }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       )
     }
 
-    // 3. Extract the generation prompt
+    // 3. Compare the passwords
+    if (inputPassword !== dbAuth.value) {
+      return new Response(
+        JSON.stringify({ error: "Acceso denegado: Contraseña de equipo incorrecta." }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      )
+    }
+
+    // 4. Extract the generation prompt
     const { prompt } = await req.json()
     if (!prompt) {
       return new Response(
@@ -72,7 +69,7 @@ Deno.serve(async (req) => {
       )
     }
 
-    // 4. Construct Gemini API query
+    // 5. Query Gemini
     const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`
     const systemInstruction = `Eres un experto diseñador web especializado en Reveal.js y CSS moderno con glassmorphism.
 Genera un bloque de diapositiva auto-contenido en HTML premium para la indicación: "${prompt}".
@@ -99,7 +96,7 @@ Reglas obligatorias:
     const geminiData = await geminiRes.json()
     let htmlResult = geminiData.candidates?.[0]?.content?.parts?.[0]?.text ?? ""
     
-    // Clean markdown wrapper elements if Gemini still includes them
+    // Clean markdown wrappers
     htmlResult = htmlResult
       .replace(/```html/gi, "")
       .replace(/```/g, "")

@@ -1,8 +1,8 @@
 /**
- * 🛡️ SUPABASE AUTHENTICATION GATEKEEPER (Google SSO & Email Whitelisting)
+ * 🛡️ SUPABASE MANUAL PASSWORD GATEKEEPER
  * ------------------------------------------------------------------------
  * Protege el acceso global a nivel de entrada para editor.html y AdvancedEditor.html.
- * Requiere inicio de sesión con Google SSO y valida contra la tabla allowed_emails.
+ * Requiere una contraseña de equipo validada directamente contra la base de datos de Supabase.
  */
 
 // ⚙️ INGRESA AQUÍ LAS CREDENCIALES PÚBLICAS DE TU PROYECTO DE SUPABASE
@@ -23,7 +23,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   // Inject gatekeeper overlay styles immediately
   injectStyles();
 
-  // Create full-screen loading/lock overlay
+  // Create full-screen Loading / Password lock overlay
   const overlay = document.createElement('div');
   overlay.id = 'auth-gatekeeper-overlay';
   overlay.innerHTML = `
@@ -31,9 +31,9 @@ window.addEventListener('DOMContentLoaded', async () => {
       <div class="auth-glow-sphere"></div>
       <div class="auth-card">
         <div class="auth-logo-badge">🔑</div>
-        <h2 id="auth-title">Verificando Credenciales...</h2>
+        <h2 id="auth-title">Cargando Suite...</h2>
         <p id="auth-desc" style="color: #94a3b8; font-size: 0.85rem; line-height: 1.5; margin: 10px 0 20px 0;">
-          Cargando entorno seguro de presentación de equipo...
+          Estableciendo conexión segura con el servidor de equipo...
         </p>
         <div id="auth-action-area">
           <div class="auth-spinner"></div>
@@ -54,126 +54,101 @@ window.addEventListener('DOMContentLoaded', async () => {
     return;
   }
 
-  // Define Auth Actions
-  window.loginWithGoogleSSO = async function() {
-    try {
-      const btn = document.getElementById('btn-login-sso');
-      if (btn) {
-        btn.disabled = true;
-        btn.innerHTML = `<span class="auth-spinner-mini"></span> Conectando con Google...`;
-      }
-      await supabaseClient.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: window.location.origin + window.location.pathname
-        }
-      });
-    } catch (err) {
-      showError("No se pudo iniciar el flujo de autenticación.");
+  // Define Password Check Action
+  window.unlockWithPassword = async function() {
+    const input = document.getElementById('team-password-input');
+    const btn = document.getElementById('btn-unlock');
+    if (!input || !btn) return;
+
+    const password = input.value.trim();
+    if (!password) {
+      alert("Por favor, introduce la contraseña.");
+      return;
     }
-  };
 
-  window.logoutTeamSession = async function() {
-    try {
-      const btn = document.getElementById('btn-logout-sso');
-      if (btn) btn.disabled = true;
-      await supabaseClient.auth.signOut();
-      window.location.reload();
-    } catch (err) {
-      window.location.reload();
-    }
-  };
-
-  // Check Active Session
-  try {
-    const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
-    
-    if (sessionError) throw sessionError;
-
-    if (!session || !session.user) {
-      // 🔓 User is NOT logged in: Show Google SSO Login UI
-      showLoginUI();
-    } else {
-      // 🔒 User is logged in: Check whitelisted allowed_emails database table
-      const user = session.user;
-      checkEmailWhitelist(user);
-    }
-  } catch (err) {
-    console.error("Session verification error:", err);
-    showError("No se pudo comprobar la sesión del miembro de equipo.");
-  }
-
-  // Whitelist Verification
-  async function checkEmailWhitelist(user) {
-    const titleEl = document.getElementById('auth-title');
-    const descEl = document.getElementById('auth-desc');
-    if (titleEl) titleEl.innerText = "Verificando Autorización...";
-    if (descEl) descEl.innerText = `Validando permisos para tu correo: ${user.email}`;
+    btn.disabled = true;
+    btn.innerHTML = `<span class="auth-spinner-mini"></span> Verificando...`;
 
     try {
-      const { data: allowed, error: dbError } = await supabaseClient
-        .from("allowed_emails")
-        .select("email")
-        .eq("email", user.email)
+      // Query the team_auth table to verify if the password matches the database
+      const { data, error } = await supabaseClient
+        .from('team_auth')
+        .select('value')
+        .eq('key', 'team_password')
         .single();
 
-      if (dbError || !allowed) {
-        // ⛔ Email is NOT whitelisted
-        showAccessDeniedUI(user.email, user.user_metadata?.avatar_url);
+      if (error || !data) {
+        showError("No se pudo leer la contraseña del servidor. Verifica la tabla team_auth.");
+        return;
+      }
+
+      if (password === data.value) {
+        // Cached in localStorage for seamless transparent auto-login next time
+        localStorage.setItem('team_auth_password', password);
+        unlockEditor();
       } else {
-        // ✅ Email is whitelisted: Let them pass!
-        unlockEditor(user);
+        btn.disabled = false;
+        btn.innerHTML = "🔓 Desbloquear Suite";
+        alert("Contraseña de equipo incorrecta. Inténtalo de nuevo.");
       }
     } catch (err) {
-      console.error("Whitelist query error:", err);
-      showAccessDeniedUI(user.email, user.user_metadata?.avatar_url);
+      btn.disabled = false;
+      btn.innerHTML = "🔓 Desbloquear Suite";
+      alert("Error al verificar la contraseña.");
+    }
+  };
+
+  window.logoutTeamSession = function() {
+    localStorage.removeItem('team_auth_password');
+    window.location.reload();
+  };
+
+  // Check if password already stored in local storage
+  const cachedPassword = localStorage.getItem('team_auth_password');
+  if (cachedPassword) {
+    try {
+      const { data, error } = await supabaseClient
+        .from('team_auth')
+        .select('value')
+        .eq('key', 'team_password')
+        .single();
+
+      if (!error && data && cachedPassword === data.value) {
+        // Auto-unlock silently (fully transparent)
+        unlockEditor();
+        return;
+      }
+    } catch (e) {
+      console.log("Cached password validation failed, prompting user...");
     }
   }
 
+  // If not authenticated or cached validation failed, show Password Input UI
+  showPasswordInputUI();
+
   // UI State Modifiers
-  function showLoginUI() {
+  function showPasswordInputUI() {
     const titleEl = document.getElementById('auth-title');
     const descEl = document.getElementById('auth-desc');
     const actionEl = document.getElementById('auth-action-area');
 
     if (titleEl) titleEl.innerText = "Acceso Restringido 🔒";
-    if (descEl) descEl.innerText = "Esta suite de diapositivas es privada. Por favor, inicia sesión con tu cuenta autorizada de Gmail para acceder a los editores.";
+    if (descEl) descEl.innerText = "Esta suite de diapositivas es privada. Por favor, introduce la contraseña de equipo autorizada para desbloquear el editor.";
     
     if (actionEl) {
       actionEl.innerHTML = `
-        <button id="btn-login-sso" class="auth-btn-google" onclick="loginWithGoogleSSO()">
-          🔴 Iniciar Sesión con Google
-        </button>
-      `;
-    }
-  }
-
-  function showAccessDeniedUI(email, avatarUrl) {
-    const titleEl = document.getElementById('auth-title');
-    const descEl = document.getElementById('auth-desc');
-    const actionEl = document.getElementById('auth-action-area');
-    const avatar = avatarUrl || 'https://www.gravatar.com/avatar/?d=mp';
-
-    if (titleEl) titleEl.innerText = "Acceso Restringido 🚫";
-    if (descEl) {
-      descEl.innerHTML = `
-        <div style="display:flex; align-items:center; justify-content:center; gap:10px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.06); padding:8px 12px; border-radius:8px; margin-bottom:15px; text-align:left;">
-          <img src="${avatar}" style="width:24px; height:24px; border-radius:50%; border:1px solid #8b5cf6;" alt="avatar">
-          <div style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:0.75rem;">
-            <strong style="color:#fff; display:block;">Sesión conectada</strong>
-            <span style="color:#94a3b8; font-size:0.9em;">${email}</span>
-          </div>
+        <div style="display:flex; flex-direction:column; gap:10px; width:100%;">
+          <input type="password" id="team-password-input" class="auth-input-password" placeholder="Contraseña de equipo..." onkeydown="if(event.key === 'Enter') unlockWithPassword()">
+          <button id="btn-unlock" class="auth-btn-unlock" onclick="unlockWithPassword()">
+            🔓 Desbloquear Suite
+          </button>
         </div>
-        Lo sentimos, tu dirección de correo no está registrada en la lista blanca de este equipo de trabajo. Por favor, ponte en contacto con el administrador para solicitar acceso.
       `;
-    }
-    
-    if (actionEl) {
-      actionEl.innerHTML = `
-        <button id="btn-logout-sso" class="auth-btn-secondary" onclick="logoutTeamSession()">
-          🚪 Cerrar Sesión / Salir
-        </button>
-      `;
+      // Auto-focus input
+      setTimeout(() => {
+        const input = document.getElementById('team-password-input');
+        if (input) input.focus();
+      }, 100);
     }
   }
 
@@ -193,7 +168,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  function unlockEditor(user) {
+  function unlockEditor() {
     const titleEl = document.getElementById('auth-title');
     const actionEl = document.getElementById('auth-action-area');
     if (titleEl) titleEl.innerText = "¡Acceso Concedido! 🔓";
@@ -230,7 +205,7 @@ window.addEventListener('DOMContentLoaded', async () => {
       .auth-gatekeeper-content {
         position: relative;
         width: 100%;
-        max-width: 440px;
+        max-width: 400px;
         padding: 20px;
       }
       .auth-glow-sphere {
@@ -239,7 +214,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         left: 50%;
         width: 320px;
         height: 320px;
-        background: radial-gradient(circle, rgba(0, 242, 254, 0.15) 0%, rgba(139, 92, 246, 0.05) 50%, transparent 100%);
+        background: radial-gradient(circle, rgba(0, 242, 254, 0.12) 0%, rgba(139, 92, 246, 0.04) 50%, transparent 100%);
         transform: translate(-50%, -50%);
         z-index: 0;
         pointer-events: none;
@@ -276,16 +251,34 @@ window.addEventListener('DOMContentLoaded', async () => {
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
       }
-      .auth-btn-google {
+      .auth-input-password {
+        width: 100%;
+        padding: 12px 15px;
+        border-radius: 10px;
+        background: rgba(5, 7, 18, 0.6);
+        border: 1px solid rgba(0, 242, 254, 0.25);
+        color: #fff;
+        font-size: 0.85rem;
+        text-align: center;
+        font-family: inherit;
+        outline: none;
+        transition: border-color 0.25s;
+        box-sizing: border-box;
+      }
+      .auth-input-password:focus {
+        border-color: #8b5cf6;
+        box-shadow: 0 0 10px rgba(139, 92, 246, 0.2);
+      }
+      .auth-btn-unlock {
         width: 100%;
         padding: 12px 20px;
-        border-radius: 12px;
-        background: linear-gradient(135deg, #ff007f, #8b5cf6);
-        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 10px;
+        background: linear-gradient(135deg, #00f2fe, #8b5cf6);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         color: #fff;
         font-family: 'Outfit', sans-serif;
         font-weight: 800;
-        font-size: 0.82rem;
+        font-size: 0.8rem;
         text-transform: uppercase;
         letter-spacing: 0.05em;
         cursor: pointer;
@@ -293,14 +286,15 @@ window.addEventListener('DOMContentLoaded', async () => {
         align-items: center;
         justify-content: center;
         gap: 10px;
-        box-shadow: 0 8px 20px rgba(255, 0, 127, 0.25);
+        box-shadow: 0 8px 20px rgba(0, 242, 254, 0.2);
         transition: transform 0.2s, box-shadow 0.2s;
+        box-sizing: border-box;
       }
-      .auth-btn-google:hover {
+      .auth-btn-unlock:hover {
         transform: translateY(-2px);
-        box-shadow: 0 12px 25px rgba(255, 0, 127, 0.4);
+        box-shadow: 0 12px 25px rgba(0, 242, 254, 0.35);
       }
-      .auth-btn-google:active {
+      .auth-btn-unlock:active {
         transform: translateY(0);
       }
       .auth-btn-secondary {
@@ -315,6 +309,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         font-size: 0.78rem;
         cursor: pointer;
         transition: background 0.2s;
+        box-sizing: border-box;
       }
       .auth-btn-secondary:hover {
         background: rgba(255, 255, 255, 0.08);
