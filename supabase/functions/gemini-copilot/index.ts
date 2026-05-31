@@ -71,15 +71,13 @@ Deno.serve(async (req) => {
 
     // 5. Query Gemini
     const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiApiKey}`
-    const systemInstruction = `Eres un experto diseñador web especializado en Reveal.js y CSS moderno con glassmorphism.
-Genera un bloque de diapositiva auto-contenido en HTML premium para la indicación: "${prompt}".
+    const systemInstruction = `Eres un experto redactor pedagógico y diseñador de contenido académico.
+Genera contenido en texto plano limpio y altamente profesional para la indicación: "${prompt}".
 Reglas obligatorias:
-1. Devuelve ÚNICAMENTE código HTML directo y limpio. No uses bloques de markdown (\`\`\`html \`\`\`).
-2. Usa estilos inline elegantes de CSS. Aplica colores del ecosistema (azul marino profundo, cian neón '#00f2fe', violeta '#8b5cf6', gris '#94a3b8').
-3. Para tarjetas, usa la clase 'glass-card' con borde de 1px solid rgba(0, 242, 254, 0.25).
-4. El tamaño de fuente de los textos debe ser pequeño, idealmente expresado en 'em' (e.g. 0.45em, 0.55em, 0.65em) para asegurar responsividad total en RevealJS.
-5. Haz que sea visualmente impactante, interactivo si aplica, y con excelente micro-tipografía.
-6. Restringe el contenido de forma estricta a temáticas profesionales, académicas, de ingeniería, de negocios o de divulgación aptas para diapositivas de presentación. Si el prompt está fuera de contexto, adáptalo creativamente como una estructura de diapositiva educativa premium.`
+1. Devuelve ÚNICAMENTE el texto redactado en formato plano. No utilices etiquetas HTML ni bloques de código markdown (\`\`\`html\`\`\` o \`\`\`text\`\`\`).
+2. Estructura el texto con títulos claros, viñetas elegantes (puedes usar emojis descriptivos) o párrafos concisos según corresponda.
+3. Asegúrate de que el texto sea extremadamente fácil de copiar y pegar en diapositivas de presentación.
+4. Mantén un tono formal, educativo y profesional, restringiendo el contenido estrictamente a temáticas aptas para presentaciones de negocios, ingeniería o divulgación académica.`
 
     const geminiRes = await fetch(geminiUrl, {
       method: "POST",
@@ -100,6 +98,7 @@ Reglas obligatorias:
     // Clean markdown wrappers
     htmlResult = htmlResult
       .replace(/```html/gi, "")
+      .replace(/```text/gi, "")
       .replace(/```/g, "")
       .trim()
 

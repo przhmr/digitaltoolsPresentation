@@ -1928,11 +1928,16 @@
           </div>
 
           <div id="ai-result-box" style="display: none; flex-direction: column; gap: 8px; margin-top: 6px; width: 100%;">
-            <div style="font-size: 0.58rem; font-weight: 700; color: var(--primary-accent); text-transform: uppercase; letter-spacing: 0.05em;">Resultado (Arrastra al lienzo o pulsa insertar):</div>
-            <div id="ai-html-preview" class="miniature-preview-box" draggable="true" ondragstart="handleAiDragStart(event)" style="padding: 12px; min-height: 150px; max-height: 250px; overflow-y: auto; text-align: left; align-items: flex-start; justify-content: flex-start; cursor: grab; background: rgba(5,7,18,0.7); border: 1px solid rgba(0, 242, 254, 0.25); border-radius: 8px; pointer-events: auto !important; width: 100%; box-sizing: border-box;" title="¡Mantén presionado y arrastra al lienzo libre!"></div>
-            <button class="btn btn-primary" style="width: 100%; justify-content: center; font-size: 0.68rem; padding: 8px 12px; font-weight: 700; margin-top: 4px; box-sizing: border-box;" onclick="insertAiGeneratedElement()">
-              ➕ Insertar en el Lienzo
-            </button>
+            <div style="font-size: 0.58rem; font-weight: 700; color: var(--primary-accent); text-transform: uppercase; letter-spacing: 0.05em;">Resultado:</div>
+            <div id="ai-html-preview" class="miniature-preview-box" draggable="true" ondragstart="handleAiDragStart(event)" style="padding: 12px; min-height: 150px; max-height: 250px; overflow-y: auto; text-align: left; align-items: flex-start; justify-content: flex-start; cursor: grab; background: rgba(5,7,18,0.7); border: 1px solid rgba(0, 242, 254, 0.25); border-radius: 8px; pointer-events: auto !important; width: 100%; box-sizing: border-box; white-space: pre-wrap; font-family: var(--font-inter); font-size: 0.72rem; line-height: 1.5; color: #fff; user-select: text !important;" title="Texto generado o ilustración lista"></div>
+            <div style="display: flex; gap: 6px; width: 100%; margin-top: 4px;">
+              <button class="btn btn-primary" style="flex: 1; justify-content: center; font-size: 0.68rem; padding: 8px 12px; font-weight: 700; box-sizing: border-box; background: linear-gradient(135deg, #10b981, #059669); border: none;" onclick="copyAiGeneratedText()" title="Copiar al portapapeles">
+                📋 Copiar Texto
+              </button>
+              <button class="btn btn-secondary" style="flex: 1; justify-content: center; font-size: 0.68rem; padding: 8px 12px; font-weight: 700; box-sizing: border-box; border-color: rgba(0, 242, 254, 0.25);" onclick="insertAiGeneratedElement()" title="Insertar bloque en el lienzo">
+                ➕ Insertar
+              </button>
+            </div>
           </div>
         `;
         
@@ -1986,11 +1991,16 @@
           </div>
 
           <div id="ai-result-box" style="display: none; flex-direction: column; gap: 8px; margin-top: 6px; width: 100%;">
-            <div style="font-size: 0.58rem; font-weight: 700; color: var(--primary-accent); text-transform: uppercase; letter-spacing: 0.05em;">Resultado (Arrastra al lienzo o pulsa insertar):</div>
-            <div id="ai-html-preview" class="miniature-preview-box" draggable="true" ondragstart="handleAiDragStart(event)" style="padding: 12px; min-height: 150px; max-height: 250px; overflow-y: auto; text-align: left; align-items: flex-start; justify-content: flex-start; cursor: grab; background: rgba(5,7,18,0.7); border: 1px solid rgba(0, 242, 254, 0.25); border-radius: 8px; pointer-events: auto !important; width: 100%; box-sizing: border-box;" title="¡Mantén presionado y arrastra al lienzo libre!"></div>
-            <button class="btn btn-primary" style="width: 100%; justify-content: center; font-size: 0.68rem; padding: 8px 12px; font-weight: 700; margin-top: 4px; box-sizing: border-box;" onclick="insertAiGeneratedElement()">
-              ➕ Insertar en el Lienzo
-            </button>
+            <div style="font-size: 0.58rem; font-weight: 700; color: var(--primary-accent); text-transform: uppercase; letter-spacing: 0.05em;">Resultado:</div>
+            <div id="ai-html-preview" class="miniature-preview-box" draggable="true" ondragstart="handleAiDragStart(event)" style="padding: 12px; min-height: 150px; max-height: 250px; overflow-y: auto; text-align: left; align-items: flex-start; justify-content: flex-start; cursor: grab; background: rgba(5,7,18,0.7); border: 1px solid rgba(0, 242, 254, 0.25); border-radius: 8px; pointer-events: auto !important; width: 100%; box-sizing: border-box; white-space: pre-wrap; font-family: var(--font-inter); font-size: 0.72rem; line-height: 1.5; color: #fff; user-select: text !important;" title="Texto generado o ilustración lista"></div>
+            <div style="display: flex; gap: 6px; width: 100%; margin-top: 4px;">
+              <button class="btn btn-primary" style="flex: 1; justify-content: center; font-size: 0.68rem; padding: 8px 12px; font-weight: 700; box-sizing: border-box; background: linear-gradient(135deg, #10b981, #059669); border: none;" onclick="copyAiGeneratedText()" title="Copiar al portapapeles">
+                📋 Copiar Texto
+              </button>
+              <button class="btn btn-secondary" style="flex: 1; justify-content: center; font-size: 0.68rem; padding: 8px 12px; font-weight: 700; box-sizing: border-box; border-color: rgba(0, 242, 254, 0.25);" onclick="insertAiGeneratedElement()" title="Insertar bloque en el lienzo">
+                ➕ Insertar
+              </button>
+            </div>
           </div>
         `;
       } catch (err) {
@@ -2108,7 +2118,7 @@
         const seed = Math.floor(Math.random() * 100000);
         // Styled prompt to force clean professional presentation assets in Pollinations AI!
         const styledPrompt = `Professional modern presentation slide asset, clean educational vector style, high-fidelity: ${prompt}`;
-        const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(styledPrompt)}?width=600&height=400&nologo=true&seed=${seed}`;
+        const imageUrl = `https://gen.pollinations.ai/image/${encodeURIComponent(styledPrompt)}?width=600&height=400&nologo=true&seed=${seed}`;
         
         const img = new Image();
         img.onload = () => {
@@ -2325,7 +2335,7 @@
 
         if (resData && resData.html) {
           lastAiGeneratedHtml = resData.html;
-          previewBox.innerHTML = resData.html;
+          previewBox.innerText = resData.html;
           const sandbox = document.getElementById('ai-sandbox-code');
           if (sandbox) sandbox.value = resData.html;
           
@@ -3483,39 +3493,37 @@
         setTimeout(() => {
           console.log('Gemini API key not found. Triggering premium academic fallback templates generator...');
           
-          let fallbackHtml = '';
+          let fallbackText = '';
           const p = prompt.toLowerCase();
           
           if (p.includes('viñeta') || p.includes('lista') || p.includes('bullets') || p.includes('punto')) {
-            fallbackHtml = `<ul style="font-size:0.55em; line-height:1.55; list-style:none; padding:0; text-align:left;"><li style="margin-bottom:8px;">🤖 <strong>IA y Productividad:</strong> Automatización práctica del e-learning.</li><li style="margin-bottom:8px;">📊 <strong>Sheets en la Nube:</strong> Control de tareas y trazabilidad colaborativa instantánea.</li><li style="margin-bottom:8px;">💡 <strong>NotebookLM:</strong> Síntesis guiada de fuentes y lecturas del postgrado.</li></ul>`;
+            fallbackText = `💡 Sheets en la Nube: Trazabilidad y control colaborativo instantáneo de tareas del equipo.
+🤖 IA y Productividad: Automatización práctica del e-learning aplicada al postgrado.
+📚 NotebookLM: Síntesis guiada y de alta fidelidad de lecturas críticas.`;
           } else if (p.includes('kpi') || p.includes('métrica') || p.includes('número') || p.includes('porcenta') || p.includes('éxito')) {
-            fallbackHtml = `<div class="glass-card" style="padding:15px; border-color:rgba(0,242,254,0.45); display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%;"><span style="font-size:1.3em;">📈</span><strong style="font-size:0.7em; display:block; color:#fff; font-family:Outfit; margin-top:5px;">88% Automatización</strong><span style="font-size:0.42em; color:var(--muted-text); text-transform:uppercase;">Eficiencia Académica</span></div>`;
+            fallbackText = `📈 ÉXITO ACADÉMICO:
+• 88% de Automatización Eficiente del contenido.
+• 92% de Retención del Conocimiento mediante dinámicas activas.`;
           } else if (p.includes('cita') || p.includes('quote') || p.includes('testimonio') || p.includes('pensamien')) {
-            fallbackHtml = `<blockquote style="font-size:0.5em; color:#fff; border-left:3px solid var(--secondary-accent); padding-left:10px; margin:0; font-style:italic; line-height:1.45; text-align:left;">"La innovación pedagógica es un viaje de transformación continuo potenciado por redes neuronales artificiales y datos abiertos."</blockquote>`;
+            fallbackText = `"La innovación pedagógica es un viaje de transformación continuo potenciado por redes neuronales artificiales y datos abiertos."`;
           } else if (p.includes('compar') || p.includes('diferencia') || p.includes('vs') || p.includes('tab')) {
-            fallbackHtml = `<div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; height:100%;"><div style="text-align:left; border-right:1px solid rgba(255,255,255,0.06); padding-right:8px;"><strong style="font-size:0.5em; color:var(--primary-accent); display:block;">ESTÁNDAR</strong><span style="font-size:0.35em; color:var(--muted-text); line-height:1.2; display:block; margin-top:2px;">Controles rígidos y plantillas cuadradas sin libertad creativa.</span></div><div style="text-align:left; padding-left:4px;"><strong style="font-size:0.55em; color:var(--secondary-accent); display:block;">LIENZO</strong><span style="font-size:0.35em; color:var(--muted-text); line-height:1.2; display:block; margin-top:2px;">Libertad total de maquetación y sincronización responsiva en porcentaje.</span></div></div>`;
-          } else if (p.includes('paso') || p.includes('fase') || p.includes('flujo') || p.includes('timeline') || p.includes('road')) {
-            fallbackHtml = `<div style="display:flex; justify-content:space-between; align-items:center; height:100%; font-size:0.4em;"><div style="text-align:center;"><div style="width:16px; height:16px; border-radius:50%; background:var(--primary-accent); display:flex; align-items:center; justify-content:center; color:#000; font-weight:900; margin:0 auto 3px auto;">1</div><strong style="color:#fff;">Fase A</strong></div><div style="flex-grow:1; height:1px; background:rgba(255,255,255,0.15); margin:0 5px;"></div><div style="text-align:center;"><div style="width:16px; height:16px; border-radius:50%; background:var(--secondary-accent); display:flex; align-items:center; justify-content:center; color:#000; font-weight:900; margin:0 auto 3px auto;">2</div><strong style="color:#fff;">Fase B</strong></div></div>`;
-          } else if (p.includes('neon') || p.includes('brillo') || p.includes('destac') || p.includes('gradien')) {
-            fallbackHtml = `<div class="glass-card" style="padding:15px; border-color:var(--primary-accent); display:flex; align-items:center; justify-content:center; background:rgba(0,242,254,0.06); text-align:center;"><h3 style="font-family:Outfit; font-size:0.7em; background:linear-gradient(90deg, #fff, var(--primary-accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; font-weight:900; margin:0; text-transform:uppercase;">Innovación Disruptiva</h3></div>`;
-          } else if (p.includes('consola') || p.includes('tech') || p.includes('terminal') || p.includes('code') || p.includes('codigo')) {
-            fallbackHtml = `<div style="background:#050712; border:1px solid rgba(139,92,246,0.3); border-radius:6px; padding:10px; text-align:left; font-family:monospace; font-size:0.4em; color:#10b981; line-height:1.3;">$ revealjs --deploy<br><span style="color:#fff;">[OK]</span> Copiloto local activado.<br><span style="color:var(--primary-accent);">[INFO]</span> 24 Elementos cargados.</div>`;
-          } else if (p.includes('app') || p.includes('mobile') || p.includes('movil') || p.includes('celular')) {
-            fallbackHtml = `<div style="border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:6px; height:100%; display:flex; flex-direction:column; justify-content:space-between; font-size:0.35em; color:var(--muted-text);"><div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:2px;"><span>📱 LTE</span><span>100%</span></div><div style="text-align:center; color:#fff; font-family:Outfit; font-weight:700; margin:4px 0;">Interfaz Móvil</div><div style="height:2px; width:30px; background:rgba(255,255,255,0.3); margin:0 auto; border-radius:1px;"></div></div>`;
-          } else if (p.includes('speech') || p.includes('globo') || p.includes('burbuja') || p.includes('comentar')) {
-            fallbackHtml = `<div style="background:rgba(10,15,30,0.9); border:1px solid var(--secondary-accent); border-radius:8px; padding:8px; text-align:left; position:relative;"><span style="font-size:0.38em; color:var(--muted-text); line-height:1.35; display:block;">El lienzo absoluto permite combinaciones dinámicas sin precedentes.</span></div>`;
+            fallbackText = `⚖️ COMPARACIÓN DE ENFOQUES:
+• Enfoque Estándar: Controles rígidos y plantillas cuadradas sin libertad creativa.
+• Lienzo Libre: Libertad total de maquetación y sincronización responsiva en porcentaje.`;
           } else {
-            fallbackHtml = `<div class="glass-card" style="padding:18px; border-radius:12px; background:rgba(10,15,30,0.92); border:1px solid rgba(0,242,254,0.25); height:100%;"><h3 style="font-size:0.72em; color:var(--primary-accent); margin-bottom:8px; font-family:Outfit; text-transform:uppercase;">Copiloto Académico</h3><p style="font-size:0.46em; color:var(--muted-text); margin:0; line-height:1.4;">${prompt} — Diseña libremente con el lienzo absoluto de RevealJS.</p></div>`;
+            fallbackText = `🎯 Copiloto Académico:
+• ${prompt}
+• Redacta y diseña libremente con el lienzo absoluto de PresentaFacil.`;
           }
 
-          lastAiGeneratedHtml = fallbackHtml;
-          previewBox.innerHTML = fallbackHtml;
+          lastAiGeneratedHtml = fallbackText;
+          previewBox.innerText = fallbackText;
           const sandbox = document.getElementById('ai-sandbox-code');
-          if (sandbox) sandbox.value = fallbackHtml;
+          if (sandbox) sandbox.value = fallbackText;
           
           loader.style.display = 'none';
           resultBox.style.display = 'flex';
-          showToast('Elemento maquetado con el Generador Inteligente Local.', '✨');
+          showToast('Texto redactado con el Generador Inteligente Local.', '✨');
         }, 1500);
         return;
       }
@@ -3523,15 +3531,13 @@
       try {
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
         
-        const systemInstruction = `Eres un experto diseñador web especializado en Reveal.js y CSS moderno con glassmorphism.
-Genera un bloque de diapositiva auto-contenido en HTML premium para la indicación: "${prompt}".
+        const systemInstruction = `Eres un experto redactor pedagógico y diseñador de contenido académico.
+Genera contenido en texto plano limpio y altamente profesional para la indicación: "${prompt}".
 Reglas obligatorias:
-1. Devuelve ÚNICAMENTE código HTML directo y limpio. No uses bloques de markdown (\`\`\`html \`\`\`).
-2. Usa estilos inline elegantes de CSS. Aplica colores del ecosistema (azul marino profundo, cian neón '#00f2fe', violeta '#8b5cf6', gris '#94a3b8').
-3. Para tarjetas, usa la clase 'glass-card' con borde de 1px solid rgba(0, 242, 254, 0.25).
-4. El tamaño de fuente de los textos debe ser pequeño, idealmente expresado en 'em' (e.g. 0.45em, 0.55em, 0.65em) para asegurar responsividad total en RevealJS.
-5. El bloque debe tener un tamaño proporcional y verse sumamente comercial y moderno.
-6. Restringe el contenido de forma estricta a temáticas profesionales, académicas, de ingeniería, de negocios o de divulgación aptas para diapositivas de presentación. Si el prompt está fuera de contexto, adáptalo creativamente como una estructura de diapositiva educativa premium.`;
+1. Devuelve ÚNICAMENTE el texto redactado en formato plano. No utilices etiquetas HTML ni bloques de código markdown (\`\`\`html\`\`\` o \`\`\`text\`\`\`).
+2. Estructura el texto con títulos claros, viñetas elegantes (puedes usar emojis descriptivos) o párrafos concisos según corresponda.
+3. Asegúrate de que el texto sea extremadamente fácil de copiar y pegar en diapositivas de presentación.
+4. Mantén un tono formal, educativo y profesional, restringiendo el contenido estrictamente a temáticas aptas para presentaciones de negocios, ingeniería o divulgación académica.`;
 
         const response = await fetch(url, {
           method: 'POST',
@@ -3552,14 +3558,14 @@ Reglas obligatorias:
           let rawText = resData.candidates[0].content.parts[0].text;
           
           // Clean markdown wrappers if any slipped past instructions
-          rawText = rawText.replace(/```html/gi, '').replace(/```/g, '').trim();
+          rawText = rawText.replace(/```html/gi, '').replace(/```/g, '').replace(/```text/gi, '').trim();
 
           lastAiGeneratedHtml = rawText;
-          previewBox.innerHTML = rawText;
+          previewBox.innerText = rawText;
           const sandbox = document.getElementById('ai-sandbox-code');
           if (sandbox) sandbox.value = rawText;
           
-          showToast('Elemento generado con éxito por Gemini.', '✨');
+          showToast('Texto redactado con éxito por Coritos.', '✨');
           loader.style.display = 'none';
           resultBox.style.display = 'flex';
         } else {
@@ -3580,9 +3586,14 @@ Reglas obligatorias:
 
       if (!activeSlide.elements) activeSlide.elements = [];
 
+      let contentToInsert = lastAiGeneratedHtml;
+      if (!contentToInsert.trim().startsWith('<')) {
+        contentToInsert = `<div class="glass-card" style="padding:15px; border:1px solid rgba(0, 242, 254, 0.25); background:rgba(10,15,30,0.85); overflow:hidden; white-space:pre-wrap; font-family:var(--font-inter); font-size:0.48em; line-height:1.55; text-align:left; color:#fff; height:100%; width:100%; box-sizing:border-box;">${contentToInsert}</div>`;
+      }
+
       const el = {
-        x: 25, y: 35, w: 50, h: 32, zIndex: 10,
-        content: lastAiGeneratedHtml
+        x: 25, y: 35, w: 50, h: 45, zIndex: 10,
+        content: contentToInsert
       };
 
       activeSlide.elements.push(el);
@@ -3597,7 +3608,25 @@ Reglas obligatorias:
       document.getElementById('ai-prompt-box').value = '';
       switchSidebarTab('slides');
       
-      showToast('Elemento de Gemini inyectado en el lienzo.', '🤖');
+      showToast('Elemento de Coritos inyectado en el lienzo.', '🐐');
+    }
+
+    // Copy AI generated text to clipboard
+    function copyAiGeneratedText() {
+      if (!lastAiGeneratedHtml) return;
+      
+      let textToCopy = lastAiGeneratedHtml;
+      if (textToCopy.includes('<img')) {
+        const match = textToCopy.match(/src="([^"]+)"/);
+        if (match && match[1]) textToCopy = match[1];
+      }
+      
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        showToast('¡Texto copiado al portapapeles! 📋', '✨');
+      }).catch(err => {
+        console.error('Error copying text:', err);
+        showToast('No se pudo copiar el texto.', '❌');
+      });
     }
 
     // Collapsible Panel Controllers (Minimize clunky workspace and maximize viewport focus)
