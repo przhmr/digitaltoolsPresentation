@@ -78,7 +78,8 @@ Reglas obligatorias:
 2. Usa estilos inline elegantes de CSS. Aplica colores del ecosistema (azul marino profundo, cian neón '#00f2fe', violeta '#8b5cf6', gris '#94a3b8').
 3. Para tarjetas, usa la clase 'glass-card' con borde de 1px solid rgba(0, 242, 254, 0.25).
 4. El tamaño de fuente de los textos debe ser pequeño, idealmente expresado en 'em' (e.g. 0.45em, 0.55em, 0.65em) para asegurar responsividad total en RevealJS.
-5. Haz que sea visualmente impactante, interactivo si aplica, y con excelente micro-tipografía.`
+5. Haz que sea visualmente impactante, interactivo si aplica, y con excelente micro-tipografía.
+6. Restringe el contenido de forma estricta a temáticas profesionales, académicas, de ingeniería, de negocios o de divulgación aptas para diapositivas de presentación. Si el prompt está fuera de contexto, adáptalo creativamente como una estructura de diapositiva educativa premium.`
 
     const geminiRes = await fetch(geminiUrl, {
       method: "POST",

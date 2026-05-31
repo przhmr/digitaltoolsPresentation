@@ -1925,17 +1925,12 @@
             </div>
           </div>
 
-          <div id="ai-result-box" style="display: none; flex-direction: column; gap: 8px; margin-top: 5px;">
-            <div style="font-size: 0.65rem; font-weight: 700; color: var(--primary-accent); text-transform: uppercase;">Resultado (Arrastra al lienzo o inserta):</div>
-            <div id="ai-html-preview" class="miniature-preview-box" draggable="true" ondragstart="handleAiDragStart(event)" style="padding: 10px; max-height: 120px; overflow-y: auto; text-align: left; align-items: flex-start; justify-content: flex-start; cursor: grab;" title="¡Mantén presionado y arrastra al lienzo libre!"></div>
-            <div class="form-group" style="margin-top: 4px;">
-              <label for="ai-sandbox-code" style="font-size: 0.58rem; color: var(--muted-text);">Código Sandbox (Edición Directa):</label>
-              <textarea id="ai-sandbox-code" class="form-input" style="font-family: monospace; font-size: 0.6rem; min-height: 80px; line-height: 1.35; background: rgba(5,7,18,0.6);" oninput="lastAiGeneratedHtml = this.value; document.getElementById('ai-html-preview').innerHTML = this.value;"></textarea>
-            </div>
-            <div style="display: flex; gap: 6px;">
-              <button class="btn btn-secondary" style="flex: 1; justify-content: center; font-size: 0.62rem;" onclick="previewAiSandboxCode()">👁️ Vista Previa</button>
-              <button class="btn btn-primary" style="flex: 2; justify-content: center; font-size: 0.62rem; padding: 6px 10px;" onclick="insertAiGeneratedElement()">➕ Insertar</button>
-            </div>
+          <div id="ai-result-box" style="display: none; flex-direction: column; gap: 8px; margin-top: 6px; width: 100%;">
+            <div style="font-size: 0.58rem; font-weight: 700; color: var(--primary-accent); text-transform: uppercase; letter-spacing: 0.05em;">Resultado (Arrastra al lienzo o pulsa insertar):</div>
+            <div id="ai-html-preview" class="miniature-preview-box" draggable="true" ondragstart="handleAiDragStart(event)" style="padding: 12px; min-height: 150px; max-height: 250px; overflow-y: auto; text-align: left; align-items: flex-start; justify-content: flex-start; cursor: grab; background: rgba(5,7,18,0.7); border: 1px solid rgba(0, 242, 254, 0.25); border-radius: 8px; pointer-events: auto !important; width: 100%; box-sizing: border-box;" title="¡Mantén presionado y arrastra al lienzo libre!"></div>
+            <button class="btn btn-primary" style="width: 100%; justify-content: center; font-size: 0.68rem; padding: 8px 12px; font-weight: 700; margin-top: 4px; box-sizing: border-box;" onclick="insertAiGeneratedElement()">
+              ➕ Insertar en el Lienzo
+            </button>
           </div>
         `;
         
@@ -1988,17 +1983,12 @@
             </div>
           </div>
 
-          <div id="ai-result-box" style="display: none; flex-direction: column; gap: 8px; margin-top: 5px;">
-            <div style="font-size: 0.65rem; font-weight: 700; color: var(--primary-accent); text-transform: uppercase;">Resultado (Arrastra al lienzo o inserta):</div>
-            <div id="ai-html-preview" class="miniature-preview-box" draggable="true" ondragstart="handleAiDragStart(event)" style="padding: 10px; max-height: 120px; overflow-y: auto; text-align: left; align-items: flex-start; justify-content: flex-start; cursor: grab;" title="¡Mantén presionado y arrastra al lienzo libre!"></div>
-            <div class="form-group" style="margin-top: 4px;">
-              <label for="ai-sandbox-code" style="font-size: 0.58rem; color: var(--muted-text);">Código Sandbox (Edición Directa):</label>
-              <textarea id="ai-sandbox-code" class="form-input" style="font-family: monospace; font-size: 0.6rem; min-height: 80px; line-height: 1.35; background: rgba(5,7,18,0.6);" oninput="lastAiGeneratedHtml = this.value; document.getElementById('ai-html-preview').innerHTML = this.value;"></textarea>
-            </div>
-            <div style="display: flex; gap: 6px;">
-              <button class="btn btn-secondary" style="flex: 1; justify-content: center; font-size: 0.62rem;" onclick="previewAiSandboxCode()">👁️ Vista Previa</button>
-              <button class="btn btn-primary" style="flex: 2; justify-content: center; font-size: 0.62rem; padding: 6px 10px;" onclick="insertAiGeneratedElement()">➕ Insertar</button>
-            </div>
+          <div id="ai-result-box" style="display: none; flex-direction: column; gap: 8px; margin-top: 6px; width: 100%;">
+            <div style="font-size: 0.58rem; font-weight: 700; color: var(--primary-accent); text-transform: uppercase; letter-spacing: 0.05em;">Resultado (Arrastra al lienzo o pulsa insertar):</div>
+            <div id="ai-html-preview" class="miniature-preview-box" draggable="true" ondragstart="handleAiDragStart(event)" style="padding: 12px; min-height: 150px; max-height: 250px; overflow-y: auto; text-align: left; align-items: flex-start; justify-content: flex-start; cursor: grab; background: rgba(5,7,18,0.7); border: 1px solid rgba(0, 242, 254, 0.25); border-radius: 8px; pointer-events: auto !important; width: 100%; box-sizing: border-box;" title="¡Mantén presionado y arrastra al lienzo libre!"></div>
+            <button class="btn btn-primary" style="width: 100%; justify-content: center; font-size: 0.68rem; padding: 8px 12px; font-weight: 700; margin-top: 4px; box-sizing: border-box;" onclick="insertAiGeneratedElement()">
+              ➕ Insertar en el Lienzo
+            </button>
           </div>
         `;
       } catch (err) {
@@ -2114,8 +2104,9 @@
       
       try {
         const seed = Math.floor(Math.random() * 100000);
-        // Removed &enhance=true to prevent unpredictable prompt rewrites that cause weird images
-        const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=600&height=400&nologo=true&seed=${seed}`;
+        // Styled prompt to force clean professional presentation assets in Pollinations AI!
+        const styledPrompt = `Professional modern presentation slide asset, clean educational vector style, high-fidelity: ${prompt}`;
+        const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(styledPrompt)}?width=600&height=400&nologo=true&seed=${seed}`;
         
         const img = new Image();
         img.onload = () => {
@@ -2124,7 +2115,7 @@
           
           lastAiGeneratedHtml = generatedHtml;
           previewBox.innerHTML = generatedHtml;
-          sandboxCode.value = generatedHtml;
+          if (sandboxCode) sandboxCode.value = generatedHtml;
           
           previewBox.setAttribute('draggable', 'true');
           previewBox.setAttribute('ondragstart', 'handleAiDragStart(event)');
@@ -3516,7 +3507,8 @@
 
           lastAiGeneratedHtml = fallbackHtml;
           previewBox.innerHTML = fallbackHtml;
-          document.getElementById('ai-sandbox-code').value = fallbackHtml;
+          const sandbox = document.getElementById('ai-sandbox-code');
+          if (sandbox) sandbox.value = fallbackHtml;
           
           loader.style.display = 'none';
           resultBox.style.display = 'flex';
@@ -3535,7 +3527,8 @@ Reglas obligatorias:
 2. Usa estilos inline elegantes de CSS. Aplica colores del ecosistema (azul marino profundo, cian neón '#00f2fe', violeta '#8b5cf6', gris '#94a3b8').
 3. Para tarjetas, usa la clase 'glass-card' con borde de 1px solid rgba(0, 242, 254, 0.25).
 4. El tamaño de fuente de los textos debe ser pequeño, idealmente expresado en 'em' (e.g. 0.45em, 0.55em, 0.65em) para asegurar responsividad total en RevealJS.
-5. El bloque debe tener un tamaño proporcional y verse sumamente comercial y moderno.`;
+5. El bloque debe tener un tamaño proporcional y verse sumamente comercial y moderno.
+6. Restringe el contenido de forma estricta a temáticas profesionales, académicas, de ingeniería, de negocios o de divulgación aptas para diapositivas de presentación. Si el prompt está fuera de contexto, adáptalo creativamente como una estructura de diapositiva educativa premium.`;
 
         const response = await fetch(url, {
           method: 'POST',
@@ -3560,7 +3553,8 @@ Reglas obligatorias:
 
           lastAiGeneratedHtml = rawText;
           previewBox.innerHTML = rawText;
-          document.getElementById('ai-sandbox-code').value = rawText;
+          const sandbox = document.getElementById('ai-sandbox-code');
+          if (sandbox) sandbox.value = rawText;
           
           showToast('Elemento generado con éxito por Gemini.', '✨');
           loader.style.display = 'none';
