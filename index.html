@@ -290,13 +290,13 @@
       color: var(--primary-accent);
     }
 
-    /* Ambient Dynamic Glowing Background */
+    /* Ambient Dynamic Glowing Background (Connected & Responsive) */
     .glow-bg {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
+      top: -10vh;
+      left: -10vw;
+      width: 120vw;
+      height: 120vh;
       overflow: hidden;
       z-index: 0;
       pointer-events: none;
@@ -408,7 +408,7 @@
       <!-- ========================================================
            SLIDE 1: PORTADA PROFESIONAL (Startup Launch Style)
            ======================================================== -->
-      <section data-background-gradient="radial-gradient(circle at 50% 50%, #07112a 0%, #050814 100%)">
+      <section>
         <div class="glass-card" style="text-align: center; max-width: 950px; margin: 0 auto; border-color: rgba(0, 242, 254, 0.3); padding: 40px;">
           <h1 style="margin-top: 15px !important;">Ingeniería Digital y Gestión de Procesos</h1>
           <h3 style="font-size: 1.05em; color: var(--muted-text); font-weight: 500; margin-bottom: 40px; letter-spacing: 0.02em;">
@@ -851,7 +851,7 @@
       <!-- ========================================================
            SLIDE 11: FAREWELL (Despedida)
            ======================================================== -->
-      <section data-background-gradient="radial-gradient(circle at 50% 50%, #07112a 0%, #050814 100%)">
+      <section>
         <div class="glass-card" style="text-align: center; max-width: 800px; margin: 0 auto; border-color: rgba(0, 242, 254, 0.4); padding: 40px; position: relative;">
           
           <!-- Glowing Pulsating Emblem -->
@@ -1004,6 +1004,18 @@
 
       // Embed standard RevealJS Plugins
       plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+    });
+
+    // Create a beautiful, connected parallax background effect on slide transition
+    Reveal.on('slidechanged', event => {
+      const glowBg = document.querySelector('.glow-bg');
+      if (glowBg) {
+        // Shift the global backdrop smoothly based on the active slide number
+        const shiftX = -event.indexh * 30; // 30px shift per slide horizontally
+        const shiftY = (event.indexh % 2) * -15; // Alternating vertical shifts
+        glowBg.style.transform = `translate(${shiftX}px, ${shiftY}px)`;
+        glowBg.style.transition = 'transform 1.4s cubic-bezier(0.16, 1, 0.3, 1)';
+      }
     });
   </script>
 </body>
