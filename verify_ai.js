@@ -10,7 +10,10 @@ const { chromium } = require('playwright');
 
   try {
     console.log('🔗 Navigating to http://localhost:8080/AdvancedEditor.html...');
-    await page.goto('http://localhost:8080/AdvancedEditor.html', { waitUntil: 'networkidle' });
+    await page.goto('http://localhost:8080/AdvancedEditor.html');
+    await page.evaluate(() => localStorage.clear());
+    await page.reload({ waitUntil: 'networkidle' });
+
 
     console.log('⏳ Waiting for slides deck list to render...');
     await page.waitForSelector('.slide-item', { timeout: 5000 });

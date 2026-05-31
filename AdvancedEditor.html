@@ -1119,7 +1119,7 @@
       <div class="sidebar-tabs">
         <button id="tab-slides" class="sidebar-tab-btn active" onclick="switchSidebarTab('slides')">Láminas</button>
         <button id="tab-library" class="sidebar-tab-btn" onclick="switchSidebarTab('library')">Biblioteca</button>
-        <button id="tab-ai" class="sidebar-tab-btn" onclick="switchSidebarTab('ai')" style="background: linear-gradient(135deg, rgba(0, 242, 254, 0.08), rgba(139, 92, 246, 0.12)); border: 1px solid rgba(0, 242, 254, 0.15); color: #fff;">🤖 Copiloto IA</button>
+        <button id="tab-ai" class="sidebar-tab-btn" onclick="switchSidebarTab('ai')" style="background: linear-gradient(135deg, rgba(0, 242, 254, 0.08), rgba(139, 92, 246, 0.12)); border: 1px solid rgba(0, 242, 254, 0.15); color: #fff;">🦜 Corito IA</button>
       </div>
       
       <div class="sidebar-content-pane" id="sidebar-content-pane">
@@ -1485,7 +1485,7 @@
         <!-- PANE 3: 🤖 GOOGLE GEMINI AI COPILOT WRITER DRAWER -->
         <div id="pane-ai" style="display: none; flex-direction: column; gap: 12px; height: 100%;">
           <div class="sidebar-header" style="justify-content: space-between; align-items: center;">
-            <span>Copiloto de Diapositivas IA</span>
+            <span>Corito - Asistente IA 🦜</span>
             <button class="btn-icon-mini" id="btn-toggle-supabase-config" onclick="toggleSupabaseConfigPanel()" title="Configuración de Servidor de Equipo (Supabase)" style="border-radius: 50%; font-size:0.68rem; background:rgba(255,255,255,0.06); width:22px; height:22px; border-color:rgba(255,255,255,0.1); cursor:pointer; display: flex; align-items: center; justify-content: center; color: var(--muted-text);">⚙️</button>
           </div>
 
@@ -1632,6 +1632,15 @@
             <option value="concave">concave (3D cóncavo)</option>
             <option value="none">none (Sin efectos)</option>
           </select>
+        </div>
+
+        <!-- Supabase Team Cloud Sincronization -->
+        <div id="supabase-cloud-sync-area" style="display: none; flex-direction: column; gap: 6px; margin-bottom: 8px; padding: 10px; border-radius: 8px; background: rgba(139, 92, 246, 0.08); border: 1px solid rgba(139, 92, 246, 0.18);">
+          <div style="font-size: 0.58rem; color: #8b5cf6; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">☁️ Nube de Equipo (Supabase)</div>
+          <div style="display: flex; gap: 4px;">
+            <button class="btn btn-primary" style="flex: 1; font-size: 0.62rem; padding: 6px; justify-content: center; background: linear-gradient(135deg, #00f2fe, #8b5cf6); border:none; font-weight:700;" onclick="savePresentationToCloud()">☁️ Guardar en Nube</button>
+            <button class="btn btn-secondary" style="flex: 1; font-size: 0.62rem; padding: 6px; justify-content: center; border-color: rgba(0, 242, 254, 0.25);" onclick="loadPresentationFromCloud()">📂 Cargar de Nube</button>
+          </div>
         </div>
 
         <button class="btn btn-secondary" style="width: 100%; justify-content: center; font-size: 0.68rem; margin-bottom: 8px;" onclick="document.getElementById('modal-github').style.display='flex'">
@@ -1850,8 +1859,8 @@
     }
 
     async function initSupabaseAuthUI() {
-      const sbUrl = localStorage.getItem('supabase_url');
-      const sbKey = localStorage.getItem('supabase_anon_key');
+      const sbUrl = localStorage.getItem('supabase_url') || DEFAULT_SUPABASE_URL;
+      const sbKey = localStorage.getItem('supabase_anon_key') || DEFAULT_SUPABASE_ANON_KEY;
       const wrapper = document.getElementById('ai-copilot-dynamic-wrapper');
       
       if (!wrapper) return;
@@ -1859,6 +1868,11 @@
       // Sync settings input values
       if (sbUrl) document.getElementById('sb-url-input').value = sbUrl;
       if (sbKey) document.getElementById('sb-key-input').value = sbKey;
+
+      if (sbUrl && sbKey) {
+        const cloudSyncArea = document.getElementById('supabase-cloud-sync-area');
+        if (cloudSyncArea) cloudSyncArea.style.display = 'flex';
+      }
 
       if (!sbUrl || !sbKey) {
         // SINGLE USER MODE (Direct Gemini Key or Fallback)
@@ -1871,13 +1885,19 @@
             <input type="password" id="ai-gemini-key" class="form-input" placeholder="AIzaSy..." style="padding: 6px;" oninput="saveGeminiApiKey(this.value)">
           </div>
 
+          <!-- Sub-Tabs Selector for Corito -->
+          <div class="ai-sub-tabs" style="display:flex; gap:4px; margin-bottom:8px; padding: 2px; background: rgba(5,7,18,0.4); border-radius: 6px; border: 1px solid rgba(255,255,255,0.05);">
+            <button id="ai-sub-tab-text" class="btn btn-secondary active" style="flex:1; font-size:0.6rem; padding:5px; justify-content:center; border:none; background:rgba(0,242,254,0.1); color:#fff; font-weight:700;" onclick="switchAiSubTab('text')">Texto 📝</button>
+            <button id="ai-sub-tab-image" class="btn btn-secondary" style="flex:1; font-size:0.6rem; padding:5px; justify-content:center; border:none; background:transparent; color:var(--muted-text);" onclick="switchAiSubTab('image')">Imagen 🖼️</button>
+          </div>
+
           <div class="form-group">
-            <label for="ai-prompt-box">¿Qué deseas generar con Gemini IA?</label>
+            <label for="ai-prompt-box">¿Qué deseas redactar y diseñar?</label>
             <textarea id="ai-prompt-box" class="form-input" placeholder="e.g. 3 beneficios de usar Google Sheets colaborativo con emojis..." style="min-height: 90px; font-size:0.7rem; line-height:1.45; margin-bottom:6px;"></textarea>
             
             <div class="ai-suggestions-box" style="margin-top: 2px;">
               <div style="font-size: 0.58rem; color: var(--muted-text); margin-bottom: 4px; font-weight: 700;">💡 Sugerencias Rápidas:</div>
-              <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+              <div id="ai-suggestions-list" style="display: flex; flex-wrap: wrap; gap: 4px;">
                 <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.52rem; border-color: rgba(255,255,255,0.06); text-transform:none; font-weight: 500;" onclick="setAiPrompt('Crear lista de 3 viñetas con emojis sobre IA y Educación')">📝 Viñetas con Emojis</button>
                 <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.52rem; border-color: rgba(255,255,255,0.06); text-transform:none; font-weight: 500;" onclick="setAiPrompt('Diseñar métrica KPI de 92% de éxito académico con icono')">📈 KPI de Éxito</button>
                 <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.52rem; border-color: rgba(255,255,255,0.06); text-transform:none; font-weight: 500;" onclick="setAiPrompt('Generar cita de quote inspiradora en caja esmerilada')">💡 Cita Académica</button>
@@ -1887,27 +1907,27 @@
             </div>
           </div>
 
-          <button id="btn-generate-ai" class="btn btn-primary" style="width:100%; justify-content:center; padding: 10px 15px; font-family:var(--font-outfit); font-weight:800; font-size:0.75rem;" onclick="generateElementWithGeminiAI()">
-            ✨ Generar Elemento con Gemini
+          <button id="btn-generate-ai" class="btn btn-primary" style="width:100%; justify-content:center; padding: 10px 15px; font-family:var(--font-outfit); font-weight:800; font-size:0.75rem;" onclick="executeCoritoGeneration()">
+            ✨ Generar con Asistente IA
           </button>
 
           <div id="ai-status-loader" style="display:none; text-align:center; padding: 8px;">
             <div style="font-size:0.6rem; color:var(--muted-text); display:flex; align-items:center; justify-content:center; gap:8px;">
               <span style="width:8px; height:8px; border-radius:50%; background:var(--primary-accent); display:inline-block; animation: heartbeat 1s infinite alternate;"></span>
-              Gemini redactando y maquetando...
+              Corito diseñando...
             </div>
           </div>
 
           <div id="ai-result-box" style="display: none; flex-direction: column; gap: 8px; margin-top: 5px;">
-            <div style="font-size: 0.65rem; font-weight: 700; color: var(--primary-accent); text-transform: uppercase;">Resultado de Generación:</div>
-            <div id="ai-html-preview" class="miniature-preview-box" style="padding: 10px; max-height: 120px; overflow-y: auto; text-align: left; align-items: flex-start; justify-content: flex-start;"></div>
+            <div style="font-size: 0.65rem; font-weight: 700; color: var(--primary-accent); text-transform: uppercase;">Resultado (Arrastra al lienzo o inserta):</div>
+            <div id="ai-html-preview" class="miniature-preview-box" draggable="true" ondragstart="handleAiDragStart(event)" style="padding: 10px; max-height: 120px; overflow-y: auto; text-align: left; align-items: flex-start; justify-content: flex-start; cursor: grab;" title="¡Mantén presionado y arrastra al lienzo libre!"></div>
             <div class="form-group" style="margin-top: 4px;">
-              <label for="ai-sandbox-code" style="font-size: 0.58rem; color: var(--muted-text);">Código HTML Sandbox (Edición Directa):</label>
+              <label for="ai-sandbox-code" style="font-size: 0.58rem; color: var(--muted-text);">Código Sandbox (Edición Directa):</label>
               <textarea id="ai-sandbox-code" class="form-input" style="font-family: monospace; font-size: 0.6rem; min-height: 80px; line-height: 1.35; background: rgba(5,7,18,0.6);" oninput="lastAiGeneratedHtml = this.value; document.getElementById('ai-html-preview').innerHTML = this.value;"></textarea>
             </div>
             <div style="display: flex; gap: 6px;">
               <button class="btn btn-secondary" style="flex: 1; justify-content: center; font-size: 0.62rem;" onclick="previewAiSandboxCode()">👁️ Vista Previa</button>
-              <button class="btn btn-primary" style="flex: 2; justify-content: center; font-size: 0.62rem; padding: 6px 10px;" onclick="insertAiGeneratedElement()">➕ Insertar en el Lienzo</button>
+              <button class="btn btn-primary" style="flex: 2; justify-content: center; font-size: 0.62rem; padding: 6px 10px;" onclick="insertAiGeneratedElement()">➕ Insertar</button>
             </div>
           </div>
         `;
@@ -1932,9 +1952,9 @@
           // NOT LOGGED IN MODE
           wrapper.innerHTML = `
             <div style="padding: 20px; border-radius: 12px; border: 1px solid rgba(0, 242, 254, 0.2); background: rgba(10,15,30,0.85); display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center;">
-              <div style="font-size: 2.2rem; filter: drop-shadow(0 0 8px rgba(0, 242, 254, 0.45));">🔑</div>
-              <strong style="font-size: 0.72rem; color: #fff; font-family: Outfit;">Servidor de Equipo Activado</strong>
-              <p style="font-size: 0.58rem; color: var(--muted-text); margin: 0; line-height: 1.45;">Inicia sesión con tu cuenta corporativa o autorizada de Gmail para usar el Copiloto IA compartido del equipo.</p>
+              <div style="font-size: 2.2rem; filter: drop-shadow(0 0 8px rgba(0, 242, 254, 0.45));">🦜</div>
+              <strong style="font-size: 0.72rem; color: #fff; font-family: Outfit;">Asistente de Equipo Corito</strong>
+              <p style="font-size: 0.58rem; color: var(--muted-text); margin: 0; line-height: 1.45;">Inicia sesión con tu cuenta de Gmail autorizada para usar a Corito - Asistente IA de equipo.</p>
               
               <button class="btn btn-primary" style="width: 100%; padding: 10px; justify-content: center; gap: 10px; font-weight: 800; font-family: Outfit; font-size: 0.72rem;" onclick="loginWithGoogleSSO()">
                 🔴 Iniciar Sesión con Google
@@ -1959,14 +1979,20 @@
               <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.5rem; border-color:rgba(255,255,255,0.08); text-transform:none; flex-shrink:0;" onclick="logoutTeamSession()">Salir 🚪</button>
             </div>
 
+            <!-- Sub-Tabs Selector for Corito -->
+            <div class="ai-sub-tabs" style="display:flex; gap:4px; margin-bottom:8px; padding: 2px; background: rgba(5,7,18,0.4); border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); margin-top:6px;">
+              <button id="ai-sub-tab-text" class="btn btn-secondary active" style="flex:1; font-size:0.6rem; padding:5px; justify-content:center; border:none; background:rgba(0,242,254,0.1); color:#fff; font-weight:700;" onclick="switchAiSubTab('text')">Texto 📝</button>
+              <button id="ai-sub-tab-image" class="btn btn-secondary" style="flex:1; font-size:0.6rem; padding:5px; justify-content:center; border:none; background:transparent; color:var(--muted-text);" onclick="switchAiSubTab('image')">Imagen 🖼️</button>
+            </div>
+
             <!-- Standard Prompt inputs -->
             <div class="form-group">
-              <label for="ai-prompt-box">¿Qué deseas generar con el Copiloto del Equipo?</label>
+              <label for="ai-prompt-box">¿Qué deseas redactar y diseñar?</label>
               <textarea id="ai-prompt-box" class="form-input" placeholder="e.g. 3 beneficios de usar Google Sheets colaborativo con emojis..." style="min-height: 90px; font-size:0.7rem; line-height:1.45; margin-bottom:6px;"></textarea>
               
               <div class="ai-suggestions-box" style="margin-top: 2px;">
                 <div style="font-size: 0.58rem; color: var(--muted-text); margin-bottom: 4px; font-weight: 700;">💡 Sugerencias Rápidas:</div>
-                <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+                <div id="ai-suggestions-list" style="display: flex; flex-wrap: wrap; gap: 4px;">
                   <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.52rem; border-color: rgba(255,255,255,0.06); text-transform:none; font-weight: 500;" onclick="setAiPrompt('Crear lista de 3 viñetas con emojis sobre IA y Educación')">📝 Viñetas con Emojis</button>
                   <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.52rem; border-color: rgba(255,255,255,0.06); text-transform:none; font-weight: 500;" onclick="setAiPrompt('Diseñar métrica KPI de 92% de éxito académico con icono')">📈 KPI de Éxito</button>
                   <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.52rem; border-color: rgba(255,255,255,0.06); text-transform:none; font-weight: 500;" onclick="setAiPrompt('Generar cita de quote inspiradora en caja esmerilada')">💡 Cita Académica</button>
@@ -1976,27 +2002,27 @@
               </div>
             </div>
 
-            <button id="btn-generate-ai" class="btn btn-primary" style="width:100%; justify-content:center; padding: 10px 15px; font-family:var(--font-outfit); font-weight:800; font-size:0.75rem;" onclick="generateElementWithSupabaseEdgeFunction()">
-              ✨ Generar con Copiloto de Equipo
+            <button id="btn-generate-ai" class="btn btn-primary" style="width:100%; justify-content:center; padding: 10px 15px; font-family:var(--font-outfit); font-weight:800; font-size:0.75rem;" onclick="executeCoritoGeneration()">
+              ✨ Generar con Asistente IA
             </button>
 
             <div id="ai-status-loader" style="display:none; text-align:center; padding: 8px;">
               <div style="font-size:0.6rem; color:var(--muted-text); display:flex; align-items:center; justify-content:center; gap:8px;">
                 <span style="width:8px; height:8px; border-radius:50%; background:var(--primary-accent); display:inline-block; animation: heartbeat 1s infinite alternate;"></span>
-                Supabase procesando con Gemini...
+                Corito diseñando...
               </div>
             </div>
 
             <div id="ai-result-box" style="display: none; flex-direction: column; gap: 8px; margin-top: 5px;">
-              <div style="font-size: 0.65rem; font-weight: 700; color: var(--primary-accent); text-transform: uppercase;">Resultado de Generación:</div>
-              <div id="ai-html-preview" class="miniature-preview-box" style="padding: 10px; max-height: 120px; overflow-y: auto; text-align: left; align-items: flex-start; justify-content: flex-start;"></div>
+              <div style="font-size: 0.65rem; font-weight: 700; color: var(--primary-accent); text-transform: uppercase;">Resultado (Arrastra al lienzo o inserta):</div>
+              <div id="ai-html-preview" class="miniature-preview-box" draggable="true" ondragstart="handleAiDragStart(event)" style="padding: 10px; max-height: 120px; overflow-y: auto; text-align: left; align-items: flex-start; justify-content: flex-start; cursor: grab;" title="¡Mantén presionado y arrastra al lienzo libre!"></div>
               <div class="form-group" style="margin-top: 4px;">
-                <label for="ai-sandbox-code" style="font-size: 0.58rem; color: var(--muted-text);">Código HTML Sandbox (Edición Directa):</label>
+                <label for="ai-sandbox-code" style="font-size: 0.58rem; color: var(--muted-text);">Código Sandbox (Edición Directa):</label>
                 <textarea id="ai-sandbox-code" class="form-input" style="font-family: monospace; font-size: 0.6rem; min-height: 80px; line-height: 1.35; background: rgba(5,7,18,0.6);" oninput="lastAiGeneratedHtml = this.value; document.getElementById('ai-html-preview').innerHTML = this.value;"></textarea>
               </div>
               <div style="display: flex; gap: 6px;">
                 <button class="btn btn-secondary" style="flex: 1; justify-content: center; font-size: 0.62rem;" onclick="previewAiSandboxCode()">👁️ Vista Previa</button>
-                <button class="btn btn-primary" style="flex: 2; justify-content: center; font-size: 0.62rem; padding: 6px 10px;" onclick="insertAiGeneratedElement()">➕ Insertar en el Lienzo</button>
+                <button class="btn btn-primary" style="flex: 2; justify-content: center; font-size: 0.62rem; padding: 6px 10px;" onclick="insertAiGeneratedElement()">➕ Insertar</button>
               </div>
             </div>
           `;
@@ -2006,7 +2032,281 @@
       }
     }
 
+    // =========================================================================
+    // 🦜 CORITO IA ASSISTANT CORE ENGINE (Text, Images, Drag and Drop & Cloud Sync)
+    // =========================================================================
+    let activeAiSubTab = 'text';
+
+    function switchAiSubTab(tab) {
+      activeAiSubTab = tab;
+      const btnText = document.getElementById('ai-sub-tab-text');
+      const btnImg = document.getElementById('ai-sub-tab-image');
+      const promptLabel = document.querySelector('label[for="ai-prompt-box"]');
+      const promptArea = document.getElementById('ai-prompt-box');
+      const generateBtn = document.getElementById('btn-generate-ai');
+      const suggestionsBox = document.getElementById('ai-suggestions-list');
+      
+      if (tab === 'text') {
+        if (btnText) {
+          btnText.style.background = 'rgba(0,242,254,0.1)';
+          btnText.style.color = '#fff';
+          btnText.style.fontWeight = '700';
+        }
+        if (btnImg) {
+          btnImg.style.background = 'transparent';
+          btnImg.style.color = 'var(--muted-text)';
+          btnImg.style.fontWeight = '500';
+        }
+        if (promptLabel) promptLabel.innerText = "¿Qué deseas redactar y diseñar?";
+        if (promptArea) {
+          promptArea.placeholder = "e.g. 3 beneficios de usar Google Sheets colaborativo con emojis...";
+          promptArea.value = '';
+        }
+        if (generateBtn) generateBtn.innerHTML = "✨ Generar con Asistente IA";
+        if (suggestionsBox) {
+          suggestionsBox.innerHTML = `
+            <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.52rem; border-color: rgba(255,255,255,0.06); text-transform:none; font-weight: 500;" onclick="setAiPrompt('Crear lista de 3 viñetas con emojis sobre IA y Educación')">📝 Viñetas con Emojis</button>
+            <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.52rem; border-color: rgba(255,255,255,0.06); text-transform:none; font-weight: 500;" onclick="setAiPrompt('Diseñar métrica KPI de 92% de éxito académico con icono')">📈 KPI de Éxito</button>
+            <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.52rem; border-color: rgba(255,255,255,0.06); text-transform:none; font-weight: 500;" onclick="setAiPrompt('Generar cita de quote inspiradora en caja esmerilada')">💡 Cita Académica</button>
+            <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.52rem; border-color: rgba(255,255,255,0.06); text-transform:none; font-weight: 500;" onclick="setAiPrompt('Comparación rápida de Enfoque Rígido vs Lienzo Libre')">⚖️ Comparar Enfoques</button>
+            <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.52rem; border-color: rgba(255,255,255,0.06); text-transform:none; font-weight: 500;" onclick="setAiPrompt('Crear terminal de consola tech con logs del compilador')">💻 Consola Tech</button>
+          `;
+        }
+      } else {
+        if (btnText) {
+          btnText.style.background = 'transparent';
+          btnText.style.color = 'var(--muted-text)';
+          btnText.style.fontWeight = '500';
+        }
+        if (btnImg) {
+          btnImg.style.background = 'rgba(139,92,246,0.15)';
+          btnImg.style.color = '#fff';
+          btnImg.style.fontWeight = '700';
+        }
+        if (promptLabel) promptLabel.innerText = "¿Qué ilustración o foto deseas pintar?";
+        if (promptArea) {
+          promptArea.placeholder = "e.g. Un loro cyberpunk brillante con gafas VR en fondo de neón oscuro...";
+          promptArea.value = '';
+        }
+        if (generateBtn) generateBtn.innerHTML = "🎨 Generar Imagen con Corito";
+        if (suggestionsBox) {
+          suggestionsBox.innerHTML = `
+            <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.52rem; border-color: rgba(255,255,255,0.06); text-transform:none; font-weight: 500;" onclick="setAiPrompt('Ilustración 3D cyberpunk de un loro tecnificado en fondo oscuro con luces de neón')">🦜 Loro Tecnológico</button>
+            <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.52rem; border-color: rgba(255,255,255,0.06); text-transform:none; font-weight: 500;" onclick="setAiPrompt('Fondo abstracto con ondas de gradiente violeta, cian y rosa neón fluido 3D')">🔮 Ondas 3D</button>
+            <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.52rem; border-color: rgba(255,255,255,0.06); text-transform:none; font-weight: 500;" onclick="setAiPrompt('Icono brillante 3D de un cohete despegando con rastro de fuego cyberpunk cian')">🚀 Cohete Cyber</button>
+            <button class="btn btn-secondary" style="padding: 3px 6px; font-size: 0.52rem; border-color: rgba(255,255,255,0.06); text-transform:none; font-weight: 500;" onclick="setAiPrompt('Ilustración esmerilada de un cerebro digital con conexiones neuronales violeta neón')">🧠 Cerebro Digital</button>
+          `;
+        }
+      }
+    }
+
+    function executeCoritoGeneration() {
+      if (activeAiSubTab === 'text') {
+        const sbUrl = localStorage.getItem('supabase_url') || DEFAULT_SUPABASE_URL;
+        const sbKey = localStorage.getItem('supabase_anon_key') || DEFAULT_SUPABASE_ANON_KEY;
+        if (sbUrl && sbKey) {
+          return generateElementWithSupabaseEdgeFunction();
+        } else {
+          return generateElementWithGeminiAI();
+        }
+      } else {
+        return generateImageWithCorito();
+      }
+    }
+
+    async function generateImageWithCorito() {
+      const prompt = document.getElementById('ai-prompt-box').value.trim();
+      const loader = document.getElementById('ai-status-loader');
+      const resultBox = document.getElementById('ai-result-box');
+      const previewBox = document.getElementById('ai-html-preview');
+      const sandboxCode = document.getElementById('ai-sandbox-code');
+      
+      if (!prompt) {
+        showToast('Por favor introduce la descripción de la imagen.', '⚠️');
+        return;
+      }
+      
+      const loaderText = loader.querySelector('div');
+      if (loaderText) {
+        loaderText.innerHTML = `
+          <span style="width:8px; height:8px; border-radius:50%; background:var(--secondary-accent); display:inline-block; animation: heartbeat 1s infinite alternate;"></span>
+          Corito pintando con IA...
+        `;
+      }
+      loader.style.display = 'block';
+      resultBox.style.display = 'none';
+      
+      try {
+        const seed = Math.floor(Math.random() * 100000);
+        const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=600&height=400&nologo=true&private=true&enhance=true&seed=${seed}`;
+        
+        const img = new Image();
+        img.onload = () => {
+          const generatedHtml = `<div class="glass-card" style="padding:10px; display:flex; flex-direction:column; align-items:center; gap:8px; width:100%; height:100%; border:1px solid rgba(0, 242, 254, 0.25); background:rgba(10,15,30,0.85);"><img src="${imageUrl}" style="width:100%; height:auto; border-radius:8px; border:1px solid rgba(255,255,255,0.06); object-fit:cover;" alt="${prompt}"><span style="font-size:0.42em; color:var(--muted-text); font-style:italic; text-align:center; display:block; line-height:1.2; margin-top:2px;">${prompt}</span></div>`;
+          
+          lastAiGeneratedHtml = generatedHtml;
+          previewBox.innerHTML = generatedHtml;
+          sandboxCode.value = generatedHtml;
+          
+          previewBox.setAttribute('draggable', 'true');
+          previewBox.setAttribute('ondragstart', 'handleAiDragStart(event)');
+          previewBox.style.cursor = 'grab';
+          
+          loader.style.display = 'none';
+          resultBox.style.display = 'flex';
+          showToast('Imagen pintada con éxito por Corito.', '🎨');
+        };
+        img.onerror = () => {
+          loader.style.display = 'none';
+          showToast('Error cargando la imagen generada.', '❌');
+        };
+        img.src = imageUrl;
+      } catch (err) {
+        loader.style.display = 'none';
+        showToast('Error al generar la imagen.', '❌');
+      }
+    }
+
+    function handleAiDragStart(e) {
+      if (!lastAiGeneratedHtml) return;
+      e.dataTransfer.setData('text/plain', lastAiGeneratedHtml);
+      e.dataTransfer.effectAllowed = 'copy';
+      window.isAiDragging = true;
+    }
+
+    // Attach Drag and Drop to visual canvas
+    window.addEventListener('DOMContentLoaded', () => {
+      const canvasEl = document.getElementById('slide-canvas');
+      if (canvasEl) {
+        canvasEl.addEventListener('dragover', (e) => {
+          if (window.isAiDragging) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'copy';
+          }
+        });
+        
+        canvasEl.addEventListener('drop', (e) => {
+          if (window.isAiDragging) {
+            e.preventDefault();
+            window.isAiDragging = false;
+            
+            const html = e.dataTransfer.getData('text/plain');
+            if (!html) return;
+            
+            const rect = canvasEl.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+            
+            const pctX = Math.round((mouseX / rect.width) * 100);
+            const pctY = Math.round((mouseY / rect.height) * 100);
+            
+            const activeSlide = slides[activeSlideIndex];
+            if (activeSlide.type !== 'custom') return;
+            
+            if (!activeSlide.elements) activeSlide.elements = [];
+            
+            const isImg = html.includes('<img');
+            const el = {
+              x: Math.max(0, Math.min(90, pctX - 25)),
+              y: Math.max(0, Math.min(90, pctY - 15)),
+              w: 50,
+              h: isImg ? 45 : 32,
+              zIndex: 10,
+              content: html
+            };
+            
+            activeSlide.elements.push(el);
+            activeElementIndex = activeSlide.elements.length - 1;
+            
+            renderInteractiveCanvas();
+            renderInspector();
+            syncPreviewIframe();
+            
+            document.getElementById('ai-result-box').style.display = 'none';
+            document.getElementById('ai-prompt-box').value = '';
+            switchSidebarTab('slides');
+            showToast('Elemento soltado con éxito en el lienzo.', '🦜');
+          }
+        });
+      }
+    });
+
+    // Supabase Cloud Sync Persistence Engine
+    async function savePresentationToCloud() {
+      if (!window.supabaseClient) {
+        showToast('Supabase no está conectado.', '❌');
+        return;
+      }
+      try {
+        const { data: { session } } = await window.supabaseClient.auth.getSession();
+        if (!session || !session.user) {
+          showToast('Inicia sesión para guardar en la nube.', '🔑');
+          return;
+        }
+        
+        showToast('Guardando presentación en la nube...', '☁️');
+        
+        const { error } = await window.supabaseClient
+          .from('presentations')
+          .upsert({
+            id: 'main-deck',
+            name: 'Presentación Principal del Equipo',
+            slides_data: slides,
+            compiled_html: compileUpdatedPresentationHtml(),
+            owner_email: session.user.email,
+            updated_at: new Date()
+          }, { onConflict: 'id' });
+          
+        if (error) throw error;
+        showToast('Sincronizado en la nube de Supabase! ☁️', '⚡');
+      } catch (err) {
+        console.error('Cloud Save Error:', err);
+        showToast('Fallo al guardar en la nube.', '❌');
+      }
+    }
+
+    async function loadPresentationFromCloud() {
+      if (!window.supabaseClient) {
+        showToast('Supabase no está conectado.', '❌');
+        return;
+      }
+      try {
+        const { data: { session } } = await window.supabaseClient.auth.getSession();
+        if (!session || !session.user) {
+          showToast('Inicia sesión para cargar de la nube.', '🔑');
+          return;
+        }
+        
+        showToast('Descargando de la nube...', '📂');
+        
+        const { data, error } = await window.supabaseClient
+          .from('presentations')
+          .select('slides_data')
+          .eq('id', 'main-deck')
+          .single();
+          
+        if (error || !data) {
+          throw new Error('No se encontró ninguna presentación guardada en la nube.');
+        }
+        
+        slides = data.slides_data;
+        activeSlideIndex = 0;
+        activeElementIndex = -1;
+        
+        renderSlidesList();
+        renderInteractiveCanvas();
+        renderInspector();
+        syncPreviewIframe();
+        
+        showToast('Presentación cargada desde la nube! 📂', '⚡');
+      } catch (err) {
+        console.error('Cloud Load Error:', err);
+        showToast(err.message || 'Fallo al cargar de la nube.', '❌');
+      }
+    }
+
     async function loginWithGoogleSSO() {
+
       if (!supabaseClient) return;
       showToast('Redireccionando a Google SSO...', '🔴');
       await supabaseClient.auth.signInWithOAuth({

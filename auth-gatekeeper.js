@@ -9,7 +9,7 @@
 const DEFAULT_SUPABASE_URL = ""; 
 const DEFAULT_SUPABASE_ANON_KEY = "";
 
-(async () => {
+window.addEventListener('DOMContentLoaded', async () => {
   // Read config from hardcoded constants or local storage override (if any)
   const sbUrl = localStorage.getItem('supabase_url') || DEFAULT_SUPABASE_URL;
   const sbKey = localStorage.getItem('supabase_anon_key') || DEFAULT_SUPABASE_ANON_KEY;
@@ -343,4 +343,4 @@ const DEFAULT_SUPABASE_ANON_KEY = "";
     `;
     document.head.appendChild(style);
   }
-})();
+});
