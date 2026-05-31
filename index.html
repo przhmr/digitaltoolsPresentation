@@ -21,7 +21,8 @@
   <!-- Startup Style Theme Customizations -->
   <style>
     :root {
-      --bg-color: #030f26;
+      --bg-color: #031638;
+      --bg-color-deep: #020a18;
       --text-color: #f8fafc;
       --primary-accent: #00f2fe; /* Glowing Cyan */
       --secondary-accent: #8b5cf6; /* Elegant Violet */
@@ -32,10 +33,20 @@
       --card-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.4);
     }
 
-    body {
+    html,
+    body,
+    .reveal-viewport {
       font-family: 'Inter', sans-serif !important;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(0, 242, 254, 0.13) 0, rgba(0, 242, 254, 0) 28vw),
+        radial-gradient(circle at 82% 78%, rgba(139, 92, 246, 0.12) 0, rgba(139, 92, 246, 0) 32vw),
+        linear-gradient(145deg, var(--bg-color) 0%, #03112d 48%, var(--bg-color-deep) 100%) !important;
       background-color: var(--bg-color) !important;
       color: var(--text-color) !important;
+      min-height: 100%;
+    }
+
+    body {
       overflow: hidden;
     }
 
@@ -45,7 +56,14 @@
       background: transparent !important;
     }
 
-    .reveal-viewport, .reveal .backgrounds {
+    .reveal .backgrounds,
+    .reveal .slide-background,
+    .reveal .slide-background-content {
+      background: transparent !important;
+      background-color: transparent !important;
+    }
+
+    .reveal .slides {
       background: transparent !important;
     }
 
@@ -90,11 +108,11 @@
 
     /* Glowing Glassmorphism Cards with Shimmering Border */
     .glass-card {
-      background: var(--glass-bg);
+      background: linear-gradient(145deg, rgba(7, 20, 47, 0.86), rgba(5, 13, 31, 0.72));
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid var(--glass-border);
-      border-radius: 20px;
+      border-radius: 8px;
       padding: 18px;
       box-shadow: var(--card-shadow);
       transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -239,6 +257,7 @@
       overflow: hidden;
       z-index: 0;
       pointer-events: none;
+      background: linear-gradient(145deg, var(--bg-color) 0%, #03112d 52%, var(--bg-color-deep) 100%);
     }
 
     .glow-blob {
@@ -341,7 +360,7 @@
       height: 100%;
       z-index: 1;
       pointer-events: none;
-      opacity: 0.55 !important; /* Made highly visible */
+      opacity: 0.7 !important; /* Visible 3D motion layer over the navy stage */
     }
     
     .reveal {
@@ -396,7 +415,7 @@
       <!-- ========================================================
            SLIDE 2: CATEGORÍAS DEL ECOSISTEMA DIGITAL
            ======================================================== -->
-      <section data-transition="slide-in fade-out">
+      <section data-transition="convex-in fade-out">
         <h2>Ecosistema de Categorías Digitales</h2>
         <p style="font-size: 0.75em; color: var(--muted-text); margin-bottom: 30px; text-align: left; line-height: 1.45;">
           El desarrollo académico y profesional se apoya en tres tipos de herramientas que facilitan el análisis, la organización visual y la gestión de la información.
@@ -429,7 +448,7 @@
       <!-- ========================================================
            SLIDE 3: HERRAMIENTA 1 - GOOGLE SHEETS
            ======================================================== -->
-      <section data-transition="slide-in fade-out">
+      <section data-transition="convex-in fade-out">
         <h2>Google Sheets: Análisis de Datos y Control</h2>
         
         <div class="grid-2">
@@ -473,7 +492,7 @@
       <!-- ========================================================
            SLIDE 4: GOOGLE SHEETS - PRACTICIDAD Y FLUJO
            ======================================================== -->
-      <section data-transition="slide-in fade-out">
+      <section data-transition="convex-in fade-out">
         <h2>Sheets: Practicidad y Flujo de Trabajo</h2>
         
         <div class="grid-2">
@@ -523,7 +542,7 @@
       <!-- ========================================================
            SLIDE 5: HERRAMIENTA 2 - LUCIDCHART
            ======================================================== -->
-      <section data-transition="slide-in fade-out">
+      <section data-transition="convex-in fade-out">
         <h2>Lucidchart: Organización y Diseño Visual</h2>
         
         <div class="grid-2">
@@ -570,7 +589,7 @@
       <!-- ========================================================
            SLIDE 6: LUCIDCHART: CONECTIVIDAD Y ECOSISTEMA
            ======================================================== -->
-      <section data-transition="slide-in fade-out">
+      <section data-transition="convex-in fade-out">
         <h2>Lucidchart: Conectividad y Ecosistema</h2>
         
         <div class="grid-2">
@@ -629,7 +648,7 @@
       <!-- ========================================================
            SLIDE 7: HERRAMIENTA 3 - NOTEBOOKLM
            ======================================================== -->
-      <section data-transition="slide-in fade-out">
+      <section data-transition="convex-in fade-out">
         <h2>NotebookLM: Estudio Inteligente con IA</h2>
         
         <div class="grid-2">
@@ -680,7 +699,7 @@
       <!-- ========================================================
            SLIDE 8: NOTEBOOKLM: ALIADO EN EL APRENDIZAJE
            ======================================================== -->
-      <section data-transition="slide-in fade-out">
+      <section data-transition="convex-in fade-out">
         <h2>NotebookLM: Aliado en el Aprendizaje</h2>
         <p style="font-size: 0.62em; color: var(--muted-text); margin-bottom: 20px; text-align: left;">
           Optimiza la comprensión de lecturas densas y materiales de estudio en tu postgrado:
@@ -719,7 +738,7 @@
       <!-- ========================================================
            SLIDE 9: TABLERO COMPARATIVO SIMPLE Y GENERAL
            ======================================================== -->
-      <section data-transition="slide-in fade-out">
+      <section data-transition="convex-in fade-out">
         <h2 style="margin-bottom: 15px !important;">El Tablero Comparativo</h2>
         <p style="font-size: 0.58em; color: var(--muted-text); margin-bottom: 15px; text-align: left;">
           Una vista simplificada de los principales beneficios de las tres herramientas analizadas:
@@ -766,7 +785,7 @@
       <!-- ========================================================
            SLIDE 10: CONCLUSIÓN GENERAL (E-LEARNING)
            ======================================================== -->
-      <section data-transition="slide-in fade-out">
+      <section data-transition="convex-in fade-out">
         <h2>Conclusión: El Valor Digital en el Postgrado</h2>
         
         <div class="grid-2">
@@ -846,7 +865,7 @@
            COMMENTED OUT HISTORICAL SLIDES (FOR TEAM REFERENCE)
            ======================================================== -->
       <!--
-      <section data-transition="slide-in fade-out">
+      <section data-transition="convex-in fade-out">
         <h2>Defensa de Alto Impacto (5 Minutos)</h2>
         
         <p style="font-size: 0.58em; color: var(--muted-text); margin-bottom: 5px; text-align: left;">
@@ -892,7 +911,7 @@
         </div>
       </section>
 
-      <section data-transition="slide-in">
+      <section data-transition="convex-in">
         <h2 style="margin-bottom: 20px !important;">Referencias Clave</h2>
         
         <div class="glass-card" style="border-color: rgba(79, 172, 254, 0.2); max-width: 950px; margin: 0 auto; padding: 18px;">
@@ -931,6 +950,10 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/highlight/highlight.min.js"></script>
   
   <script>
+    document.querySelectorAll('.reveal section').forEach(section => {
+      section.dataset.backgroundColor = section.dataset.backgroundColor || '#031638';
+    });
+
     // Initialize Reveal.js presentation with advanced configuration options
     Reveal.initialize({
       hash: true,
@@ -938,8 +961,9 @@
       progress: true,
       history: true,
       center: true,
-      transition: 'slide', // 'none' | 'fade' | 'slide' | 'convex' | 'concave' | 'zoom'
-      backgroundTransition: 'fade',
+      transition: 'convex', // Built-in RevealJS 3D-style movement between slides
+      backgroundTransition: 'convex',
+      transitionSpeed: 'default',
       
       // Auto-slide duration in milliseconds (deactivated by default to protect oral defense pacing)
       autoSlide: 0,
@@ -977,7 +1001,7 @@
     // Bind perspective grid steering to horizontal slide transitions
     Reveal.on('slidechanged', event => {
       // Tilt/steer the perspective grid horizon based on active slide index
-      // Creates a stunning custom motion graphics cockpit curve effect
+      // Keeps the canvas motion synchronized with Reveal's 3D-style transitions
       targetHorizonX = width * 0.5 - (event.indexh - 5) * 80;
     });
 
