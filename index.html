@@ -78,16 +78,17 @@
       color: var(--text-color) !important;
     }
 
-    /* Cinematic Product Launch Title */
+    /* Cinematic Product Launch Title with Shimmering Gradient Flow */
     .reveal h1 {
       font-size: 2.1em !important;
       line-height: 1.05 !important;
-      background: linear-gradient(135deg, #ffffff 40%, var(--primary-accent) 70%, var(--secondary-accent) 100%);
+      background: linear-gradient(135deg, #ffffff 0%, var(--primary-accent) 25%, var(--secondary-accent) 50%, var(--primary-accent) 75%, #ffffff 100%);
+      background-size: 200% auto;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 30px rgba(0, 242, 254, 0.15) !important;
+      text-shadow: none !important;
       margin-bottom: 10px !important;
-      animation: titlePulse 6s infinite alternate ease-in-out;
+      animation: titleShimmer 6s linear infinite, titlePulse 4s infinite alternate ease-in-out;
     }
 
     .reveal h2 {
@@ -712,6 +713,15 @@
       }
     }
 
+    @keyframes titleShimmer {
+      0% {
+        background-position: 0% center;
+      }
+      100% {
+        background-position: 200% center;
+      }
+    }
+
     @keyframes slowSpin {
       to {
         transform: rotate(360deg);
@@ -942,20 +952,7 @@
             Aprendizaje digital, colaboración e inteligencia artificial
           </h3>
 
-          <div class="insight-strip fragment fade-up" data-fragment-index="1" style="margin: 0 0 24px 0;">
-            <div class="mini-kpi">
-              <strong>Analizar</strong>
-              <span>Datos claros para decidir con rapidez.</span>
-            </div>
-            <div class="mini-kpi">
-              <strong>Diseñar</strong>
-              <span>Procesos visibles para coordinar mejor.</span>
-            </div>
-            <div class="mini-kpi">
-              <strong>Sintetizar</strong>
-              <span>IA aplicada al estudio y la investigación.</span>
-            </div>
-          </div>
+
           
           <div class="slide-1-footer" style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 20px; font-size: 0.58em; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 25px;">
             <div style="text-align: left;">
