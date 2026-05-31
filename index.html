@@ -770,6 +770,15 @@
       }
     }
 
+    @keyframes subtleBounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-15px);
+      }
+    }
+
     @keyframes fillHeat {
       from {
         width: 0;
@@ -954,6 +963,12 @@
       background: linear-gradient(120deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.18) 40%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0.18) 60%, rgba(255,255,255,0) 70%);
       background-size: 200% auto;
       animation: titleShimmer 3.5s linear infinite;
+    }
+    .animation-spin {
+      animation: slowSpin 12s linear infinite;
+    }
+    .animation-bounce {
+      animation: subtleBounce 2s ease-in-out infinite;
     }
     
     @keyframes pulseGlow {
@@ -1718,6 +1733,8 @@
               el.borderRadius ? `border-radius: ${el.borderRadius}` : '',
               el.textAlign ? `text-align: ${el.textAlign}` : '',
               el.zIndex ? `z-index: ${el.zIndex}` : '',
+              el.animation && el.animDuration ? `animation-duration: ${el.animDuration}s` : '',
+              el.animation && el.animDelay ? `animation-delay: ${el.animDelay}s` : '',
               el.extraStyle || ''
             ].filter(Boolean).join('; ');
 
