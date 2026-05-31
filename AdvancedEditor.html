@@ -2118,7 +2118,7 @@
         const seed = Math.floor(Math.random() * 100000);
         // Styled prompt to force clean professional presentation assets in Pollinations AI!
         const styledPrompt = `Professional modern presentation slide asset, clean educational vector style, high-fidelity: ${prompt}`;
-        const imageUrl = `https://gen.pollinations.ai/image/${encodeURIComponent(styledPrompt)}?width=600&height=400&nologo=true&seed=${seed}`;
+        const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(styledPrompt)}?width=600&height=400&nologo=true&seed=${seed}`;
         
         const img = new Image();
         img.onload = () => {
