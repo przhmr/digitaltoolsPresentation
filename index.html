@@ -72,7 +72,7 @@
       font-family: 'Outfit', sans-serif !important;
       font-weight: 800 !important;
       text-transform: none !important;
-      letter-spacing: -0.03em !important;
+      letter-spacing: 0 !important;
       color: var(--text-color) !important;
     }
 
@@ -103,7 +103,7 @@
     .reveal h3 {
       font-size: 0.9em !important;
       color: var(--primary-accent) !important;
-      letter-spacing: -0.02em !important;
+      letter-spacing: 0 !important;
     }
 
     /* Glowing Glassmorphism Cards with Shimmering Border */
@@ -183,6 +183,287 @@
       grid-template-columns: 1fr 1fr 1fr;
       gap: 20px;
       align-items: stretch;
+    }
+
+    .insight-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .mini-kpi {
+      min-height: 84px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+      padding: 12px;
+      border: 1px solid rgba(0, 242, 254, 0.14);
+      border-radius: 8px;
+      background: rgba(5, 13, 31, 0.58);
+    }
+
+    .mini-kpi strong {
+      color: var(--primary-accent);
+      font-size: 0.7em;
+    }
+
+    .mini-kpi span {
+      color: var(--muted-text);
+      font-size: 0.42em;
+      line-height: 1.25;
+    }
+
+    .orbit-system {
+      position: relative;
+      min-height: 260px;
+      border: 1px solid rgba(0, 242, 254, 0.12);
+      border-radius: 8px;
+      background: radial-gradient(circle at 50% 50%, rgba(0, 242, 254, 0.13), rgba(5, 13, 31, 0.55) 56%, rgba(5, 13, 31, 0.75));
+      overflow: hidden;
+    }
+
+    .orbit-system::before,
+    .orbit-system::after {
+      content: '';
+      position: absolute;
+      inset: 15%;
+      border: 1px solid rgba(0, 242, 254, 0.18);
+      border-radius: 50%;
+      animation: slowSpin 28s linear infinite;
+    }
+
+    .orbit-system::after {
+      inset: 28%;
+      border-color: rgba(139, 92, 246, 0.22);
+      animation-duration: 18s;
+      animation-direction: reverse;
+    }
+
+    .orbit-core,
+    .orbit-node {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      border-radius: 8px;
+      border: 1px solid rgba(0, 242, 254, 0.28);
+      background: rgba(3, 22, 56, 0.86);
+      box-shadow: 0 0 24px rgba(0, 242, 254, 0.14);
+      color: #fff;
+      font-weight: 800;
+    }
+
+    .orbit-core {
+      width: 130px;
+      height: 82px;
+      left: calc(50% - 65px);
+      top: calc(50% - 41px);
+      font-size: 0.48em;
+      z-index: 2;
+    }
+
+    .orbit-node {
+      width: 96px;
+      min-height: 58px;
+      font-size: 0.38em;
+      line-height: 1.15;
+      z-index: 3;
+      animation: floatNode 5s ease-in-out infinite alternate;
+    }
+
+    .orbit-node:nth-child(2) { left: 8%; top: 16%; }
+    .orbit-node:nth-child(3) { right: 7%; top: 16%; animation-delay: 0.8s; }
+    .orbit-node:nth-child(4) { left: calc(50% - 48px); bottom: 8%; animation-delay: 1.4s; }
+
+    .bar-chart {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      align-items: end;
+      gap: 14px;
+      height: 185px;
+      padding: 16px 12px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(0, 242, 254, 0.14);
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.72), rgba(3, 22, 56, 0.38));
+    }
+
+    .bar {
+      --bar-height: 60%;
+      position: relative;
+      height: var(--bar-height);
+      min-height: 28px;
+      border-radius: 6px 6px 2px 2px;
+      background: linear-gradient(180deg, var(--primary-accent), rgba(139, 92, 246, 0.72));
+      box-shadow: 0 0 24px rgba(0, 242, 254, 0.22);
+      transform-origin: bottom;
+      animation: growBar 1.2s ease-out both;
+    }
+
+    .bar span {
+      position: absolute;
+      left: 50%;
+      bottom: -26px;
+      transform: translateX(-50%);
+      color: var(--muted-text);
+      font-size: 0.34em;
+      white-space: nowrap;
+    }
+
+    .process-flow {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .flow-step {
+      position: relative;
+      min-height: 116px;
+      padding: 14px 10px;
+      border: 1px solid rgba(0, 242, 254, 0.18);
+      border-radius: 8px;
+      background: rgba(5, 13, 31, 0.7);
+      overflow: hidden;
+    }
+
+    .flow-step::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 3px;
+      width: 100%;
+      background: linear-gradient(90deg, var(--primary-accent), var(--secondary-accent));
+      animation: scanLine 2.8s ease-in-out infinite;
+    }
+
+    .flow-step strong {
+      display: block;
+      color: #fff;
+      font-size: 0.58em;
+      margin-bottom: 8px;
+    }
+
+    .flow-step span {
+      display: block;
+      color: var(--muted-text);
+      font-size: 0.42em;
+      line-height: 1.25;
+    }
+
+    .pulse-network {
+      position: relative;
+      min-height: 250px;
+      border-radius: 8px;
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      background:
+        linear-gradient(90deg, rgba(0, 242, 254, 0.08) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(0, 242, 254, 0.08) 1px, transparent 1px),
+        rgba(5, 13, 31, 0.68);
+      background-size: 38px 38px;
+      overflow: hidden;
+    }
+
+    .network-card {
+      position: absolute;
+      width: 118px;
+      min-height: 58px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid rgba(0, 242, 254, 0.26);
+      background: rgba(3, 22, 56, 0.88);
+      color: #fff;
+      font-size: 0.4em;
+      font-weight: 800;
+      animation: floatNode 4.8s ease-in-out infinite alternate;
+    }
+
+    .network-card:nth-child(1) { left: 8%; top: 12%; }
+    .network-card:nth-child(2) { right: 8%; top: 12%; animation-delay: 0.7s; }
+    .network-card:nth-child(3) { left: 8%; bottom: 12%; animation-delay: 1.2s; }
+    .network-card:nth-child(4) { right: 8%; bottom: 12%; animation-delay: 1.7s; }
+    .network-card:nth-child(5) {
+      left: calc(50% - 59px);
+      top: calc(50% - 29px);
+      border-color: rgba(139, 92, 246, 0.42);
+      box-shadow: 0 0 34px rgba(139, 92, 246, 0.22);
+    }
+
+    .source-pipeline {
+      display: grid;
+      grid-template-columns: 0.9fr 1.2fr 0.9fr;
+      align-items: center;
+      gap: 12px;
+      min-height: 220px;
+    }
+
+    .source-stack,
+    .ai-output {
+      display: grid;
+      gap: 8px;
+    }
+
+    .source-chip,
+    .output-chip {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(0, 242, 254, 0.16);
+      background: rgba(15, 23, 42, 0.7);
+      color: #fff;
+      font-size: 0.42em;
+      font-weight: 800;
+    }
+
+    .ai-core {
+      min-height: 150px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 242, 254, 0.34);
+      background: radial-gradient(circle, rgba(0, 242, 254, 0.18), rgba(139, 92, 246, 0.1) 55%, rgba(5, 13, 31, 0.8));
+      color: #fff;
+      font-size: 0.56em;
+      font-weight: 900;
+      animation: pulseCore 2.8s ease-in-out infinite;
+    }
+
+    .heat-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .heat-pill {
+      --fill: 80%;
+      position: relative;
+      overflow: hidden;
+      min-height: 54px;
+      display: flex;
+      align-items: center;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(0, 242, 254, 0.14);
+      background: rgba(5, 13, 31, 0.68);
+      color: #fff;
+      font-size: 0.42em;
+      font-weight: 800;
+    }
+
+    .heat-pill::before {
+      content: '';
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: var(--fill);
+      background: linear-gradient(90deg, rgba(0, 242, 254, 0.22), rgba(139, 92, 246, 0.18));
+      animation: fillHeat 1.2s ease-out both;
+      z-index: -1;
     }
 
     /* Ultra-sleek, clean comparison table */
@@ -308,46 +589,174 @@
       }
     }
 
+    @keyframes slowSpin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes floatNode {
+      from {
+        transform: translateY(0);
+      }
+      to {
+        transform: translateY(-10px);
+      }
+    }
+
+    @keyframes growBar {
+      from {
+        transform: scaleY(0.08);
+        opacity: 0.45;
+      }
+      to {
+        transform: scaleY(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes scanLine {
+      0%, 100% {
+        transform: translateX(-100%);
+      }
+      50% {
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes pulseCore {
+      0%, 100% {
+        box-shadow: 0 0 18px rgba(0, 242, 254, 0.2);
+        transform: scale(1);
+      }
+      50% {
+        box-shadow: 0 0 44px rgba(0, 242, 254, 0.38);
+        transform: scale(1.035);
+      }
+    }
+
+    @keyframes fillHeat {
+      from {
+        width: 0;
+      }
+      to {
+        width: var(--fill);
+      }
+    }
+
     /* Highly responsive media queries for vertical / mobile screens */
     @media (max-width: 768px), (max-aspect-ratio: 13/9) {
+      .reveal .slides {
+        text-align: left !important;
+      }
       .grid-2 {
         grid-template-columns: 1fr !important;
-        gap: 15px !important;
+        gap: 10px !important;
       }
       .grid-3 {
         grid-template-columns: 1fr !important;
-        gap: 12px !important;
+        gap: 8px !important;
+      }
+      .insight-strip,
+      .heat-row,
+      .process-flow,
+      .source-pipeline {
+        grid-template-columns: 1fr !important;
+        gap: 8px !important;
       }
       .slide-1-footer {
         grid-template-columns: 1fr !important;
         text-align: center !important;
-        gap: 15px !important;
+        gap: 8px !important;
       }
       .slide-1-footer div {
         text-align: center !important;
       }
       /* Adjust padding and spacing on mobile */
       .glass-card {
-        padding: 15px !important;
-        border-radius: 12px !important;
+        padding: 12px !important;
+        border-radius: 8px !important;
       }
       .reveal h1 {
-        font-size: 1.6em !important;
+        font-size: 1.85em !important;
       }
       .reveal h2 {
-        font-size: 1.15em !important;
-        margin-bottom: 12px !important;
+        font-size: 1.28em !important;
+        margin-bottom: 10px !important;
       }
       .reveal p {
-        font-size: 0.55em !important;
-        line-height: 1.35 !important;
+        font-size: 0.64em !important;
+        line-height: 1.28 !important;
       }
       .reveal li {
-        font-size: 0.52em !important;
-        line-height: 1.3 !important;
+        font-size: 0.58em !important;
+        line-height: 1.25 !important;
+        margin-bottom: 6px !important;
       }
       .stat-number {
-        font-size: 1.4em !important;
+        font-size: 1.25em !important;
+      }
+      .stat-label {
+        font-size: 0.54em !important;
+      }
+      .stat-desc,
+      .mini-kpi span,
+      .flow-step span,
+      .source-chip,
+      .output-chip,
+      .heat-pill {
+        font-size: 0.46em !important;
+      }
+      .orbit-system,
+      .pulse-network {
+        min-height: 190px !important;
+      }
+      .bar-chart {
+        height: 132px !important;
+        gap: 8px !important;
+        margin-bottom: 18px !important;
+      }
+      .custom-table {
+        font-size: 0.44em !important;
+      }
+      .custom-table th,
+      .custom-table td {
+        padding: 8px 6px !important;
+      }
+    }
+
+    @media (max-width: 480px) and (orientation: portrait) {
+      .reveal {
+        font-size: 30px !important;
+      }
+      .reveal section.present {
+        min-height: 100% !important;
+        max-height: calc(100vh - 42px) !important;
+        overflow-y: auto !important;
+        overscroll-behavior: contain;
+        padding-right: 4px !important;
+      }
+      .slide-1-footer > div:first-child > div {
+        grid-template-columns: 1fr !important;
+      }
+      .orbit-node,
+      .network-card {
+        width: 84px !important;
+        min-height: 48px !important;
+        font-size: 0.34em !important;
+      }
+      .orbit-core {
+        width: 112px !important;
+        height: 68px !important;
+        left: calc(50% - 56px) !important;
+        top: calc(50% - 34px) !important;
+      }
+      .network-card:nth-child(5) {
+        left: calc(50% - 42px) !important;
+      }
+      .ai-core {
+        min-height: 104px !important;
+        border-radius: 8px !important;
       }
     }
 
@@ -394,6 +803,21 @@
           <h3 style="font-size: 1.05em; color: var(--muted-text); font-weight: 500; margin-bottom: 40px; letter-spacing: 0.02em;">
             Optimización, Colaboración e Inteligencia Artificial en el Postgrado
           </h3>
+
+          <div class="insight-strip fragment fade-up" data-fragment-index="1" style="margin: 0 0 24px 0;">
+            <div class="mini-kpi">
+              <strong>Analizar</strong>
+              <span>Datos claros para decidir con rapidez.</span>
+            </div>
+            <div class="mini-kpi">
+              <strong>Diseñar</strong>
+              <span>Procesos visibles para coordinar mejor.</span>
+            </div>
+            <div class="mini-kpi">
+              <strong>Sintetizar</strong>
+              <span>IA aplicada al estudio y la investigacion.</span>
+            </div>
+          </div>
           
           <div class="slide-1-footer" style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 20px; font-size: 0.58em; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 25px;">
             <div style="text-align: left;">
@@ -443,6 +867,21 @@
             <div class="stat-desc" style="margin-top: 8px;"><strong>NotebookLM</strong>: Permite resumir lecturas extensas, resolver dudas y sintetizar artículos de estudio.</div>
           </div>
         </div>
+
+        <div class="insight-strip">
+          <div class="mini-kpi fragment fade-up" data-fragment-index="4">
+            <strong>Datos</strong>
+            <span>Orden y automatizacion para tareas repetitivas.</span>
+          </div>
+          <div class="mini-kpi fragment fade-up" data-fragment-index="5">
+            <strong>Procesos</strong>
+            <span>Mapas visuales que alinean al equipo.</span>
+          </div>
+          <div class="mini-kpi fragment fade-up" data-fragment-index="6">
+            <strong>Conocimiento</strong>
+            <span>Lecturas convertidas en respuestas utiles.</span>
+          </div>
+        </div>
       </section>
 
       <!-- ========================================================
@@ -471,7 +910,14 @@
           
           <div class="glass-card" style="border-color: rgba(79, 172, 254, 0.3); display: flex; flex-direction: column; justify-content: center; padding: 20px;">
             <h3 style="font-size: 0.85em; margin-bottom: 12px; text-align: center; color: var(--primary-accent); text-transform: uppercase; letter-spacing: 0.05em;">Automatización Práctica</h3>
-            
+
+            <div class="bar-chart">
+              <div class="bar" style="--bar-height: 52%; animation-delay: 0.05s;"><span>Datos</span></div>
+              <div class="bar" style="--bar-height: 78%; animation-delay: 0.18s;"><span>Formulas</span></div>
+              <div class="bar" style="--bar-height: 88%; animation-delay: 0.31s;"><span>Equipo</span></div>
+              <div class="bar" style="--bar-height: 66%; animation-delay: 0.44s;"><span>Reportes</span></div>
+            </div>
+
             <div style="background: rgba(15, 23, 42, 0.6); padding: 10px; border-radius: 8px; border: 1px solid rgba(0,242,254,0.1); margin-bottom: 10px;" class="fragment fade-in" data-fragment-index="4">
               <strong style="color: var(--primary-accent); font-size: 0.6em; display: block;">⚡ Automatización y Fórmulas</strong>
               <span style="font-size: 0.45em; color: var(--muted-text); display: block; line-height: 1.3; margin-top: 2px;">
@@ -524,15 +970,18 @@
           <div style="display: flex; flex-direction: column; justify-content: center; text-align: left;">
             <h3 style="font-size: 0.85em; margin-bottom: 15px; color: var(--secondary-accent); text-transform: uppercase;">Flujo de Trabajo Simplificado</h3>
             
-            <div style="display: flex; flex-direction: column; gap: 10px; font-size: 0.48em;">
-              <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--primary-accent); border-radius: 8px; padding: 10px;" class="fragment fade-left" data-fragment-index="1">
-                <strong>1. Registro Sencillo:</strong> Se ingresan datos de forma amigable a través de un formulario móvil o web.
+            <div class="process-flow">
+              <div class="flow-step fragment fade-left" data-fragment-index="1">
+                <strong>1. Registro Sencillo</strong>
+                <span>Se ingresan datos de forma amigable a traves de un formulario movil o web.</span>
               </div>
-              <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--secondary-accent); border-radius: 8px; padding: 10px;" class="fragment fade-left" data-fragment-index="2">
-                <strong>2. Guardado en la Nube:</strong> La información ingresa automáticamente a Sheets, sin necesidad de transcribir en papel.
+              <div class="flow-step fragment fade-left" data-fragment-index="2">
+                <strong>2. Guardado en la Nube</strong>
+                <span>La informacion ingresa automaticamente a Sheets, sin transcribir en papel.</span>
               </div>
-              <div style="background: rgba(0, 242, 254, 0.08); border: 1.5px dashed var(--primary-accent); border-radius: 8px; padding: 10px;" class="fragment fade-left" data-fragment-index="3">
-                <strong>3. Gráficos Automáticos:</strong> La hoja de cálculo actualiza los reportes al instante para facilitar su lectura y análisis.
+              <div class="flow-step fragment fade-left" data-fragment-index="3">
+                <strong>3. Graficos Automaticos</strong>
+                <span>La hoja actualiza los reportes al instante para facilitar lectura y analisis.</span>
               </div>
             </div>
           </div>
@@ -582,6 +1031,12 @@
                 <span style="color: var(--primary-accent); font-weight: 700;">"Organizar las tareas visualmente mejora la comunicación y evita confusiones en el equipo."</span>
               </div>
             </div>
+
+            <div class="heat-row fragment fade-up" data-fragment-index="4">
+              <div class="heat-pill" style="--fill: 74%;">Claridad</div>
+              <div class="heat-pill" style="--fill: 86%;">Coordinacion</div>
+              <div class="heat-pill" style="--fill: 68%;">Entrega</div>
+            </div>
           </div>
         </div>
       </section>
@@ -623,23 +1078,12 @@
           <div style="display: flex; flex-direction: column; justify-content: center; text-align: left;">
             <h3 style="font-size: 0.8em; margin-bottom: 15px; color: var(--secondary-accent); text-transform: uppercase;">Integración con Aplicaciones</h3>
             
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.46em;">
-              <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--glass-border); padding: 10px; border-radius: 8px; text-align: center;" class="fragment zoom-in" data-fragment-index="4">
-                <span style="font-size: 1.3em; display: block; margin-bottom: 2px;">💬 Chat</span>
-                <span style="color: var(--muted-text);">Notificaciones de cambios del equipo al instante.</span>
-              </div>
-              <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--glass-border); padding: 10px; border-radius: 8px; text-align: center;" class="fragment zoom-in" data-fragment-index="5">
-                <span style="font-size: 1.3em; display: block; margin-bottom: 2px;">📅 Tareas</span>
-                <span style="color: var(--muted-text);">Vinculación directa de actividades a cada figura del flujo.</span>
-              </div>
-              <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--glass-border); padding: 10px; border-radius: 8px; text-align: center;" class="fragment zoom-in" data-fragment-index="6">
-                <span style="font-size: 1.3em; display: block; margin-bottom: 2px;">📂 Documentos</span>
-                <span style="color: var(--muted-text);">Inserta diagramas interactivos en Docs y Slides de Google.</span>
-              </div>
-              <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--glass-border); padding: 10px; border-radius: 8px; text-align: center;" class="fragment zoom-in" data-fragment-index="7">
-                <span style="font-size: 1.3em; display: block; margin-bottom: 2px;">💾 PDF e Imagen</span>
-                <span style="color: var(--muted-text);">Formatos listos para imprimir o exponer sin pixelar.</span>
-              </div>
+            <div class="pulse-network">
+              <div class="network-card">Chat<br><span style="color: var(--muted-text); font-weight: 500;">cambios</span></div>
+              <div class="network-card">Tareas<br><span style="color: var(--muted-text); font-weight: 500;">actividad</span></div>
+              <div class="network-card">Docs<br><span style="color: var(--muted-text); font-weight: 500;">insercion</span></div>
+              <div class="network-card">Exportar<br><span style="color: var(--muted-text); font-weight: 500;">PDF/imagen</span></div>
+              <div class="network-card">Lucidchart<br><span style="color: var(--muted-text); font-weight: 500;">ecosistema</span></div>
             </div>
           </div>
         </div>
@@ -673,23 +1117,17 @@
           <div class="glass-card" style="border-color: rgba(0, 242, 254, 0.3); display: flex; flex-direction: column; justify-content: center; align-items: stretch; text-align: center; padding: 20px;">
             <h3 style="font-size: 0.85em; margin-bottom: 12px; color: var(--primary-accent); text-transform: uppercase;">Ventajas Principales</h3>
             
-            <div style="background: rgba(15, 23, 42, 0.6); padding: 12px; border-radius: 12px; border: 1px solid rgba(0, 242, 254, 0.15); display: flex; flex-direction: column; gap: 8px; font-size: 0.46em;">
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="font-size: 1.3em;">🤖</span>
-                <div style="text-align: left;">
-                  <strong style="color: var(--primary-accent); display: block;">IA Confiable y Segura</strong>
-                  <span style="color: var(--muted-text); font-size: 0.9em; line-height: 1.2;">Evita que la IA invente información, garantizando respuestas correctas.</span>
-                </div>
+            <div class="source-pipeline">
+              <div class="source-stack">
+                <div class="source-chip">PDFs</div>
+                <div class="source-chip">Apuntes</div>
+                <div class="source-chip">Articulos</div>
               </div>
-              
-              <div style="height: 1px; background: rgba(255, 255, 255, 0.08);"></div>
-              
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="font-size: 1.3em;">🔬</span>
-                <div style="text-align: left;">
-                  <strong style="color: var(--secondary-accent); display: block;">Análisis de Varias Fuentes</strong>
-                  <span style="color: var(--muted-text); font-size: 0.9em; line-height: 1.2;">Conecta y analiza hasta 50 libros, notas o guías de estudio en un solo chat.</span>
-                </div>
+              <div class="ai-core">NotebookLM<br><span style="color: var(--muted-text); font-size: 0.7em;">IA con citas</span></div>
+              <div class="ai-output">
+                <div class="output-chip">Resumen</div>
+                <div class="output-chip">Respuesta</div>
+                <div class="output-chip">Guia</div>
               </div>
             </div>
           </div>
@@ -732,6 +1170,12 @@
           <p style="font-size: 0.46em; color: var(--text-color); margin: 0; text-align: left; line-height: 1.35;">
             🤖 <strong>Uso Estratégico de Inteligencia Artificial:</strong> Cumplimiento de las directrices del postgrado al integrar herramientas de IA generativa para potenciar la productividad y el aprendizaje académico autónomo.
           </p>
+        </div>
+
+        <div class="heat-row fragment fade-up" data-fragment-index="5">
+          <div class="heat-pill" style="--fill: 82%;">Comprension</div>
+          <div class="heat-pill" style="--fill: 76%;">Sintesis</div>
+          <div class="heat-pill" style="--fill: 88%;">Repaso</div>
         </div>
       </section>
 
@@ -780,6 +1224,12 @@
             </tr>
           </tbody>
         </table>
+
+        <div class="heat-row fragment fade-up" data-fragment-index="2">
+          <div class="heat-pill" style="--fill: 78%;">Sheets: control de datos</div>
+          <div class="heat-pill" style="--fill: 72%;">Lucidchart: claridad visual</div>
+          <div class="heat-pill" style="--fill: 86%;">NotebookLM: aprendizaje IA</div>
+        </div>
       </section>
 
       <!-- ========================================================
@@ -812,6 +1262,21 @@
             <blockquote style="font-size: 0.5em; color: var(--text-color); border-left: 2px solid var(--primary-accent); padding-left: 10px; margin: 0; font-style: italic; line-height: 1.45;">
               "Las herramientas digitales en el e-learning son laboratorios de aprendizaje práctico. A través de ellas, los estudiantes desarrollan habilidades indispensables para el mercado actual: la analítica de datos en la nube, la planificación visual de ideas y el uso ético, seguro y productivo de la Inteligencia Artificial cognitiva."
             </blockquote>
+
+            <div class="insight-strip fragment fade-up" data-fragment-index="4">
+              <div class="mini-kpi">
+                <strong>Nube</strong>
+                <span>Trabajo remoto con trazabilidad.</span>
+              </div>
+              <div class="mini-kpi">
+                <strong>Visual</strong>
+                <span>Procesos comprensibles.</span>
+              </div>
+              <div class="mini-kpi">
+                <strong>IA</strong>
+                <span>Estudio acelerado y citado.</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -837,6 +1302,12 @@
           
           <div style="background: rgba(15, 23, 42, 0.6); padding: 15px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.05); display: inline-block; font-size: 0.48em; letter-spacing: 0.1em; color: var(--primary-accent); font-weight: 800; text-transform: uppercase; margin-bottom: 30px;" class="fragment zoom-in" data-fragment-index="1">
             💬 Espacio para Preguntas y Debate
+          </div>
+
+          <div class="heat-row fragment fade-up" data-fragment-index="2" style="margin-bottom: 24px;">
+            <div class="heat-pill" style="--fill: 82%;">Datos</div>
+            <div class="heat-pill" style="--fill: 78%;">Diagramas</div>
+            <div class="heat-pill" style="--fill: 90%;">IA</div>
           </div>
           
           <div style="border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 20px; font-size: 0.45em; color: var(--muted-text); line-height: 1.4;">
@@ -950,6 +1421,23 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/highlight/highlight.min.js"></script>
   
   <script>
+    const getDeckSizing = () => {
+      const portraitPhone = window.matchMedia('(max-width: 480px) and (orientation: portrait)').matches;
+      const portraitTablet = window.matchMedia('(max-width: 820px) and (orientation: portrait)').matches;
+
+      if (portraitPhone) {
+        return { width: 390, height: 780, margin: 0.035, maxScale: 1.08 };
+      }
+
+      if (portraitTablet) {
+        return { width: 720, height: 1060, margin: 0.05, maxScale: 1.08 };
+      }
+
+      return { width: 1050, height: 700, margin: 0.12, maxScale: 1.2 };
+    };
+
+    const deckSizing = getDeckSizing();
+
     document.querySelectorAll('.reveal section').forEach(section => {
       section.dataset.backgroundColor = section.dataset.backgroundColor || '#031638';
     });
@@ -969,14 +1457,25 @@
       autoSlide: 0,
       
       // Scale options to ensure responsiveness in multi-device zooms
-      width: 1050,
-      height: 700,
-      margin: 0.15,
+      width: deckSizing.width,
+      height: deckSizing.height,
+      margin: deckSizing.margin,
       minScale: 0.2,
-      maxScale: 1.2,
+      maxScale: deckSizing.maxScale,
 
       // Embed standard RevealJS Plugins
       plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+    });
+
+    window.addEventListener('resize', () => {
+      const nextSizing = getDeckSizing();
+      Reveal.configure({
+        width: nextSizing.width,
+        height: nextSizing.height,
+        margin: nextSizing.margin,
+        maxScale: nextSizing.maxScale
+      });
+      Reveal.layout();
     });
 
     // 3D Flowing Perspective Grid & Particle Stream Engine (Motion Graphics Background)
