@@ -1,0 +1,2185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lienzo Libre - Editor Avanzado de Presentaciones</title>
+  <!-- Google Fonts: Outfit & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-dark: #030a1c;
+      --bg-darker: #020612;
+      --primary-accent: #00f2fe;
+      --secondary-accent: #8b5cf6;
+      --neon-pink: #ff007f;
+      --glass-bg: rgba(10, 20, 45, 0.5);
+      --glass-border: rgba(0, 242, 254, 0.15);
+      --glass-border-focus: rgba(0, 242, 254, 0.45);
+      --text-color: #f8fafc;
+      --muted-text: #94a3b8;
+      --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+      --font-outfit: 'Outfit', sans-serif;
+      --font-inter: 'Inter', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(0, 242, 254, 0.12) 0px, transparent 50%);
+      color: var(--text-color);
+      font-family: var(--font-inter);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(2, 6, 18, 0.3);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(0, 242, 254, 0.2);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 242, 254, 0.4);
+    }
+
+    /* Header Styling */
+    header {
+      background: rgba(2, 6, 18, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      height: 64px;
+      flex-shrink: 0;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-badge {
+      background: linear-gradient(135deg, var(--secondary-accent), var(--primary-accent));
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+    }
+
+    .logo-text h1 {
+      font-family: var(--font-outfit);
+      font-size: 0.98rem;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      background: linear-gradient(135deg, #ffffff 40%, var(--primary-accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .logo-text span {
+      font-size: 0.68rem;
+      color: var(--muted-text);
+      display: block;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .status-badge {
+      font-size: 0.65rem;
+      padding: 5px 10px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .status-badge.success {
+      background: rgba(16, 185, 129, 0.1);
+      border-color: rgba(16, 185, 129, 0.3);
+      color: #34d399;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.1);
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      border: none;
+      text-decoration: none;
+      font-family: var(--font-inter);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+      color: var(--bg-darker);
+      box-shadow: 0 4px 15px rgba(0, 242, 254, 0.2);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(0, 242, 254, 0.35);
+      filter: brightness(1.1);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-color);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(0, 242, 254, 0.3);
+    }
+
+    /* Workspace layout grid */
+    .editor-layout {
+      display: flex;
+      flex-grow: 1;
+      overflow: hidden;
+    }
+
+    /* Sidebar Styling */
+    .sidebar {
+      width: 250px;
+      background: rgba(2, 6, 18, 0.55);
+      border-right: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+
+    .sidebar-header {
+      padding: 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .sidebar-header span {
+      font-family: var(--font-outfit);
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--primary-accent);
+    }
+
+    .slides-list {
+      flex-grow: 1;
+      overflow-y: auto;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .slide-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .slide-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(0, 242, 254, 0.25);
+    }
+
+    .slide-item.active {
+      background: rgba(139, 92, 246, 0.12);
+      border-color: var(--secondary-accent);
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
+    }
+
+    .slide-item.custom-active {
+      border-color: var(--primary-accent);
+      background: rgba(0, 242, 254, 0.08);
+      box-shadow: 0 4px 12px rgba(0, 242, 254, 0.15);
+    }
+
+    .slide-item-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: #fff;
+    }
+
+    .slide-item-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.58rem;
+      color: var(--muted-text);
+    }
+
+    .slide-type-badge {
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.06);
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .slide-type-badge.custom-type {
+      background: rgba(0, 242, 254, 0.15);
+      color: var(--primary-accent);
+    }
+
+    .slide-actions-mini {
+      display: none;
+      position: absolute;
+      right: 8px;
+      top: 8px;
+      gap: 4px;
+    }
+
+    .slide-item:hover .slide-actions-mini {
+      display: flex;
+    }
+
+    .btn-icon-mini {
+      background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.1);
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 0.6rem;
+      cursor: pointer;
+    }
+
+    .btn-icon-mini:hover {
+      background: var(--neon-pink);
+      border-color: var(--neon-pink);
+    }
+
+    /* Central Workspace Workspace */
+    .workspace {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: rgba(2, 6, 18, 0.25);
+    }
+
+    .workspace-header {
+      padding: 12px 20px;
+      background: rgba(2, 6, 18, 0.4);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .workspace-title h2 {
+      font-family: var(--font-outfit);
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .workspace-title span {
+      font-size: 0.65rem;
+      color: var(--muted-text);
+      display: block;
+      margin-top: 2px;
+    }
+
+    .view-mode-selector {
+      background: rgba(3, 11, 28, 0.6);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      padding: 4px;
+      display: flex;
+      gap: 4px;
+    }
+
+    .view-mode-btn {
+      background: transparent;
+      border: none;
+      color: var(--muted-text);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .view-mode-btn.active {
+      background: var(--secondary-accent);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(139, 92, 246, 0.25);
+    }
+
+    .workspace-split-pane {
+      display: flex;
+      flex-grow: 1;
+      overflow: hidden;
+    }
+
+    /* Canvas Workspace Area */
+    .canvas-panel {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      overflow: auto;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    /* Visual Grid Backdrop */
+    .canvas-panel::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-size: 20px 20px;
+      background-image: 
+        radial-gradient(circle, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Slide Elements Canvas */
+    .slide-canvas {
+      width: 750px;
+      height: 500px;
+      position: relative;
+      background: radial-gradient(circle at center, #061b40 0%, #03122c 100%);
+      border-radius: 12px;
+      border: 1px solid rgba(0, 242, 254, 0.2);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+      overflow: hidden;
+      user-select: none;
+      z-index: 5;
+      transform-origin: center center;
+    }
+
+    /* Elements positioning guidelines */
+    .canvas-grid-lines {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      z-index: 1;
+      display: none;
+    }
+
+    .canvas-grid-lines.active {
+      display: block;
+    }
+
+    .canvas-grid-lines::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-size: 5% 5%;
+      background-image: 
+        linear-gradient(to right, rgba(0, 242, 254, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 242, 254, 0.03) 1px, transparent 1px);
+    }
+
+    /* Slide Template Warning Overlay */
+    .canvas-template-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(3, 10, 28, 0.88);
+      backdrop-filter: blur(8px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      text-align: center;
+      z-index: 50;
+      border-radius: 12px;
+    }
+
+    .template-overlay-card {
+      max-width: 440px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+    }
+
+    .template-overlay-icon {
+      font-size: 3rem;
+      margin-bottom: 15px;
+    }
+
+    .template-overlay-title {
+      font-family: var(--font-outfit);
+      font-size: 1.15rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+
+    .template-overlay-desc {
+      font-size: 0.76rem;
+      color: var(--muted-text);
+      line-height: 1.45;
+      margin-bottom: 20px;
+    }
+
+    /* Elements rendered on the canvas */
+    .canvas-element {
+      position: absolute;
+      cursor: move;
+      min-width: 20px;
+      min-height: 20px;
+      user-select: none;
+      z-index: 10;
+      box-sizing: border-box;
+      /* Simple CSS variables to display Reveal properties dynamically if required */
+    }
+
+    .canvas-element:hover {
+      outline: 1px dashed rgba(0, 242, 254, 0.5);
+    }
+
+    .canvas-element.selected {
+      outline: 2px solid var(--primary-accent);
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+    }
+
+    /* Resize Handle */
+    .canvas-element.selected .resize-handle {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: var(--primary-accent);
+      border: 1px solid #000;
+      border-radius: 50%;
+      z-index: 100;
+      cursor: se-resize;
+      bottom: -5px;
+      right: -5px;
+    }
+
+    /* Render styling properties matching presentation index.html */
+    .canvas-element h1 {
+      font-family: var(--font-outfit);
+      font-size: 1.8em;
+      font-weight: 900;
+      text-transform: none;
+      margin: 0;
+      background: linear-gradient(135deg, #ffffff 30%, var(--primary-accent) 70%, var(--secondary-accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.1;
+    }
+
+    .canvas-element h2 {
+      font-family: var(--font-outfit);
+      font-size: 1.3em;
+      font-weight: 800;
+      margin: 0;
+      color: #fff;
+      letter-spacing: 0.01em;
+      line-height: 1.2;
+    }
+
+    .canvas-element p {
+      margin: 0;
+      line-height: 1.45;
+    }
+
+    .canvas-element ul {
+      margin: 0;
+      padding-left: 15px;
+    }
+
+    /* Premium elements templates */
+    .glass-card {
+      background: rgba(10, 15, 30, 0.92) !important;
+      border: 1px solid rgba(0, 242, 254, 0.25) !important;
+      border-radius: 12px;
+      box-shadow: none !important;
+    }
+
+    /* Real-time split screen iframe */
+    .iframe-preview-panel {
+      width: 480px;
+      border-left: 1px solid rgba(255, 255, 255, 0.05);
+      background: rgba(2, 6, 18, 0.6);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      height: 100%;
+    }
+
+    .iframe-header {
+      padding: 12px 15px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(2, 6, 18, 0.7);
+    }
+
+    .iframe-header span {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--primary-accent);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .iframe-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--primary-accent);
+      box-shadow: 0 0 8px var(--primary-accent);
+    }
+
+    .iframe-wrapper {
+      flex-grow: 1;
+      position: relative;
+      background: #000;
+    }
+
+    .iframe-wrapper iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: #030f26;
+    }
+
+    /* Canvas Element Toolbar Controls */
+    .canvas-toolbar {
+      background: rgba(2, 6, 18, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 6px 12px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 15px;
+      z-index: 10;
+      flex-shrink: 0;
+    }
+
+    .toolbar-separator {
+      width: 1px;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .toolbar-label {
+      font-size: 0.62rem;
+      font-weight: 700;
+      color: var(--muted-text);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Right Sidebar Inspector */
+    .inspector {
+      width: 320px;
+      background: rgba(2, 6, 18, 0.55);
+      border-left: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      overflow-y: auto;
+    }
+
+    .inspector-header {
+      padding: 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .inspector-header span {
+      font-family: var(--font-outfit);
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--primary-accent);
+      display: block;
+    }
+
+    .inspector-panel {
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .inspector-section-title {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--muted-text);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding-bottom: 4px;
+      margin-bottom: 8px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .form-group label {
+      font-size: 0.65rem;
+      color: var(--muted-text);
+      font-weight: 600;
+    }
+
+    .form-input {
+      background: rgba(3, 11, 28, 0.8);
+      border: 1px solid var(--glass-border);
+      border-radius: 6px;
+      padding: 8px;
+      color: #fff;
+      font-family: var(--font-inter);
+      font-size: 0.74rem;
+      transition: border-color 0.2s;
+      outline: none;
+      width: 100%;
+    }
+
+    .form-input:focus {
+      border-color: var(--glass-border-focus);
+    }
+
+    .form-input option {
+      background: #030d24;
+      color: #fff;
+    }
+
+    .form-textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    /* Toast Notification */
+    .editor-toast {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      background: rgba(6, 15, 38, 0.9);
+      border: 1px solid var(--primary-accent);
+      border-radius: 12px;
+      padding: 12px 20px;
+      z-index: 10000;
+      display: none;
+      align-items: center;
+      gap: 10px;
+      animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 10px 30px rgba(0, 242, 254, 0.15);
+    }
+
+    .toast-icon {
+      font-size: 1.1rem;
+    }
+
+    .toast-message {
+      font-size: 0.76rem;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    /* Modal Overlay */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(2, 6, 18, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 5000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-card {
+      background: rgba(6, 17, 43, 0.95);
+      border: 1px solid var(--glass-border-focus);
+      border-radius: 16px;
+      padding: 30px;
+      width: 480px;
+      max-width: 90%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      animation: zoomIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes zoomIn {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-title {
+      font-family: var(--font-outfit);
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .modal-desc {
+      font-size: 0.72rem;
+      color: var(--muted-text);
+      line-height: 1.45;
+      margin-bottom: 20px;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    /* Segmented view wrapper styles */
+    #workspace-container {
+      display: flex;
+      flex-grow: 1;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    /* Dragging ghost preview helper */
+    .ghost-preview {
+      outline: 1px dashed rgba(255, 255, 255, 0.3);
+      position: absolute;
+      pointer-events: none;
+      display: none;
+      z-index: 1000;
+    }
+
+    /* Empty state */
+    .empty-state {
+      padding: 40px;
+      text-align: center;
+      color: var(--muted-text);
+    }
+    
+    .empty-state-icon {
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+    }
+
+    .empty-state-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 5px;
+    }
+
+    .empty-state-desc {
+      font-size: 0.65rem;
+      max-width: 200px;
+      margin: 0 auto;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header>
+    <div class="logo-container">
+      <div class="logo-badge">⚡</div>
+      <div class="logo-text">
+        <h1>Lienzo Libre - Canva revealJS</h1>
+        <span>Editor de Posicionamiento Absoluto Responsivo</span>
+      </div>
+    </div>
+    
+    <div class="nav-actions">
+      <!-- Sync Status Badges -->
+      <div id="local-status" class="status-badge">📁 Local: Desvinculado</div>
+      <div id="github-status" class="status-badge">🌐 GitHub: Desconectado</div>
+      
+      <!-- Toggle Editors -->
+      <a href="editor.html" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.68rem;" title="Cambiar al editor estándar basado en formularios Canva">📝 Formulario Canva</a>
+      <a href="index.html" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.68rem;" target="_blank">💻 Presentación</a>
+    </div>
+  </header>
+
+  <!-- Editor Workspace -->
+  <div class="editor-layout">
+    
+    <!-- LEFT SIDEBAR: Slide list navigator -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <span>Diapositivas</span>
+        <button id="add-slide-btn" class="btn-icon-mini" title="Agregar Diapositiva" style="border-radius: 50%; font-weight: 800; font-size:0.8rem; background:rgba(0,242,254,0.15); border-color:var(--primary-accent); width:24px; height:24px;">+</button>
+      </div>
+      <div class="slides-list" id="slides-list-container">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+
+    <!-- CENTER AREA: Interactive Canva and Split View -->
+    <div class="workspace">
+      <div class="workspace-header">
+        <div class="workspace-title">
+          <h2 id="active-slide-label">Cargando diapositivas...</h2>
+          <span id="active-slide-info">Configura elementos libres o convierte una plantilla estándar.</span>
+        </div>
+        
+        <!-- Segmented Split-Screen Mode Control -->
+        <div class="view-mode-selector">
+          <button id="view-mode-canvas" class="view-mode-btn active" onclick="setViewMode('canvas')">🎨 Lienzo</button>
+          <button id="view-mode-split" class="view-mode-btn" onclick="setViewMode('split')">🖥️ Dividido</button>
+          <button id="view-mode-preview" class="view-mode-btn" onclick="setViewMode('preview')">👁️ Vista Previa</button>
+        </div>
+      </div>
+      
+      <!-- Workspace Container -->
+      <div id="workspace-container">
+        
+        <!-- Canvas Drag Area -->
+        <div class="canvas-panel" id="canvas-panel-container">
+          
+          <!-- Element Toolbar Selector (Only visible on Custom Slides) -->
+          <div class="canvas-toolbar" id="canvas-toolbar-panel" style="display: none;">
+            <span class="toolbar-label">Agregar al Lienzo:</span>
+            <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 0.65rem;" onclick="addNewElement('title')">🏷️ Título</button>
+            <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 0.65rem;" onclick="addNewElement('text')">📝 Párrafo</button>
+            <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 0.65rem;" onclick="addNewElement('card')">🎴 Tarjeta Esmerilada</button>
+            <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 0.65rem;" onclick="addNewElement('kpi')">📈 Métrica KPI</button>
+            
+            <div class="toolbar-separator"></div>
+            
+            <span class="toolbar-label">Guías:</span>
+            <button id="btn-toggle-grid" class="btn btn-secondary" style="padding: 4px 8px; font-size: 0.65rem;" onclick="toggleGridLines()">👁️ Mostrar Rejilla</button>
+          </div>
+
+          <!-- Slide Presentation Core Viewport Frame -->
+          <div class="slide-canvas" id="slide-canvas">
+            <div class="canvas-grid-lines" id="grid-lines-overlay"></div>
+            
+            <!-- Slides absolutely positioned DIVs will be injected dynamically -->
+            
+            <!-- Standard Slide Layout Protection Screen -->
+            <div class="canvas-template-overlay" id="template-warning-screen" style="display: none;">
+              <div class="template-overlay-card">
+                <div class="template-overlay-icon">⚡</div>
+                <div class="template-overlay-title" id="template-title-label">Plantilla Estándar</div>
+                <div class="template-overlay-desc">
+                  Esta diapositiva está estructurada usando una plantilla Canva pre-diseñada. Para re-ordenar, arrastrar, cambiar de tamaño o agregar libremente elementos absolutamente posicionados:
+                </div>
+                <button class="btn btn-primary" onclick="convertActiveSlideToCustom()" style="width: 100%; justify-content: center; padding: 10px 15px; font-family: var(--font-outfit); font-weight:800; font-size:0.8rem; letter-spacing:0.02em;">
+                  ⚡ Convertir a Lienzo Libre
+                </button>
+                <div style="font-size:0.6rem; color:var(--muted-text); margin-top:10px;">
+                  *Nota: Los elementos del formulario se descompondrán en bloques libres editables.
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+
+        <!-- Real-time split screen preview iframe pane -->
+        <div class="iframe-preview-panel" id="iframe-preview-pane" style="display: none;">
+          <div class="iframe-header">
+            <span>
+              <span class="iframe-dot"></span> Previsualización en Vivo
+            </span>
+            <button class="btn-icon-mini" title="Recargar Previsualización" onclick="reloadPreviewFrame()" style="background:transparent; border:none; font-size:0.8rem;">🔄</button>
+          </div>
+          <div class="iframe-wrapper">
+            <iframe id="preview-iframe" src="index.html"></iframe>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RIGHT SIDEBAR: Canvas Element properties inspector -->
+    <div class="inspector">
+      <div class="inspector-header">
+        <span>Inspector de Diseño</span>
+      </div>
+      
+      <div class="inspector-panel" id="inspector-panel-container">
+        <!-- Rendered dynamically according to element selection -->
+        <div class="empty-state">
+          <div class="empty-state-icon">🖱️</div>
+          <div class="empty-state-title">Ningún Elemento Seleccionado</div>
+          <div class="empty-state-desc">Haz clic en un bloque dentro del lienzo para editar sus posiciones, estilos, fragmentos y animaciones loop en tiempo real.</div>
+        </div>
+      </div>
+
+      <!-- General Slide Transition & Meta Settings -->
+      <div style="margin-top: auto; padding: 15px; border-top: 1px solid rgba(255,255,255,0.05); background: rgba(2, 6, 18, 0.45);">
+        <div class="inspector-section-title">Parámetros de la Diapositiva</div>
+        
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label for="slide-transition-dropdown">Transición General (RevealJS):</label>
+          <select id="slide-transition-dropdown" class="form-input" onchange="updateActiveSlideTransition(this.value)">
+            <option value="convex">convex (3D convexo - Defecto)</option>
+            <option value="fade">fade (Desvanecimiento suave)</option>
+            <option value="slide">slide (Desplazamiento plano)</option>
+            <option value="zoom">zoom (Aproximación de escala)</option>
+            <option value="concave">concave (3D cóncavo)</option>
+            <option value="none">none (Sin efectos)</option>
+          </select>
+        </div>
+
+        <button class="btn btn-secondary" style="width: 100%; justify-content: center; font-size: 0.68rem; margin-bottom: 8px;" onclick="document.getElementById('modal-github').style.display='flex'">
+          🔧 Credenciales de GitHub
+        </button>
+        <button class="btn btn-secondary" style="width: 100%; justify-content: center; font-size: 0.68rem; margin-bottom: 8px;" onclick="triggerDirectoryPicker()">
+          📁 Sincronizar Disco Local
+        </button>
+        <button id="btn-save-disk" class="btn btn-primary" style="width: 100%; justify-content: center; font-size: 0.72rem; margin-bottom: 8px; display: none;" onclick="saveChangesLocally()">
+          💾 Guardar en Disco
+        </button>
+        <button id="btn-publish-github" class="btn btn-primary" style="width: 100%; justify-content: center; font-size: 0.72rem; background: linear-gradient(135deg, var(--secondary-accent), var(--neon-pink)); color:#fff; box-shadow: 0 4px 15px rgba(255,0,127,0.2);" onclick="publishToGithub()">
+          🚀 Publicar en la Web
+        </button>
+        <button class="btn btn-secondary" style="width: 100%; justify-content: center; font-size: 0.72rem;" onclick="downloadUpdatedHtml()">
+          📄 Descargar index.html
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div class="editor-toast" id="editor-toast">
+    <span class="toast-icon" id="toast-icon">💾</span>
+    <span class="toast-message" id="toast-message">Cambios guardados con éxito.</span>
+  </div>
+
+  <!-- GITHUB SETTINGS MODAL -->
+  <div class="modal-overlay" id="modal-github">
+    <div class="modal-card">
+      <div class="modal-title">
+        <span>🌐 Conectar Repositorio GitHub</span>
+      </div>
+      <div class="modal-desc">
+        Configura tu Personal Access Token (PAT) de GitHub para confirmar y enviar de forma segura las actualizaciones de tu presentación directamente a tus GitHub Pages sin necesidad de un servidor.
+      </div>
+      
+      <div class="form-group" style="margin-bottom: 12px;">
+        <label for="github-pat">Personal Access Token (PAT):</label>
+        <input type="password" id="github-pat" class="form-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxx">
+      </div>
+
+      <div class="form-group" style="margin-bottom: 12px;">
+        <label for="github-repo">Repositorio (usuario/repo):</label>
+        <input type="text" id="github-repo" class="form-input" placeholder="nombre-usuario/digitaltoolsPresentation" value="przhmr/digitaltoolsPresentation">
+      </div>
+
+      <div class="form-group" style="margin-bottom: 15px;">
+        <label for="github-commit">Mensaje de Commit:</label>
+        <input type="text" id="github-commit" class="form-input" placeholder="Actualizando elementos libres..." value="Modificación desde Editor Avanzado Canvas">
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="document.getElementById('modal-github').style.display='none'">Cancelar</button>
+        <button class="btn btn-primary" onclick="saveGithubSettings()">Vincular y Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RUN TIME LOGIC ENGINE -->
+  <script>
+    // State variables
+    let slides = [];
+    let activeSlideIndex = 0;
+    let activeElementIndex = null;
+    let indexHtmlContent = ''; // Local file cache
+    let localDirectoryHandle = null;
+    let localFileHandle = null;
+    let viewMode = 'canvas'; // 'canvas' | 'split' | 'preview'
+    let isGridLinesVisible = false;
+
+    // Draggable/Resizable Canvas State Variables
+    let isDragging = false;
+    let isResizing = false;
+    let activeDragElement = null;
+    let dragStartX, dragStartY;
+    let dragStartLeft, dragStartTop;
+    let dragStartWidth, dragStartHeight;
+
+    // References to core DOM nodes
+    const slidesListContainer = document.getElementById('slides-list-container');
+    const slideCanvas = document.getElementById('slide-canvas');
+    const activeSlideLabel = document.getElementById('active-slide-label');
+    const activeSlideInfo = document.getElementById('active-slide-info');
+    const templateWarningScreen = document.getElementById('template-warning-screen');
+    const templateTitleLabel = document.getElementById('template-title-label');
+    const canvasToolbarPanel = document.getElementById('canvas-toolbar-panel');
+    const gridLinesOverlay = document.getElementById('grid-lines-overlay');
+    const inspectorPanelContainer = document.getElementById('inspector-panel-container');
+    const slideTransitionDropdown = document.getElementById('slide-transition-dropdown');
+    
+    const githubStatusBadge = document.getElementById('github-status');
+    const localStatusBadge = document.getElementById('local-status');
+    const btnSaveDisk = document.getElementById('btn-save-disk');
+
+    const inputGithubPat = document.getElementById('github-pat');
+    const inputGithubRepo = document.getElementById('github-repo');
+    const inputGithubCommit = document.getElementById('github-commit');
+
+    // Display a high fidelity notification toast
+    function showToast(message, icon = '💾', duration = 3000) {
+      const toast = document.getElementById('editor-toast');
+      const toastIcon = document.getElementById('toast-icon');
+      const toastMsg = document.getElementById('toast-message');
+      
+      toastIcon.textContent = icon;
+      toastMsg.textContent = message;
+      toast.style.display = 'flex';
+      
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, duration);
+    }
+
+    // Initialize application templates
+    async function loadPresentationOnStart() {
+      try {
+        const response = await fetch('index.html');
+        if (response.ok) {
+          indexHtmlContent = await response.text();
+          extractSlidesData(indexHtmlContent);
+        } else {
+          showToast('No se pudo encontrar index.html remoto en el servidor.', '⚠️');
+        }
+      } catch (err) {
+        console.error('Error fetching template on startup:', err);
+        showToast('Error cargando los datos iniciales.', '❌');
+      }
+
+      // Check for cached GitHub settings
+      const cachedPat = localStorage.getItem('github_pat');
+      const cachedRepo = localStorage.getItem('github_repo');
+      
+      if (cachedPat) inputGithubPat.value = cachedPat;
+      if (cachedRepo) inputGithubRepo.value = cachedRepo;
+
+      if (cachedPat && cachedRepo) {
+        githubStatusBadge.textContent = '🌐 GitHub: Autenticado';
+        githubStatusBadge.classList.add('success');
+      }
+    }
+
+    // Extract slides JSON array structure from index.html
+    function extractSlidesData(html) {
+      try {
+        // Look for the SLIDES_DATA block inside index.html surgically
+        const match = html.match(/const\s+SLIDES_DATA\s*=\s*(\[[\s\S]*?\]);\s*\/\/\s*DYNAMIC RENDERER FUNCTION/);
+        if (match && match[1]) {
+          const parseSlidesFunc = new Function(`return ${match[1]};`);
+          slides = parseSlidesFunc();
+          
+          renderSlidesNavigator();
+          selectSlide(0);
+          showToast('Presentación vinculada con éxito.', '📦');
+        } else {
+          showToast('No se pudo ubicar SLIDES_DATA en el index.html.', '❌');
+        }
+      } catch (err) {
+        console.error('Error analyzing slide data:', err);
+        showToast('Error al analizar estructura de datos.', '❌');
+      }
+    }
+
+    // Render Slide Thumbnails inside the Left Navigator
+    function renderSlidesNavigator() {
+      slidesListContainer.innerHTML = '';
+      slides.forEach((slide, idx) => {
+        const item = document.createElement('div');
+        const isCustom = slide.type === 'custom';
+        item.className = `slide-item ${idx === activeSlideIndex ? (isCustom ? 'custom-active' : 'active') : ''}`;
+        
+        let titleText = slide.title || 'Sin Título';
+        if (slide.type === 'cover') titleText = slide.title || 'Portada';
+        if (slide.type === 'farewell') titleText = slide.title || 'Despedida';
+        
+        item.innerHTML = `
+          <div class="slide-item-title" onclick="selectSlide(${idx})">Lámina ${idx + 1}: ${titleText}</div>
+          <div class="slide-item-meta" onclick="selectSlide(${idx})">
+            <span class="slide-type-badge ${isCustom ? 'custom-type' : ''}">${isCustom ? '⚡ Libre' : '📋 ' + slide.type}</span>
+            <span>Elementos: ${isCustom ? (slide.elements || []).length : 'Preset'}</span>
+          </div>
+          <div class="slide-actions-mini">
+            <button class="btn-icon-mini" title="Eliminar Diapositiva" onclick="deleteSlide(${idx}, event)">🗑️</button>
+          </div>
+        `;
+        slidesListContainer.appendChild(item);
+      });
+    }
+
+    // Slide selection trigger
+    function selectSlide(idx) {
+      if (idx < 0 || idx >= slides.length) return;
+      
+      activeSlideIndex = idx;
+      activeElementIndex = null;
+      
+      // Update sidebar visual highlight
+      const items = slidesListContainer.querySelectorAll('.slide-item');
+      items.forEach((item, itemIdx) => {
+        const isCustom = slides[itemIdx].type === 'custom';
+        item.className = `slide-item ${itemIdx === activeSlideIndex ? (isCustom ? 'custom-active' : 'active') : ''}`;
+      });
+
+      const activeSlide = slides[activeSlideIndex];
+      activeSlideLabel.textContent = `Lámina ${activeSlideIndex + 1}: ${activeSlide.title || 'Diapositiva ' + activeSlide.type}`;
+      
+      // Configure transition dropdown
+      slideTransitionDropdown.value = activeSlide.transition || 'convex';
+
+      // Verify layout type compatibility
+      if (activeSlide.type === 'custom') {
+        templateWarningScreen.style.display = 'none';
+        canvasToolbarPanel.style.display = 'flex';
+        activeSlideInfo.textContent = `Arrastra y redimensiona elementos. Utiliza el Inspector lateral para modificar el contenido.`;
+        renderInteractiveCanvas();
+      } else {
+        templateWarningScreen.style.display = 'flex';
+        canvasToolbarPanel.style.display = 'none';
+        templateTitleLabel.textContent = `Plantilla Estándar: ${activeSlide.type.toUpperCase()}`;
+        activeSlideInfo.textContent = `Esta diapositiva usa la plantilla '${activeSlide.type}'. Conviértela a lienzo libre para posicionar a tu gusto.`;
+        
+        // Remove old elements from previous custom render
+        clearCanvasElementsOnly();
+      }
+
+      renderInspector();
+      syncPreviewIframe();
+    }
+
+    function clearCanvasElementsOnly() {
+      const items = slideCanvas.querySelectorAll('.canvas-element');
+      items.forEach(el => el.remove());
+    }
+
+    // Render interactive draggable canvas structures
+    function renderInteractiveCanvas() {
+      clearCanvasElementsOnly();
+      
+      const activeSlide = slides[activeSlideIndex];
+      if (activeSlide.type !== 'custom') return;
+
+      const elements = activeSlide.elements || [];
+      elements.forEach((el, index) => {
+        const div = document.createElement('div');
+        div.className = `canvas-element ${index === activeElementIndex ? 'selected' : ''}`;
+        
+        // Match CSS absolute percentages
+        div.style.left = `${el.x}%`;
+        div.style.top = `${el.y}%`;
+        div.style.width = `${el.w}%`;
+        div.style.height = `${el.h}%`;
+        div.style.zIndex = el.zIndex || 1;
+
+        // Custom element decoration styles
+        if (el.color) div.style.color = el.color;
+        if (el.bg) div.style.background = el.bg;
+        if (el.border) div.style.border = el.border;
+        if (el.borderRadius) div.style.borderRadius = el.borderRadius;
+        if (el.padding) div.style.padding = el.padding;
+        if (el.textAlign) div.style.textAlign = el.textAlign;
+        if (el.fontSize) div.style.fontSize = el.fontSize;
+        if (el.extraStyle) {
+          const rules = el.extraStyle.split(';');
+          rules.forEach(rule => {
+            const parts = rule.split(':');
+            if (parts.length === 2) div.style[parts[0].trim()] = parts[1].trim();
+          });
+        }
+
+        // Incorporate custom helper animations inside canvas
+        if (el.animation) {
+          div.classList.add(`animation-${el.animation}`);
+        }
+
+        div.innerHTML = el.content;
+
+        // Add selection and resizing handle
+        if (index === activeElementIndex) {
+          const handle = document.createElement('div');
+          handle.className = 'resize-handle';
+          // Start resize action
+          handle.addEventListener('mousedown', (e) => startResize(e, index));
+          handle.addEventListener('touchstart', (e) => startResize(e, index), { passive: false });
+          div.appendChild(handle);
+        }
+
+        // Selection / drag mouse pointer listener
+        div.addEventListener('mousedown', (e) => startDrag(e, index));
+        div.addEventListener('touchstart', (e) => startDrag(e, index), { passive: false });
+
+        slideCanvas.appendChild(div);
+      });
+    }
+
+    // Decompose pre-baked template slides to absolute positioned custom layouts
+    function convertActiveSlideToCustom() {
+      const slide = slides[activeSlideIndex];
+      if (slide.type === 'custom') return;
+
+      const decompElements = [];
+      const baseType = slide.type;
+
+      // Programmatic layout decomposition database mapper
+      if (baseType === 'cover') {
+        decompElements.push(
+          {
+            x: 5, y: 15, w: 90, h: 70,
+            bg: 'rgba(10, 15, 30, 0.92)', border: '1px solid rgba(0, 242, 254, 0.25)',
+            borderRadius: '16px', padding: '24px', className: 'glass-card', zIndex: 1,
+            content: '',
+            extraStyle: 'display: flex; flex-direction: column; justify-content: center; align-items: center;'
+          },
+          {
+            x: 10, y: 20, w: 80, h: 16,
+            content: `<h1>${slide.title || 'Título'}</h1>`,
+            textAlign: 'center', zIndex: 2
+          },
+          {
+            x: 10, y: 38, w: 80, h: 10,
+            content: `<h3 style="font-size: 1.05em; color: var(--muted-text); font-weight: 500;">${slide.subtitle || ''}</h3>`,
+            textAlign: 'center', zIndex: 2
+          },
+          {
+            x: 10, y: 55, w: 50, h: 25,
+            content: `<span style="color: var(--primary-accent); font-weight: 800; display: block; margin-bottom: 8px; letter-spacing: 0.05em; text-transform: uppercase; font-size:0.5em;">EQUIPO DE PROYECTO:</span><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; color: #fff; font-size: 0.45em;">${(slide.authors || []).map(a => '<div>• ' + a + '</div>').join('')}</div>`,
+            zIndex: 2
+          },
+          {
+            x: 62, y: 55, w: 28, h: 25,
+            content: `<div style="text-align: right; display: flex; flex-direction: column; justify-content: center; line-height: 1.4; font-size: 0.5em;"><span style="color: var(--primary-accent); font-weight: 800; display: block; margin-top: 3px; letter-spacing: 0.02em;">${slide.institution || ''}</span></div>`,
+            zIndex: 2
+          }
+        );
+      } else if (baseType === 'categories') {
+        decompElements.push(
+          {
+            x: 5, y: 5, w: 90, h: 8,
+            content: `<h2>${slide.title}</h2>`, zIndex: 2
+          },
+          {
+            x: 5, y: 15, w: 90, h: 10,
+            content: `<p style="font-size: 0.7em; color: var(--muted-text); text-align: left; line-height: 1.45;">${slide.description}</p>`, zIndex: 2
+          }
+        );
+
+        // Convert cards dynamically
+        const cardPositions = [5, 36, 67];
+        (slide.cards || []).forEach((c, idx) => {
+          decompElements.push({
+            x: cardPositions[idx] || 5, y: 28, w: 28, h: 38,
+            className: 'glass-card',
+            bg: 'rgba(10, 15, 30, 0.92)', border: '1px solid rgba(0, 242, 254, 0.25)', borderRadius: '12px', padding: '15px',
+            content: `<div style="font-size: 1.3em; margin-bottom:4px;">${c.emoji}</div><strong style="font-size: 0.55em; color: var(--primary-accent); display: block; margin-bottom: 5px;">${c.label}</strong><span style="font-size: 0.42em; color: var(--muted-text); display: block; line-height: 1.3;">${c.desc}</span>`,
+            fragment: true, fragmentTransition: 'fade-up', fragmentIndex: idx + 1, zIndex: 2
+          });
+        });
+
+        // Convert KPIs dynamically
+        decompElements.push({
+          x: 5, y: 70, w: 90, h: 20,
+          content: `<div class="insight-strip" style="display: flex; justify-content: space-between; gap: 10px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px;">${(slide.kpis || []).map((k, i) => `<div class="mini-kpi with-icon fragment fade-up" data-fragment-index="${4+i}" style="display: flex; gap: 8px; align-items: center;"><div class="mini-icon" style="font-size: 0.8em; color: var(--primary-accent);">${k.icon}</div><div style="text-align: left;"><strong style="font-size:0.55em; display:block; color:#fff;">${k.title}</strong><span style="font-size:0.42em; color:var(--muted-text); display:block;">${k.desc}</span></div></div>`).join('')}</div>`,
+          zIndex: 2
+        });
+      } else if (baseType === 'conclusion' || baseType === 'split_chart' || baseType === 'split_flow' || baseType === 'split_road' || baseType === 'split_network' || baseType === 'split_pipeline') {
+        // Symmetric split layout converter
+        decompElements.push(
+          {
+            x: 5, y: 5, w: 90, h: 8,
+            content: `<h2>${slide.title || 'Título'}</h2>`, zIndex: 2
+          },
+          {
+            x: 5, y: 15, w: 43, h: 75,
+            content: `<p style="text-align: left; margin-bottom: 15px; font-size:0.65em; line-height: 1.4; color: var(--muted-text);">${slide.description || ''}</p><ul style="font-size: 0.55em; line-height: 1.4; padding-left:15px;">${(slide.bullets || []).map((b, i) => `<li class="fragment fade-up" data-fragment-index="${i+1}">${b}</li>`).join('')}</ul>`,
+            zIndex: 2
+          },
+          {
+            x: 52, y: 15, w: 43, h: 75,
+            bg: 'rgba(10, 15, 30, 0.92)', border: '1px solid rgba(0, 242, 254, 0.25)', borderRadius: '12px', padding: '20px',
+            content: `<h3 style="font-size: 0.8em; margin-bottom: 12px; color: var(--primary-accent); text-align: center; text-transform: uppercase;">${slide.right_title || slide.road_title || 'Síntesis'}</h3><blockquote style="font-size: 0.48em; color: var(--text-color); border-left: 2px solid var(--primary-accent); padding-left: 10px; margin: 0; font-style: italic; line-height: 1.4;">"${slide.quote || 'Herramientas digitales aceleran el conocimiento.'}"</blockquote><div class="insight-strip fragment fade-up" data-fragment-index="4" style="display: flex; flex-direction:column; gap:8px; margin-top:15px;">${(slide.kpis || []).map(k => `<div class="mini-kpi" style="border-top:1px solid rgba(255,255,255,0.05); padding-top:6px;"><strong style="font-size:0.5em; color: #fff; display:block;">${k.title}</strong><span style="font-size:0.42em; color:var(--muted-text); display:block;">${k.desc}</span></div>`).join('')}</div>`,
+            zIndex: 2
+          }
+        );
+      } else {
+        // Generic fallback decomposition
+        decompElements.push(
+          {
+            x: 5, y: 5, w: 90, h: 8,
+            content: `<h2>${slide.title || 'Título de lámina'}</h2>`, zIndex: 2
+          },
+          {
+            x: 5, y: 16, w: 90, h: 75,
+            bg: 'rgba(10, 15, 30, 0.92)', border: '1px solid rgba(0, 242, 254, 0.2)', borderRadius: '12px', padding: '24px',
+            content: `<div style="font-size: 0.6em; color: var(--text-color); text-align: left;"><p style="margin-bottom:15px;">${slide.description || 'Contenido de la plantilla estándar.'}</p></div>`,
+            zIndex: 2
+          }
+        );
+      }
+
+      // Convert structural fields
+      slide.type = 'custom';
+      slide.elements = decompElements;
+
+      showToast('Diapositiva convertida a Lienzo Libre.', '⚡');
+      renderSlidesNavigator();
+      selectSlide(activeSlideIndex);
+    }
+
+    // Add new custom freeform elements
+    function addNewElement(elemType) {
+      const activeSlide = slides[activeSlideIndex];
+      if (activeSlide.type !== 'custom') return;
+
+      if (!activeSlide.elements) activeSlide.elements = [];
+
+      let el = {};
+      
+      if (elemType === 'title') {
+        el = {
+          x: 10, y: 10, w: 80, h: 12, zIndex: 10,
+          content: '<h2>Nuevo Título Libre</h2>',
+          textAlign: 'center'
+        };
+      } else if (elemType === 'text') {
+        el = {
+          x: 20, y: 25, w: 60, h: 15, zIndex: 10,
+          content: '<p style="font-size: 0.58em; color: var(--muted-text); line-height: 1.4;">Haz doble clic en el lienzo o selecciona este elemento para modificar su texto e incorporar etiquetas HTML.</p>'
+        };
+      } else if (elemType === 'card') {
+        el = {
+          x: 30, y: 45, w: 40, h: 35, zIndex: 10,
+          bg: 'rgba(10, 15, 30, 0.92)',
+          border: '1px solid rgba(0, 242, 254, 0.25)',
+          borderRadius: '12px',
+          padding: '18px',
+          content: '<h3 style="font-size:0.7em; color:var(--primary-accent); margin-bottom:8px;">Tarjeta Libre</h3><p style="font-size:0.45em; color:var(--muted-text); margin:0;">Arrastra y acomoda este bloque en cualquier cuadrante de la lámina.</p>'
+        };
+      } else if (elemType === 'kpi') {
+        el = {
+          x: 40, y: 45, w: 20, h: 25, zIndex: 10,
+          bg: 'rgba(10, 15, 30, 0.92)',
+          border: '1px solid rgba(0, 242, 254, 0.35)',
+          borderRadius: '12px',
+          padding: '12px',
+          content: '<div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%;"><div style="font-size:1.1em;">📊</div><strong style="font-size:0.65em; display:block; color:#fff;">95%</strong><span style="font-size:0.4em; color:var(--muted-text);">Eficiencia</span></div>'
+        };
+      }
+
+      activeSlide.elements.push(el);
+      activeElementIndex = activeSlide.elements.length - 1;
+
+      renderInteractiveCanvas();
+      renderInspector();
+      syncPreviewIframe();
+    }
+
+    // Delete custom selected elements
+    function deleteActiveElement() {
+      const activeSlide = slides[activeSlideIndex];
+      if (activeSlide.type !== 'custom' || activeElementIndex === null) return;
+
+      activeSlide.elements.splice(activeElementIndex, 1);
+      activeElementIndex = null;
+
+      renderInteractiveCanvas();
+      renderInspector();
+      syncPreviewIframe();
+      showToast('Elemento eliminado.', '🗑️');
+    }
+
+    // Delete entire slides
+    function deleteSlide(idx, event) {
+      if (event) event.stopPropagation();
+      if (slides.length <= 1) {
+        showToast('Debes mantener al menos una diapositiva.', '⚠️');
+        return;
+      }
+
+      if (confirm(`¿Estás seguro de que deseas eliminar la diapositiva ${idx + 1}?`)) {
+        slides.splice(idx, 1);
+        if (activeSlideIndex >= slides.length) activeSlideIndex = slides.length - 1;
+        
+        renderSlidesNavigator();
+        selectSlide(activeSlideIndex);
+        showToast('Diapositiva eliminada.', '🗑️');
+      }
+    }
+
+    // Toggle align grids
+    function toggleGridLines() {
+      isGridLinesVisible = !isGridLinesVisible;
+      const btn = document.getElementById('btn-toggle-grid');
+      
+      if (isGridLinesVisible) {
+        gridLinesOverlay.classList.add('active');
+        btn.textContent = '👁️ Ocultar Rejilla';
+        btn.style.borderColor = 'var(--primary-accent)';
+      } else {
+        gridLinesOverlay.classList.remove('active');
+        btn.textContent = '👁️ Mostrar Rejilla';
+        btn.style.borderColor = 'rgba(255,255,255,0.1)';
+      }
+    }
+
+    // General Slide properties transition syncing
+    function updateActiveSlideTransition(transition) {
+      slides[activeSlideIndex].transition = transition;
+      syncPreviewIframe();
+    }
+
+    // Sidebar Slide Add trigger
+    document.getElementById('add-slide-btn').onclick = () => {
+      const newSlide = {
+        id: `slide_${Date.now()}`,
+        type: 'custom',
+        transition: 'convex',
+        elements: [
+          {
+            x: 5, y: 5, w: 90, h: 8,
+            content: '<h2>Nueva Diapositiva Libre</h2>',
+            zIndex: 10
+          },
+          {
+            x: 10, y: 20, w: 80, h: 60,
+            bg: 'rgba(10, 15, 30, 0.92)',
+            border: '1px solid rgba(0, 242, 254, 0.2)',
+            borderRadius: '12px',
+            padding: '24px',
+            content: '<p style="font-size: 0.6em; text-align: left; line-height: 1.45;">Bienvenido a tu nuevo lienzo interactivo. Presiona en el menú superior para incorporar bloques, títulos o métricas y arrástralas por la lámina libremente.</p>',
+            zIndex: 5
+          }
+        ]
+      };
+
+      slides.push(newSlide);
+      activeSlideIndex = slides.length - 1;
+      
+      renderSlidesNavigator();
+      selectSlide(activeSlideIndex);
+      showToast('Nueva diapositiva añadida.', '➕');
+    };
+
+    // Inspector Rendering Engine
+    function renderInspector() {
+      const activeSlide = slides[activeSlideIndex];
+      
+      if (activeSlide.type !== 'custom' || activeElementIndex === null) {
+        inspectorPanelContainer.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">🖱️</div>
+            <div class="empty-state-title">Ningún Elemento Seleccionado</div>
+            <div class="empty-state-desc">Haz clic en un bloque dentro del lienzo para editar sus posiciones y estilos en tiempo real.</div>
+          </div>
+        `;
+        return;
+      }
+
+      const el = activeSlide.elements[activeElementIndex];
+
+      inspectorPanelContainer.innerHTML = `
+        <!-- Section 1: Position properties -->
+        <div class="inspector-section-title">Coordenadas y Tamaño (%)</div>
+        <div class="form-group-row" style="margin-bottom: 8px;">
+          <div class="form-group">
+            <label for="inspect-x">Posición X (Left):</label>
+            <input type="number" step="0.5" id="inspect-x" class="form-input" value="${el.x}" oninput="updateActiveElementParam('x', parseFloat(this.value))">
+          </div>
+          <div class="form-group">
+            <label for="inspect-y">Posición Y (Top):</label>
+            <input type="number" step="0.5" id="inspect-y" class="form-input" value="${el.y}" oninput="updateActiveElementParam('y', parseFloat(this.value))">
+          </div>
+        </div>
+        <div class="form-group-row" style="margin-bottom: 12px;">
+          <div class="form-group">
+            <label for="inspect-w">Ancho (Width):</label>
+            <input type="number" step="0.5" id="inspect-w" class="form-input" value="${el.w}" oninput="updateActiveElementParam('w', parseFloat(this.value))">
+          </div>
+          <div class="form-group">
+            <label for="inspect-h">Alto (Height):</label>
+            <input type="number" step="0.5" id="inspect-h" class="form-input" value="${el.h}" oninput="updateActiveElementParam('h', parseFloat(this.value))">
+          </div>
+        </div>
+
+        <!-- Section 2: Aesthetics layout styles -->
+        <div class="inspector-section-title">Diseño y Visuales</div>
+        
+        <div class="form-group" style="margin-bottom: 8px;">
+          <label for="inspect-bg">Color de Fondo:</label>
+          <select id="inspect-bg" class="form-input" onchange="updateActiveElementParam('bg', this.value)">
+            <option value="" ${!el.bg ? 'selected' : ''}>Sin fondo (Transparente)</option>
+            <option value="rgba(10, 15, 30, 0.92)" ${el.bg === 'rgba(10, 15, 30, 0.92)' ? 'selected' : ''}>Esmerilado Oscuro (Glassmorphism)</option>
+            <option value="rgba(15, 23, 42, 0.6)" ${el.bg === 'rgba(15, 23, 42, 0.6)' ? 'selected' : ''}>Esmerilado Transparente</option>
+            <option value="rgba(0, 242, 254, 0.1)" ${el.bg === 'rgba(0, 242, 254, 0.1)' ? 'selected' : ''}>Neon Cyan Glass (0.1)</option>
+            <option value="rgba(139, 92, 246, 0.15)" ${el.bg === 'rgba(139, 92, 246, 0.15)' ? 'selected' : ''}>Violet Glow Glass (0.15)</option>
+            <option value="#031638" ${el.bg === '#031638' ? 'selected' : ''}>Sólido Navy Azul</option>
+            <option value="linear-gradient(135deg, rgba(0, 242, 254, 0.1), rgba(139, 92, 246, 0.15))" ${el.bg && el.bg.includes('linear-gradient') ? 'selected' : ''}>Gradiente Cyan-Violeta</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 8px;">
+          <label for="inspect-border">Estilo de Borde:</label>
+          <select id="inspect-border" class="form-input" onchange="updateActiveElementParam('border', this.value)">
+            <option value="" ${!el.border ? 'selected' : ''}>Sin Borde</option>
+            <option value="1px solid rgba(0, 242, 254, 0.25)" ${el.border === '1px solid rgba(0, 242, 254, 0.25)' ? 'selected' : ''}>Borde Cyan Delgado</option>
+            <option value="1px solid rgba(139, 92, 246, 0.3)" ${el.border === '1px solid rgba(139, 92, 246, 0.3)' ? 'selected' : ''}>Borde Violeta Delgado</option>
+            <option value="1px solid rgba(255, 255, 255, 0.08)" ${el.border === '1px solid rgba(255, 255, 255, 0.08)' ? 'selected' : ''}>Borde Blanco Sutil</option>
+            <option value="2px solid var(--primary-accent)" ${el.border === '2px solid var(--primary-accent)' ? 'selected' : ''}>Borde Cyan Grueso</option>
+          </select>
+        </div>
+
+        <div class="form-group-row" style="margin-bottom: 8px;">
+          <div class="form-group">
+            <label for="inspect-radius">Esquinas (Radius):</label>
+            <select id="inspect-radius" class="form-input" onchange="updateActiveElementParam('borderRadius', this.value)">
+              <option value="" ${!el.borderRadius ? 'selected' : ''}>Rectas (0px)</option>
+              <option value="6px" ${el.borderRadius === '6px' ? 'selected' : ''}>Redondeado S (6px)</option>
+              <option value="12px" ${el.borderRadius === '12px' ? 'selected' : ''}>Redondeado M (12px - Defecto)</option>
+              <option value="24px" ${el.borderRadius === '24px' ? 'selected' : ''}>Redondeado L (24px)</option>
+              <option value="50px" ${el.borderRadius === '50px' ? 'selected' : ''}>Total (Píldora)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="inspect-padding">Relleno (Padding):</label>
+            <select id="inspect-padding" class="form-input" onchange="updateActiveElementParam('padding', this.value)">
+              <option value="" ${!el.padding ? 'selected' : ''}>Sin Relleno</option>
+              <option value="10px" ${el.padding === '10px' ? 'selected' : ''}>Pequeño (10px)</option>
+              <option value="15px" ${el.padding === '15px' ? 'selected' : ''}>Medio (15px)</option>
+              <option value="24px" ${el.padding === '24px' ? 'selected' : ''}>Grande (24px)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group-row" style="margin-bottom: 12px;">
+          <div class="form-group">
+            <label for="inspect-font">Tamaño Fuente (em):</label>
+            <input type="text" id="inspect-font" class="form-input" placeholder="e.g. 0.6em" value="${el.fontSize || ''}" oninput="updateActiveElementParam('fontSize', this.value)">
+          </div>
+          <div class="form-group">
+            <label for="inspect-align">Alineación:</label>
+            <select id="inspect-align" class="form-input" onchange="updateActiveElementParam('textAlign', this.value)">
+              <option value="" ${!el.textAlign ? 'selected' : ''}>Por Defecto</option>
+              <option value="left" ${el.textAlign === 'left' ? 'selected' : ''}>Izquierda</option>
+              <option value="center" ${el.textAlign === 'center' ? 'selected' : ''}>Centrado</option>
+              <option value="right" ${el.textAlign === 'right' ? 'selected' : ''}>Derecha</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Section 3: Animations & transitions -->
+        <div class="inspector-section-title">Efectos de la Animación (RevealJS)</div>
+        
+        <div class="form-group-row" style="margin-bottom: 8px;">
+          <div class="form-group" style="grid-column: span 2;">
+            <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+              <input type="checkbox" id="inspect-fragment" ${el.fragment ? 'checked' : ''} onchange="updateActiveElementParam('fragment', this.checked)">
+              Aparecer Secuencial (Fragmento)
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group-row" style="margin-bottom: 8px;">
+          <div class="form-group">
+            <label for="inspect-frag-trans">Efecto Fragmento:</label>
+            <select id="inspect-frag-trans" class="form-input" ${!el.fragment ? 'disabled' : ''} onchange="updateActiveElementParam('fragmentTransition', this.value)">
+              <option value="fade-up" ${el.fragmentTransition === 'fade-up' ? 'selected' : ''}>fade-up (Defecto)</option>
+              <option value="fade-down" ${el.fragmentTransition === 'fade-down' ? 'selected' : ''}>fade-down</option>
+              <option value="fade-left" ${el.fragmentTransition === 'fade-left' ? 'selected' : ''}>fade-left</option>
+              <option value="fade-right" ${el.fragmentTransition === 'fade-right' ? 'selected' : ''}>fade-right</option>
+              <option value="zoom-in" ${el.fragmentTransition === 'zoom-in' ? 'selected' : ''}>zoom-in</option>
+              <option value="zoom-out" ${el.fragmentTransition === 'zoom-out' ? 'selected' : ''}>zoom-out</option>
+              <option value="flip-in" ${el.fragmentTransition === 'flip-in' ? 'selected' : ''}>flip-in</option>
+              <option value="semi-out" ${el.fragmentTransition === 'semi-out' ? 'selected' : ''}>fade-out</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="inspect-frag-index">Secuencia (Index):</label>
+            <input type="number" id="inspect-frag-index" class="form-input" ${!el.fragment ? 'disabled' : ''} value="${el.fragmentIndex !== undefined ? el.fragmentIndex : ''}" oninput="updateActiveElementParam('fragmentIndex', this.value === '' ? undefined : parseInt(this.value))">
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label for="inspect-loop-anim">Animación Loop Infinita:</label>
+          <select id="inspect-loop-anim" class="form-input" onchange="updateActiveElementParam('animation', this.value)">
+            <option value="" ${!el.animation ? 'selected' : ''}>Sin animación</option>
+            <option value="float" ${el.animation === 'float' ? 'selected' : ''}>Flotar suave (floatNode)</option>
+            <option value="pulse" ${el.animation === 'pulse' ? 'selected' : ''}>Latido cardíaco (pulseCore)</option>
+            <option value="glow" ${el.animation === 'glow' ? 'selected' : ''}>Resplandor respiratorio (pulseGlow)</option>
+            <option value="shimmer" ${el.animation === 'shimmer' ? 'selected' : ''}>Efecto metálico (titleShimmer)</option>
+          </select>
+        </div>
+
+        <!-- Section 4: Inner raw HTML content -->
+        <div class="inspector-section-title">Contenido HTML / Texto</div>
+        <div class="form-group" style="margin-bottom: 10px;">
+          <textarea id="inspect-content" class="form-input form-textarea" oninput="updateActiveElementParam('content', this.value)">${el.content}</textarea>
+        </div>
+        
+        <button class="btn btn-secondary" style="border-color: var(--neon-pink); color: #fff; background: rgba(255, 0, 127, 0.05); justify-content: center;" onclick="deleteActiveElement()">
+          🗑️ Eliminar Elemento
+        </button>
+      `;
+    }
+
+    // Dynamic element properties updates
+    function updateActiveElementParam(param, value) {
+      const activeSlide = slides[activeSlideIndex];
+      if (activeSlide.type !== 'custom' || activeElementIndex === null) return;
+
+      const el = activeSlide.elements[activeElementIndex];
+      el[param] = value;
+
+      // Realtime inline coordinate sync
+      const canvasEl = slideCanvas.querySelectorAll('.canvas-element')[activeElementIndex];
+      if (canvasEl) {
+        if (param === 'x') canvasEl.style.left = `${value}%`;
+        if (param === 'y') canvasEl.style.top = `${value}%`;
+        if (param === 'w') canvasEl.style.width = `${value}%`;
+        if (param === 'h') canvasEl.style.height = `${value}%`;
+        if (param === 'bg') canvasEl.style.background = value;
+        if (param === 'border') canvasEl.style.border = value;
+        if (param === 'borderRadius') canvasEl.style.borderRadius = value;
+        if (param === 'padding') canvasEl.style.padding = value;
+        if (param === 'textAlign') canvasEl.style.textAlign = value;
+        if (param === 'fontSize') canvasEl.style.fontSize = value;
+        if (param === 'content') canvasEl.innerHTML = value;
+
+        // Re-inject resize handle if selected and content changed
+        if (param === 'content') {
+          const handle = document.createElement('div');
+          handle.className = 'resize-handle';
+          handle.addEventListener('mousedown', (e) => startResize(e, activeElementIndex));
+          handle.addEventListener('touchstart', (e) => startResize(e, activeElementIndex), { passive: false });
+          canvasEl.appendChild(handle);
+        }
+
+        // Loop animation utility classes
+        if (param === 'animation') {
+          // Remove previous animation classes
+          canvasEl.classList.remove('animation-float', 'animation-pulse', 'animation-glow', 'animation-shimmer');
+          if (value) canvasEl.classList.add(`animation-${value}`);
+        }
+      }
+
+      // Update sidebar slides list coordinates counter in background
+      renderSlidesNavigator();
+      syncPreviewIframe();
+    }
+
+    // =========================================================================
+    // 🖱️ MOUSE DRAG & RESIZE ENGINE (Percentage coordinate mapper)
+    // =========================================================================
+    function startDrag(e, index) {
+      // Ignore if resize handle clicked
+      if (e.target.classList.contains('resize-handle')) return;
+      
+      e.preventDefault();
+      activeElementIndex = index;
+      
+      // Update Selection
+      renderInteractiveCanvas();
+      renderInspector();
+
+      const el = slides[activeSlideIndex].elements[index];
+      activeDragElement = slideCanvas.querySelectorAll('.canvas-element')[index];
+      
+      isDragging = true;
+      
+      // Parse multi-touch touchpoints or clicks
+      const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+      const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+
+      dragStartX = clientX;
+      dragStartY = clientY;
+
+      // Extract coordinates from style directly (percentages)
+      dragStartLeft = parseFloat(activeDragElement.style.left);
+      dragStartTop = parseFloat(activeDragElement.style.top);
+
+      document.addEventListener('mousemove', dragMove);
+      document.addEventListener('mouseup', dragEnd);
+      document.addEventListener('touchmove', dragMove, { passive: false });
+      document.addEventListener('touchend', dragEnd);
+    }
+
+    function dragMove(e) {
+      if (!isDragging || !activeDragElement) return;
+      e.preventDefault();
+
+      const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+      const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+
+      const dx = clientX - dragStartX;
+      const dy = clientY - dragStartY;
+
+      // Convert pixel delta shifts to canvas percentage metrics
+      const canvasWidth = slideCanvas.offsetWidth;
+      const canvasHeight = slideCanvas.offsetHeight;
+
+      const pctDx = (dx / canvasWidth) * 100;
+      const pctDy = (dy / canvasHeight) * 100;
+
+      let newLeft = dragStartLeft + pctDx;
+      let newTop = dragStartTop + pctDy;
+
+      // Constrain coordinates bounds (0 to 100) and round to 1 decimal place
+      newLeft = Math.max(0, Math.min(100 - parseFloat(activeDragElement.style.width), newLeft));
+      newTop = Math.max(0, Math.min(100 - parseFloat(activeDragElement.style.height), newTop));
+
+      newLeft = Math.round(newLeft * 10) / 10;
+      newTop = Math.round(newTop * 10) / 10;
+
+      // Apply dynamically
+      activeDragElement.style.left = `${newLeft}%`;
+      activeDragElement.style.top = `${newTop}%`;
+
+      // Update state data structures
+      const el = slides[activeSlideIndex].elements[activeElementIndex];
+      el.x = newLeft;
+      el.y = newTop;
+
+      // Feed inspector fields
+      const inputX = document.getElementById('inspect-x');
+      const inputY = document.getElementById('inspect-y');
+      if (inputX) inputX.value = newLeft;
+      if (inputY) inputY.value = newTop;
+    }
+
+    function dragEnd() {
+      if (isDragging) {
+        isDragging = false;
+        document.removeEventListener('mousemove', dragMove);
+        document.removeEventListener('mouseup', dragEnd);
+        document.removeEventListener('touchmove', dragMove);
+        document.removeEventListener('touchend', dragEnd);
+        
+        syncPreviewIframe();
+      }
+    }
+
+    // Resize Engine
+    function startResize(e, index) {
+      e.stopPropagation();
+      e.preventDefault();
+      
+      activeElementIndex = index;
+      activeDragElement = slideCanvas.querySelectorAll('.canvas-element')[index];
+      isResizing = true;
+
+      const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+      const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+
+      dragStartX = clientX;
+      dragStartY = clientY;
+
+      dragStartWidth = parseFloat(activeDragElement.style.width);
+      dragStartHeight = parseFloat(activeDragElement.style.height);
+
+      document.addEventListener('mousemove', resizeMove);
+      document.addEventListener('mouseup', resizeEnd);
+      document.addEventListener('touchmove', resizeMove, { passive: false });
+      document.addEventListener('touchend', resizeEnd);
+    }
+
+    function resizeMove(e) {
+      if (!isResizing || !activeDragElement) return;
+      e.preventDefault();
+
+      const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+      const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+
+      const dx = clientX - dragStartX;
+      const dy = clientY - dragStartY;
+
+      const canvasWidth = slideCanvas.offsetWidth;
+      const canvasHeight = slideCanvas.offsetHeight;
+
+      const pctDw = (dx / canvasWidth) * 100;
+      const pctDh = (dy / canvasHeight) * 100;
+
+      let newWidth = dragStartWidth + pctDw;
+      let newHeight = dragStartHeight + pctDh;
+
+      // Minimum sizing block bounds
+      newWidth = Math.max(5, Math.min(100 - parseFloat(activeDragElement.style.left), newWidth));
+      newHeight = Math.max(5, Math.min(100 - parseFloat(activeDragElement.style.top), newHeight));
+
+      newWidth = Math.round(newWidth * 10) / 10;
+      newHeight = Math.round(newHeight * 10) / 10;
+
+      activeDragElement.style.width = `${newWidth}%`;
+      activeDragElement.style.height = `${newHeight}%`;
+
+      const el = slides[activeSlideIndex].elements[activeElementIndex];
+      el.w = newWidth;
+      el.h = newHeight;
+
+      const inputW = document.getElementById('inspect-w');
+      const inputH = document.getElementById('inspect-h');
+      if (inputW) inputW.value = newWidth;
+      if (inputH) inputH.value = newHeight;
+    }
+
+    function resizeEnd() {
+      if (isResizing) {
+        isResizing = false;
+        document.removeEventListener('mousemove', resizeMove);
+        document.removeEventListener('mouseup', resizeEnd);
+        document.removeEventListener('touchmove', resizeMove);
+        document.removeEventListener('touchend', resizeEnd);
+        
+        syncPreviewIframe();
+      }
+    }
+
+    // =========================================================================
+    // 🖥️ SEGMENTED PREVIEW SYNC & VIEWPORT CONTROLS
+    // =========================================================================
+    function setViewMode(mode) {
+      viewMode = mode;
+      
+      const btnCanvas = document.getElementById('view-mode-canvas');
+      const btnSplit = document.getElementById('view-mode-split');
+      const btnPreview = document.getElementById('view-mode-preview');
+      
+      const canvasContainer = document.getElementById('canvas-panel-container');
+      const iframeContainer = document.getElementById('iframe-preview-pane');
+
+      // Reset Active Highlights
+      btnCanvas.classList.remove('active');
+      btnSplit.classList.remove('active');
+      btnPreview.classList.remove('active');
+
+      if (mode === 'canvas') {
+        btnCanvas.classList.add('active');
+        canvasContainer.style.display = 'flex';
+        iframeContainer.style.display = 'none';
+      } else if (mode === 'split') {
+        btnSplit.classList.add('active');
+        canvasContainer.style.display = 'flex';
+        iframeContainer.style.display = 'flex';
+      } else if (mode === 'preview') {
+        btnPreview.classList.add('active');
+        canvasContainer.style.display = 'none';
+        iframeContainer.style.display = 'flex';
+        iframeContainer.style.width = '100%'; // Full stretch
+      }
+
+      // Readjust sizes
+      if (mode === 'split') {
+        iframeContainer.style.width = '480px';
+      }
+      
+      syncPreviewIframe();
+    }
+
+    // Sync state data directly to iframe via postMessage
+    function syncPreviewIframe() {
+      const iframe = document.getElementById('preview-iframe');
+      if (iframe && iframe.contentWindow) {
+        iframe.contentWindow.postMessage({
+          type: 'update-slides',
+          data: slides,
+          activeIndex: activeSlideIndex
+        }, '*');
+      }
+    }
+
+    function reloadPreviewFrame() {
+      const iframe = document.getElementById('preview-iframe');
+      if (iframe) {
+        iframe.src = 'index.html';
+        showToast('Recargando iframe...', '🔄');
+        iframe.onload = () => {
+          syncPreviewIframe();
+        };
+      }
+    }
+
+    // =========================================================================
+    // 💾 HTML CODE SERIALIZATION WRITER & PUBLISHING
+    // =========================================================================
+    function compileUpdatedPresentationHtml() {
+      if (!indexHtmlContent) {
+        throw new Error('La plantilla base index.html no está cargada.');
+      }
+
+      const indent = '    ';
+      const formattedJson = JSON.stringify(slides, null, 2)
+        .replace(/\n/g, '\n' + indent);
+      
+      // Surgical replacement mapping the approved RegExp
+      const updatedHtml = indexHtmlContent.replace(
+        /(const\s+SLIDES_DATA\s*=\s*)\[[\s\S]*?\](\;\s*\/\/\s*DYNAMIC RENDERER FUNCTION)/,
+        `$1${formattedJson}$2`
+      );
+
+      return updatedHtml;
+    }
+
+    // Trigger local memory Blob download
+    function downloadUpdatedHtml() {
+      try {
+        const updatedHtml = compileUpdatedPresentationHtml();
+        
+        const blob = new Blob([updatedHtml], { type: 'text/html;charset=utf-8' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'index.html';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        showToast('Descarga generada con éxito.', '💾');
+      } catch (err) {
+        console.error('Failed to compile HTML:', err);
+        showToast('Error al compilar el index.html.', '❌');
+      }
+    }
+
+    // =========================================================================
+    // 📁 MECANISMO LOCAL: FILE SYSTEM DIRECTORY ACCESS API
+    // =========================================================================
+    async function triggerDirectoryPicker() {
+      try {
+        localDirectoryHandle = await window.showDirectoryPicker();
+        
+        // Find index.html file handle
+        try {
+          localFileHandle = await localDirectoryHandle.getFileHandle('index.html', { create: false });
+          const file = await localFileHandle.getFile();
+          indexHtmlContent = await file.text();
+          
+          extractSlidesData(indexHtmlContent);
+          
+          // Toggle local status markers
+          localStatusBadge.textContent = '📁 Local: Conectado';
+          localStatusBadge.classList.add('success');
+          btnSaveDisk.style.display = 'inline-flex';
+          
+          showToast('Directorio local vinculado con éxito.', '📁');
+        } catch (fileErr) {
+          console.error(fileErr);
+          showToast('No se encontró el index.html en el directorio seleccionado.', '⚠️', 4500);
+        }
+      } catch (err) {
+        console.error('Local File System Access Rejected:', err);
+        showToast('Acceso denegado o cancelado.', '❌');
+      }
+    }
+
+    async function saveChangesLocally() {
+      if (!localFileHandle) {
+        showToast('Vincule un directorio local primero.', '⚠️');
+        return;
+      }
+
+      try {
+        const updatedHtml = compileUpdatedPresentationHtml();
+        
+        // Write to local disk directly
+        const writable = await localFileHandle.createWritable();
+        await writable.write(updatedHtml);
+        await writable.close();
+
+        indexHtmlContent = updatedHtml; // Update memory buffer
+        showToast('Cambios escritos en disco local.', '💾');
+        reloadPreviewFrame();
+      } catch (err) {
+        console.error('Local disk write error:', err);
+        showToast('Fallo al escribir en el disco local.', '❌');
+      }
+    }
+
+    // =========================================================================
+    // 🚀 GITHUB PUBLISHING API (Zero Server REST API Commit Push)
+    // =========================================================================
+    function saveGithubSettings() {
+      const pat = inputGithubPat.value.trim();
+      const repo = inputGithubRepo.value.trim();
+      
+      if (!pat || !repo) {
+        showToast('Favor rellenar todos los campos.', '⚠️');
+        return;
+      }
+
+      localStorage.setItem('github_pat', pat);
+      localStorage.setItem('github_repo', repo);
+
+      githubStatusBadge.textContent = '🌐 GitHub: Autenticado';
+      githubStatusBadge.classList.add('success');
+      
+      document.getElementById('modal-github').style.display = 'none';
+      showToast('Credenciales de GitHub guardadas.', '🔑');
+    }
+
+    async function publishToGithub() {
+      const pat = localStorage.getItem('github_pat') || inputGithubPat.value.trim();
+      const repo = localStorage.getItem('github_repo') || inputGithubRepo.value.trim();
+      const commitMsg = inputGithubCommit.value.trim() || 'Modificación desde Editor Avanzado Canvas';
+
+      if (!pat || !repo) {
+        document.getElementById('modal-github').style.display = 'flex';
+        showToast('Por favor introduce tus credenciales de GitHub.', '⚠️');
+        return;
+      }
+
+      showToast('Obteniendo metadatos de GitHub...', '🌐', 5000);
+
+      try {
+        const compiledHtml = compileUpdatedPresentationHtml();
+        const base64Content = btoa(unescape(encodeURIComponent(compiledHtml)));
+
+        const getUrl = `https://api.github.com/repos/${repo}/contents/index.html`;
+        let sha = '';
+        let currentRemoteContent = '';
+
+        // Retrieve file SHA metadata from GitHub API
+        const getRes = await fetch(getUrl, {
+          headers: {
+            'Authorization': `token ${pat}`,
+            'Accept': 'application/vnd.github.v3+json'
+          }
+        });
+
+        if (getRes.ok) {
+          const fileData = await getRes.json();
+          sha = fileData.sha;
+          currentRemoteContent = decodeURIComponent(escape(atob(fileData.content)));
+        } else if (getRes.status !== 404) {
+          throw new Error(`Respuesta inválida de GitHub API: ${getRes.statusText}`);
+        }
+
+        // Align local buffer with remote if sync is requested
+        if (currentRemoteContent) {
+          indexHtmlContent = currentRemoteContent;
+        }
+
+        const putUrl = `https://api.github.com/repos/${repo}/contents/index.html`;
+        const bodyData = {
+          message: commitMsg,
+          content: base64Content,
+          branch: 'main'
+        };
+        if (sha) bodyData.sha = sha;
+
+        showToast('Publicando cambios en GitHub Pages...', '🚀', 6000);
+
+        const putRes = await fetch(putUrl, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `token ${pat}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/vnd.github.v3+json'
+          },
+          body: JSON.stringify(bodyData)
+        });
+
+        if (putRes.ok) {
+          githubStatusBadge.textContent = '🌐 GitHub: Sincronizado';
+          githubStatusBadge.classList.add('success');
+          showToast('¡Presentación publicada con éxito en GitHub!', '🚀');
+          
+          // Clear commit inputs back to default
+          inputGithubCommit.value = 'Modificación desde Editor Avanzado Canvas';
+          reloadPreviewFrame();
+        } else {
+          const errData = await putRes.json();
+          console.error(errData);
+          showToast(`Error al subir a GitHub: ${errData.message || putRes.statusText}`, '❌', 6000);
+        }
+      } catch (err) {
+        console.error('GitHub publishing failed:', err);
+        showToast(`Fallo al publicar: ${err.message}`, '❌', 6000);
+      }
+    }
+
+    // Start-up triggers
+    window.onload = () => {
+      loadPresentationOnStart();
+      
+      // Auto-sync preview iframe once fully loaded
+      const iframe = document.getElementById('preview-iframe');
+      iframe.onload = () => {
+        syncPreviewIframe();
+      };
+    };
+  </script>
+</body>
+</html>

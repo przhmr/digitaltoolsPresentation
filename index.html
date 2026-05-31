@@ -940,6 +940,33 @@
       transform: translateY(-2px) scale(1.03) !important;
     }
 
+    /* Core loop animation utility classes for freeform elements */
+    .animation-float {
+      animation: floatNode 4.5s ease-in-out infinite alternate;
+    }
+    .animation-pulse {
+      animation: pulseCore 2.5s ease-in-out infinite;
+    }
+    .animation-glow {
+      animation: pulseGlow 2.2s infinite alternate ease-in-out;
+    }
+    .animation-shimmer {
+      background: linear-gradient(120deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.18) 40%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0.18) 60%, rgba(255,255,255,0) 70%);
+      background-size: 200% auto;
+      animation: titleShimmer 3.5s linear infinite;
+    }
+    
+    @keyframes pulseGlow {
+      0% {
+        box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+        border-color: rgba(0, 242, 254, 0.3);
+      }
+      100% {
+        box-shadow: 0 0 30px rgba(0, 242, 254, 0.6);
+        border-color: rgba(0, 242, 254, 1);
+      }
+    }
+
     @media print {
       body, .reveal, .reveal-viewport, .reveal .slides, .reveal section {
         background-color: #030f26 !important;
@@ -1675,6 +1702,49 @@
                   </div>
                 </div>
               </div>
+        } else if (slide.type === 'custom') {
+          const elementsHtml = (slide.elements || []).map(el => {
+            const styles = [
+              `position: absolute`,
+              `left: ${el.x}%`,
+              `top: ${el.y}%`,
+              `width: ${el.w}%`,
+              `height: ${el.h}%`,
+              el.color ? `color: ${el.color}` : '',
+              el.bg ? `background: ${el.bg}` : '',
+              el.border ? `border: ${el.border}` : '',
+              el.fontSize ? `font-size: ${el.fontSize}` : '',
+              el.padding ? `padding: ${el.padding}` : '',
+              el.borderRadius ? `border-radius: ${el.borderRadius}` : '',
+              el.textAlign ? `text-align: ${el.textAlign}` : '',
+              el.zIndex ? `z-index: ${el.zIndex}` : '',
+              el.extraStyle || ''
+            ].filter(Boolean).join('; ');
+
+            let fragmentClass = '';
+            let fragmentAttr = '';
+            if (el.fragment) {
+              fragmentClass = 'fragment ' + (el.fragmentTransition || 'fade-up');
+              if (el.fragmentIndex !== undefined) {
+                fragmentAttr = `data-fragment-index="${el.fragmentIndex}"`;
+              }
+            }
+
+            const animationClass = el.animation ? `animation-${el.animation}` : '';
+            const combinedClass = [fragmentClass, animationClass, el.className || ''].filter(Boolean).join(' ');
+
+            return `
+              <div class="${combinedClass}" style="${styles}" ${fragmentAttr}>
+                ${el.content}
+              </div>
+            `;
+          }).join('');
+
+          const transitionAttr = slide.transition ? `data-transition="${slide.transition}"` : 'data-transition="convex-in fade-out"';
+          
+          return `
+            <section ${transitionAttr} style="position: relative; width: 100%; height: 100%;">
+              ${elementsHtml}
             </section>
           `;
         } else if (slide.type === 'farewell') {
