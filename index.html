@@ -580,16 +580,25 @@
       z-index: -1;
     }
 
-    /* Ultra-sleek, clean comparison table */
+    /* Ultra-sleek, clean comparison table wrapper */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 16px;
+      border: 1px solid var(--glass-border);
+      background: rgba(10, 15, 30, 0.45);
+      backdrop-filter: blur(12px);
+      box-shadow: var(--card-shadow);
+      margin-bottom: 10px;
+    }
+
     .custom-table {
       width: 100%;
       border-collapse: collapse;
-      background: rgba(10, 15, 30, 0.4);
-      backdrop-filter: blur(12px);
-      border-radius: 16px;
-      overflow: hidden;
-      border: 1px solid var(--glass-border);
+      border: none;
       font-size: 0.52em !important;
+      margin: 0 !important;
     }
 
     .custom-table th {
@@ -1321,46 +1330,48 @@
           Una vista simplificada de los principales beneficios de las tres herramientas analizadas:
         </p>
         
-        <table class="custom-table fragment fade-in" data-fragment-index="1">
-          <thead>
-            <tr>
-              <th style="width: 22%;">Criterio</th>
-              <th style="width: 26%;">Google Sheets</th>
-              <th style="width: 26%;">Lucidchart</th>
-              <th style="width: 26%;">NotebookLM</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Propósito Principal</strong></td>
-              <td>Organizar y analizar datos tabulares.</td>
-              <td>Diseñar diagramas y flujos visuales.</td>
-              <td>Sintetizar y consultar documentos con IA.</td>
-            </tr>
-            <tr>
-              <td><strong>¿Cómo te ayuda?</strong></td>
-              <td>Realiza cálculos rápidos y lleva un control ordenado.</td>
-              <td>Permite estructurar ideas y planificar proyectos.</td>
-              <td>Facilita el estudio de libros y lecturas extensas.</td>
-            </tr>
-            <tr>
-              <td><strong>Punto Fuerte</strong></td>
-              <td>Trabajo en equipo y fórmulas en tiempo real.</td>
-              <td>Lienzo interactivo muy intuitivo (arrastrar y soltar).</td>
-              <td>Respuestas confiables basadas sólo en tus propios PDFs.</td>
-            </tr>
-            <tr>
-              <td><strong>Facilidad de Uso</strong></td>
-              <td>Alta (Familiar para todos).</td>
-              <td>Alta (Sencillo de aprender).</td>
-              <td>Excelente (Se conversa en lenguaje natural).</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-container fragment fade-in" data-fragment-index="1">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th style="width: 22%;">Criterio</th>
+                <th style="width: 26%;">Google Sheets</th>
+                <th style="width: 26%;">Lucidchart</th>
+                <th style="width: 26%;">NotebookLM</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Propósito Principal</strong></td>
+                <td>Organizar y analizar datos tabulares.</td>
+                <td>Diseñar diagramas y flujos visuales.</td>
+                <td>Sintetizar y consultar documentos con IA.</td>
+              </tr>
+              <tr>
+                <td><strong>¿Cómo te ayuda?</strong></td>
+                <td>Realiza cálculos rápidos y lleva un control ordenado.</td>
+                <td>Permite estructurar ideas y planificar proyectos.</td>
+                <td>Facilita el estudio de libros y lecturas extensas.</td>
+              </tr>
+              <tr>
+                <td><strong>Punto Fuerte</strong></td>
+                <td>Trabajo en equipo y fórmulas en tiempo real.</td>
+                <td>Lienzo interactivo muy intuitivo (arrastrar y soltar).</td>
+                <td>Respuestas confiables basadas sólo en tus propios PDFs.</td>
+              </tr>
+              <tr>
+                <td><strong>Facilidad de Uso</strong></td>
+                <td>Alta (Familiar para todos).</td>
+                <td>Alta (Sencillo de aprender).</td>
+                <td>Excelente (Se conversa en lenguaje natural).</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
         <div class="heat-row fragment fade-up" data-fragment-index="2">
           <div class="heat-pill" style="--fill: 78%;">Sheets: datos</div>
-          <div class="heat-pill" style="--fill: 78%;">Lucidchart: procesos</div>
+          <div class="heat-pill" style="--fill: 78%;">Lucidchart: diagramas</div>
           <div class="heat-pill" style="--fill: 78%;">NotebookLM: fuentes</div>
         </div>
       </section>
