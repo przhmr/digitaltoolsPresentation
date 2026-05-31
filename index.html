@@ -2787,18 +2787,31 @@
       if (e.key === 'g' || e.key === 'G') {
         if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
 
+        // Prevent RevealJS from capturing or overriding this hotkey!
+        e.preventDefault();
+        e.stopPropagation();
+
         const pipContainer = document.getElementById('camera-mic-pip');
         const videoEl = document.getElementById('webcam-stream');
         if (!pipContainer || !videoEl) return;
 
         if (!webcamStream) {
           try {
-            // Request both video and audio
+            // Request both video and audio with a user gesture
             webcamStream = await navigator.mediaDevices.getUserMedia({ 
-              video: { width: 300, height: 300 }, 
+              video: { width: 320, height: 320, facingMode: "user" }, 
               audio: true 
             });
+            
+            // Programmatically ensure autoplay attributes are loaded
+            videoEl.setAttribute('autoplay', '');
+            videoEl.setAttribute('playsinline', '');
+            videoEl.muted = true;
             videoEl.srcObject = webcamStream;
+            
+            // Play stream instantly
+            await videoEl.play().catch(ev => console.log("Play interrupted:", ev));
+            
             pipContainer.style.display = 'flex';
             console.log("🎥 Webcam and mic activated successfully!");
           } catch (err) {
@@ -2814,7 +2827,7 @@
           console.log("🎥 Webcam and mic deactivated.");
         }
       }
-    });
+    }, true); // Use capture phase to intercept RevealJS keystrokes!
 
     // Automatically open the print dialog when ?print-pdf is in the URL
     if (window.location.search.match(/print-pdf/gi)) {
