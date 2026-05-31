@@ -10,6 +10,9 @@ const DEFAULT_SUPABASE_URL = "https://wsmktslxrgnoxzpycymj.supabase.co";
 const DEFAULT_SUPABASE_ANON_KEY = "sb_publishable__pV5l2sQPXzWwx90UsQTrw_PKRwzFm1";
 
 window.addEventListener('DOMContentLoaded', async () => {
+  // Clean up legacy localStorage credentials if any exist
+  localStorage.removeItem('team_auth_password');
+
   // Read config from hardcoded constants or local storage override (if any)
   const cachedUrl = localStorage.getItem('supabase_url');
   const cachedKey = localStorage.getItem('supabase_anon_key');
@@ -85,8 +88,9 @@ window.addEventListener('DOMContentLoaded', async () => {
       }
 
       if (password === data.value) {
-        // Cached in localStorage for seamless transparent auto-login next time
-        localStorage.setItem('team_auth_password', password);
+        // Cached in sessionStorage for browser session lifetime
+        sessionStorage.setItem('team_auth_password', password);
+        sessionStorage.setItem('team_auth_last_activity', Date.now().toString());
         unlockEditor();
       } else {
         btn.disabled = false;
@@ -101,12 +105,13 @@ window.addEventListener('DOMContentLoaded', async () => {
   };
 
   window.logoutTeamSession = function() {
-    localStorage.removeItem('team_auth_password');
+    sessionStorage.removeItem('team_auth_password');
+    sessionStorage.removeItem('team_auth_last_activity');
     window.location.reload();
   };
 
-  // Check if password already stored in local storage
-  const cachedPassword = localStorage.getItem('team_auth_password');
+  // Check if password already stored in session storage
+  const cachedPassword = sessionStorage.getItem('team_auth_password');
   if (cachedPassword) {
     try {
       const { data, error } = await supabaseClient
@@ -339,5 +344,39 @@ window.addEventListener('DOMContentLoaded', async () => {
       }
     `;
     document.head.appendChild(style);
+  }
+
+  // Start Idle Tracker
+  setupIdleTracker();
+
+  // --- 🛡️ Detección Global de Inactividad (30 Minutos) ---
+  function setupIdleTracker() {
+    // Interceptar interacciones del usuario
+    const activityEvents = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart', 'click'];
+    activityEvents.forEach(eventType => {
+      document.addEventListener(eventType, () => {
+        if (sessionStorage.getItem('team_auth_password')) {
+          sessionStorage.setItem('team_auth_last_activity', Date.now().toString());
+        }
+      }, { capture: true, passive: true });
+    });
+
+    // Comprobador periódico cada 10 segundos
+    setInterval(() => {
+      if (!sessionStorage.getItem('team_auth_password')) return;
+
+      const lastActivity = parseFloat(sessionStorage.getItem('team_auth_last_activity') || '0');
+      if (!lastActivity) {
+        sessionStorage.setItem('team_auth_last_activity', Date.now().toString());
+        return;
+      }
+
+      if (Date.now() - lastActivity >= 30 * 60 * 1000) {
+        sessionStorage.removeItem('team_auth_password');
+        sessionStorage.removeItem('team_auth_last_activity');
+        alert("Tu sesión ha expirado por inactividad de 30 minutos. Por favor, introduce la contraseña de nuevo.");
+        window.location.reload();
+      }
+    }, 10000);
   }
 });
