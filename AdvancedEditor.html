@@ -196,6 +196,14 @@
       display: flex;
       flex-direction: column;
       flex-shrink: 0;
+      transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+
+    .sidebar.collapsed {
+      width: 0 !important;
+      border-right: none !important;
+      overflow: hidden !important;
     }
 
     /* Sidebar Segmented Tabs */
@@ -827,6 +835,53 @@
       flex-direction: column;
       flex-shrink: 0;
       overflow-y: auto;
+      transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-left 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+
+    .inspector.collapsed {
+      width: 0 !important;
+      border-left: none !important;
+      overflow: hidden !important;
+    }
+
+    /* Panel collapse chevron buttons styled like vertical glass tabs */
+    .panel-toggle-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 14px;
+      height: 60px;
+      background: rgba(3, 10, 28, 0.85);
+      border: 1px solid var(--glass-border);
+      color: var(--primary-accent);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.52rem;
+      z-index: 1000;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      user-select: none;
+    }
+
+    .left-toggle {
+      left: 0;
+      border-radius: 0 8px 8px 0;
+      border-left: none;
+    }
+
+    .right-toggle {
+      right: 0;
+      border-radius: 8px 0 0 8px;
+      border-right: none;
+    }
+
+    .panel-toggle-btn:hover {
+      background: var(--primary-accent);
+      color: var(--bg-darker);
+      box-shadow: 0 0 12px rgba(0, 242, 254, 0.55);
     }
 
     .inspector-header {
@@ -1153,6 +1208,10 @@
         
         <!-- Canvas Drag Area -->
         <div class="canvas-panel" id="canvas-panel-container">
+          
+          <!-- Collapsible Panel Toggle Handles (Figma-Style Glass Chevrons) -->
+          <button id="toggle-left-btn" class="panel-toggle-btn left-toggle" title="Contraer/Expandir Panel Izquierdo" onclick="toggleLeftSidebar()">◀</button>
+          <button id="toggle-right-btn" class="panel-toggle-btn right-toggle" title="Contraer/Expandir Inspector Derecho" onclick="toggleRightSidebar()">▶</button>
           
           <!-- Element Toolbar Selector (Only visible on Custom Slides) -->
           <div class="canvas-toolbar" id="canvas-toolbar-panel" style="display: none;">
@@ -1754,6 +1813,37 @@
         renderSlidesNavigator();
         selectSlide(activeSlideIndex);
         showToast('Diapositiva eliminada.', '🗑️');
+      }
+    }
+
+    // Collapsible Panel Controllers (Minimize clunky workspace and maximize viewport focus)
+    function toggleLeftSidebar() {
+      const sidebar = document.querySelector('.sidebar');
+      const toggleBtn = document.getElementById('toggle-left-btn');
+      const isCollapsed = sidebar.classList.toggle('collapsed');
+      
+      if (isCollapsed) {
+        toggleBtn.textContent = '▶';
+        toggleBtn.title = 'Expandir Panel Izquierdo';
+        showToast('Panel izquierdo contraído.', '👁️');
+      } else {
+        toggleBtn.textContent = '◀';
+        toggleBtn.title = 'Contraer Panel Izquierdo';
+      }
+    }
+
+    function toggleRightSidebar() {
+      const inspector = document.querySelector('.inspector');
+      const toggleBtn = document.getElementById('toggle-right-btn');
+      const isCollapsed = inspector.classList.toggle('collapsed');
+      
+      if (isCollapsed) {
+        toggleBtn.textContent = '◀';
+        toggleBtn.title = 'Expandir Inspector Derecho';
+        showToast('Inspector derecho contraído.', '👁️');
+      } else {
+        toggleBtn.textContent = '▶';
+        toggleBtn.title = 'Contraer Inspector Derecho';
       }
     }
 
