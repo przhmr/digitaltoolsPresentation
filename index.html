@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-  <title>Herramientas Digitales en la era 4.0</title>
+  <title>Herramientas Digitales para la Ingeniería</title>
   
-  <meta name="description" content="Presentación de postgrado de alto impacto sobre herramientas digitales en la era 4.0 para ingeniería de procesos.">
+  <meta name="description" content="Presentación de postgrado de alto impacto sobre herramientas digitales en la ingeniería.">
   <meta name="author" content="Ing. Dalia Rojas, Ing. Homer Perozo, Ing. Indiana Salas, Lic. Ruby Medina">
 
   <!-- Google Fonts for Modern Typography -->
@@ -42,6 +42,11 @@
     .reveal {
       font-family: 'Inter', sans-serif !important;
       color: var(--text-color) !important;
+      background: transparent !important;
+    }
+
+    .reveal-viewport, .reveal .backgrounds {
+      background: transparent !important;
     }
 
     /* Headings styling - Startup Keynote feel (Elegant & Refined) */
@@ -55,7 +60,7 @@
 
     /* Cinematic Product Launch Title */
     .reveal h1 {
-      font-size: 2.2em !important;
+      font-size: 2.1em !important;
       line-height: 1.05 !important;
       background: linear-gradient(135deg, #ffffff 40%, var(--primary-accent) 70%, var(--secondary-accent) 100%);
       -webkit-background-clip: text;
@@ -326,6 +331,27 @@
         font-size: 1.4em !important;
       }
     }
+
+    /* Flowing 3D Grid Canvas Styling - Highly Visible Motion Graphics */
+    #network-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.55 !important; /* Made highly visible */
+    }
+    
+    .reveal {
+      position: relative;
+      z-index: 2; /* Content floats cleanly above the animated background */
+    }
+    
+    .reveal section {
+      background: transparent !important;
+    }
   </style>
 </head>
 <body>
@@ -334,7 +360,7 @@
   <div class="glow-bg">
     <div class="glow-blob blob1"></div>
     <div class="glow-blob blob2"></div>
-    <canvas id="network-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; opacity: 0.25;"></canvas>
+    <canvas id="network-canvas"></canvas>
   </div>
 
   <div class="reveal">
@@ -345,9 +371,9 @@
            ======================================================== -->
       <section>
         <div class="glass-card" style="text-align: center; max-width: 950px; margin: 0 auto; border-color: rgba(0, 242, 254, 0.3); padding: 40px;">
-          <h1>Herramientas Digitales en la era 4.0</h1>
+          <h1>Herramientas Digitales</h1>
           <h3 style="font-size: 1.05em; color: var(--muted-text); font-weight: 500; margin-bottom: 40px; letter-spacing: 0.02em;">
-            Optimización, Modelado e Inteligencia Artificial en la Ingeniería de Procesos
+            Optimización, Colaboración e Inteligencia Artificial en el Postgrado
           </h3>
           
           <div class="slide-1-footer" style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 20px; font-size: 0.58em; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 25px;">
@@ -368,76 +394,76 @@
       </section>
 
       <!-- ========================================================
-           SLIDE 2: CATEGORÍAS DEL ECOSISTEMA DIGITAL 4.0
+           SLIDE 2: CATEGORÍAS DEL ECOSISTEMA DIGITAL
            ======================================================== -->
       <section data-transition="slide-in fade-out">
-        <h2>Ecosistema de Categorías 4.0</h2>
-        <p style="font-size: 0.7em; color: var(--muted-text); margin-bottom: 30px; text-align: left; line-height: 1.4;">
-          La transformación digital de la ingeniería se fundamenta en tres categorías clave de herramientas que unifican datos, representaciones visuales y modelos cognitivos de aprendizaje.
+        <h2>Ecosistema de Categorías Digitales</h2>
+        <p style="font-size: 0.75em; color: var(--muted-text); margin-bottom: 30px; text-align: left; line-height: 1.45;">
+          El desarrollo académico y profesional se apoya en tres tipos de herramientas que facilitan el análisis, la organización visual y la gestión de la información.
         </p>
         
         <div class="grid-3">
           <!-- Category 1 -->
           <div class="glass-card fragment fade-up" data-fragment-index="1">
             <div class="stat-number">📊</div>
-            <div class="stat-label">Analítica y Datos</div>
-            <div class="stat-desc" style="margin-top: 8px;"><strong>Google Sheets</strong>: Procesamiento de datos tabulares, base relacional liviana y control estadístico en piso de planta.</div>
+            <div class="stat-label" style="font-size: 0.58em;">Análisis y Organización</div>
+            <div class="stat-desc" style="margin-top: 8px;"><strong>Google Sheets</strong>: Permite ordenar datos, automatizar tareas y compartir hojas de cálculo en equipo al instante.</div>
           </div>
           
           <!-- Category 2 -->
           <div class="glass-card fragment fade-up" data-fragment-index="2">
-            <div class="stat-number">⚙️</div>
-            <div class="stat-label">Modelado Visual</div>
-            <div class="stat-desc" style="margin-top: 8px;"><strong>Lucidchart</strong>: Estandarización visual, mapas de flujo de valor (VSM) y diagramas P&ID conectados a datos activos.</div>
+            <div class="stat-number">✏️</div>
+            <div class="stat-label" style="font-size: 0.58em;">Organización Visual</div>
+            <div class="stat-desc" style="margin-top: 8px;"><strong>Lucidchart</strong>: Facilita el diseño de diagramas, mapas conceptuales y planificación de proyectos paso a paso.</div>
           </div>
           
           <!-- Category 3 -->
           <div class="glass-card fragment fade-up" data-fragment-index="3">
             <div class="stat-number">🤖</div>
-            <div class="stat-label">Cognición e IA</div>
-            <div class="stat-desc" style="margin-top: 8px;"><strong>NotebookLM</strong>: Gestión inteligente del conocimiento, estructuración científica y análisis semántico de normas.</div>
+            <div class="stat-label" style="font-size: 0.58em;">Inteligencia Artificial</div>
+            <div class="stat-desc" style="margin-top: 8px;"><strong>NotebookLM</strong>: Permite resumir lecturas extensas, resolver dudas y sintetizar artículos de estudio.</div>
           </div>
         </div>
       </section>
 
       <!-- ========================================================
-           SLIDE 3: HERRAMIENTA 1 - GOOGLE SHEETS (PILARES TÉCNICOS)
+           SLIDE 3: HERRAMIENTA 1 - GOOGLE SHEETS
            ======================================================== -->
       <section data-transition="slide-in fade-out">
-        <h2>Sheets: Arquitectura y Analítica de Datos</h2>
+        <h2>Google Sheets: Análisis de Datos y Control</h2>
         
         <div class="grid-2">
           <div>
             <p style="text-align: left; margin-bottom: 15px;">
-              Entorno SaaS que opera como una base de datos relacional ligera y motor de cálculo distribuido de alta velocidad.
+              Una hoja de cálculo inteligente en la nube que facilita el análisis de información y el trabajo colaborativo sin instalar programas.
             </p>
             <ul style="font-size: 0.58em; line-height: 1.45;">
               <li class="fragment fade-up" data-fragment-index="1">
-                <strong>SaaS Multi-inquilino:</strong> Cálculo inmediato en los servidores de Google, suprimiendo software y hardware local.
+                <strong>Acceso desde Cualquier Dispositivo:</strong> Consulta y edita tus archivos desde tu celular, tablet o laptop con total sincronización.
               </li>
               <li class="fragment fade-up" data-fragment-index="2">
-                <strong>Algoritmos de Transformación Operacional (OT):</strong> Sincronización multiusuario simultánea sin bloqueos de celdas ni colisiones.
+                <strong>Colaboración en Tiempo Real:</strong> Varios compañeros pueden trabajar sobre el mismo archivo a la vez sin perder información.
               </li>
               <li class="fragment fade-up" data-fragment-index="3">
-                <strong>Gobernanza Rigurosa:</strong> Control de versiones inmutable y auditoría de celdas para prevenir desvíos de datos de ingeniería.
+                <strong>Historial Seguro de Cambios:</strong> Todo cambio se guarda automáticamente. Si hay un error, puedes volver a la versión anterior en un clic.
               </li>
             </ul>
           </div>
           
           <div class="glass-card" style="border-color: rgba(79, 172, 254, 0.3); display: flex; flex-direction: column; justify-content: center; padding: 20px;">
-            <h3 style="font-size: 0.85em; margin-bottom: 12px; text-align: center; color: var(--primary-accent); text-transform: uppercase; letter-spacing: 0.05em;">EXTENSIBILIDAD CLAVE</h3>
+            <h3 style="font-size: 0.85em; margin-bottom: 12px; text-align: center; color: var(--primary-accent); text-transform: uppercase; letter-spacing: 0.05em;">Automatización Práctica</h3>
             
             <div style="background: rgba(15, 23, 42, 0.6); padding: 10px; border-radius: 8px; border: 1px solid rgba(0,242,254,0.1); margin-bottom: 10px;" class="fragment fade-in" data-fragment-index="4">
-              <strong style="color: var(--primary-accent); font-size: 0.6em; display: block;">⚡ Google Apps Script (Engine V8)</strong>
+              <strong style="color: var(--primary-accent); font-size: 0.6em; display: block;">⚡ Automatización y Fórmulas</strong>
               <span style="font-size: 0.45em; color: var(--muted-text); display: block; line-height: 1.3; margin-top: 2px;">
-                Inyección de lógica de procesos compleja y automatizaciones avanzadas mediante JS nativo.
+                Permite programar cálculos automáticos para ahorrar tiempo en tareas repetitivas.
               </span>
             </div>
             
             <div style="background: rgba(15, 23, 42, 0.6); padding: 10px; border-radius: 8px; border: 1px solid rgba(0,242,254,0.1);" class="fragment fade-in" data-fragment-index="5">
-              <strong style="color: var(--secondary-accent); font-size: 0.6em; display: block;">🔌 Integración por REST APIs</strong>
+              <strong style="color: var(--secondary-accent); font-size: 0.6em; display: block;">🔌 Integración con Formularios</strong>
               <span style="font-size: 0.45em; color: var(--muted-text); display: block; line-height: 1.3; margin-top: 2px;">
-                Interconexión bidireccional inmediata con sistemas SCADA, sensores IoT de planta y bases de datos SQL.
+                Vincula formularios web para recolectar datos desde tu celular directamente a la hoja.
               </span>
             </div>
           </div>
@@ -445,49 +471,49 @@
       </section>
 
       <!-- ========================================================
-           SLIDE 4: GOOGLE SHEETS (EJES ESTRATÉGICOS PyMEs y HSE)
+           SLIDE 4: GOOGLE SHEETS - PRACTICIDAD Y FLUJO
            ======================================================== -->
       <section data-transition="slide-in fade-out">
-        <h2>Sheets: Despliegue en PyMEs y Calidad</h2>
+        <h2>Sheets: Practicidad y Flujo de Trabajo</h2>
         
         <div class="grid-2">
           <div class="glass-card" style="border-color: rgba(0, 242, 254, 0.3); padding: 20px;">
-            <h3 style="font-size: 0.85em; margin-bottom: 15px; color: var(--primary-accent); text-transform: uppercase;">APLICACIÓN EN PyMEs</h3>
+            <h3 style="font-size: 0.85em; margin-bottom: 15px; color: var(--primary-accent); text-transform: uppercase;">Uso del Recurso</h3>
             
             <div style="margin-bottom: 15px;">
-              <span style="font-size: 0.58em; font-weight: 800; color: #fff; display: block;">📊 Analítica Democratizada</span>
+              <span style="font-size: 0.58em; font-weight: 800; color: #fff; display: block;">📊 Accesibilidad Sin Costo</span>
               <span style="font-size: 0.48em; color: var(--muted-text); display: block; line-height: 1.3; margin-top: 2px;">
-                Permite implementar cuadros de control y KPIs complejos en PyMEs venezolanas sin costos de licencia corporativos.
+                Permite a cualquier persona u organización estructurar información y llevar controles de forma gratuita.
               </span>
             </div>
             
             <div style="margin-bottom: 15px;">
-              <span style="font-size: 0.58em; font-weight: 800; color: #fff; display: block;">📲 Captura Móvil in-situ</span>
+              <span style="font-size: 0.58em; font-weight: 800; color: #fff; display: block;">📲 Formularios Móviles</span>
               <span style="font-size: 0.48em; color: var(--muted-text); display: block; line-height: 1.3; margin-top: 2px;">
-                Integración directa con Google Forms en celulares de operadores para el registro inmediato de variables de planta.
+                Permite recolectar respuestas, opiniones o datos de campo desde teléfonos e integrarlos al instante.
               </span>
             </div>
             
             <div>
-              <span style="font-size: 0.58em; font-weight: 800; color: #fff; display: block;">📈 Shewhart & Pareto Automáticos</span>
+              <span style="font-size: 0.58em; font-weight: 800; color: #fff; display: block;">📈 Visualización Rápida</span>
               <span style="font-size: 0.48em; color: var(--muted-text); display: block; line-height: 1.3; margin-top: 2px;">
-                Macros en Apps Script calculan desvíos estándar y trazan gráficos de control y diagramas de Pareto en tiempo real.
+                Genera gráficos y reportes automáticos al instante a medida que agregas o modificas datos.
               </span>
             </div>
           </div>
           
           <div style="display: flex; flex-direction: column; justify-content: center; text-align: left;">
-            <h3 style="font-size: 0.85em; margin-bottom: 15px; color: var(--secondary-accent); text-transform: uppercase;">FLUJO AUTOMATIZADO</h3>
+            <h3 style="font-size: 0.85em; margin-bottom: 15px; color: var(--secondary-accent); text-transform: uppercase;">Flujo de Trabajo Simplificado</h3>
             
             <div style="display: flex; flex-direction: column; gap: 10px; font-size: 0.48em;">
               <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--primary-accent); border-radius: 8px; padding: 10px;" class="fragment fade-left" data-fragment-index="1">
-                <strong>1. Registro en Campo:</strong> Operadores capturan variables HSE desde Forms en su celular.
+                <strong>1. Registro Sencillo:</strong> Se ingresan datos de forma amigable a través de un formulario móvil o web.
               </div>
               <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--secondary-accent); border-radius: 8px; padding: 10px;" class="fragment fade-left" data-fragment-index="2">
-                <strong>2. Consolidación:</strong> Datos ingresan de inmediato a Sheets sin transcribir ni requerir papel.
+                <strong>2. Guardado en la Nube:</strong> La información ingresa automáticamente a Sheets, sin necesidad de transcribir en papel.
               </div>
               <div style="background: rgba(0, 242, 254, 0.08); border: 1.5px dashed var(--primary-accent); border-radius: 8px; padding: 10px;" class="fragment fade-left" data-fragment-index="3">
-                <strong>3. Gráfico & Alerta:</strong> Se grafican desviaciones estadísticas de control y se envían alertas de HSE.
+                <strong>3. Gráficos Automáticos:</strong> La hoja de cálculo actualiza los reportes al instante para facilitar su lectura y análisis.
               </div>
             </div>
           </div>
@@ -495,51 +521,46 @@
       </section>
 
       <!-- ========================================================
-           SLIDE 5: HERRAMIENTA 2 - LUCIDCHART (VSM Y LEAN)
+           SLIDE 5: HERRAMIENTA 2 - LUCIDCHART
            ======================================================== -->
       <section data-transition="slide-in fade-out">
-        <h2>Lucidchart: Modelado de Procesos y VSM</h2>
+        <h2>Lucidchart: Organización y Diseño Visual</h2>
         
         <div class="grid-2">
           <div>
             <p style="text-align: left; margin-bottom: 15px;">
-              Lienzo vectorial inteligente diseñado para la estandarización y optimización de flujos de trabajo de ingeniería:
+              Lienzo digital intuitivo que ayuda a estructurar ideas, planificar actividades y coordinar proyectos de forma visual y legible:
             </p>
             
             <ul style="font-size: 0.58em; line-height: 1.45;">
               <li class="fragment fade-up" data-fragment-index="1">
-                <strong>VSM Digital Colaborativo:</strong> Mapeo interactivo del Flujo de Valor en vivo desde el piso de la planta por equipos multidisciplinarios.
+                <strong>Flujos de Trabajo Claros:</strong> Diseña de manera interactiva diagramas y cronogramas para ordenar tareas.
               </li>
               <li class="fragment fade-up" data-fragment-index="2">
-                <strong>Eliminación Sistemática de Mudas:</strong> Visualización clara de retrasos, cuellos de botella y actividades redundantes sin valor agregado.
+                <strong>Colaboración Interactiva:</strong> Trabaja con tus compañeros de estudio sobre un lienzo infinito, colocando formas y notas en vivo.
               </li>
               <li class="fragment fade-up" data-fragment-index="3">
-                <strong>Ingeniería Estandarizada:</strong> Diagramas de instrumentación P&ID e ingeniería de tuberías integrados de acuerdo con normas ISO/ISA.
+                <strong>Plantillas Inteligentes:</strong> Acceso a miles de diseños prediseñados listos para adaptar, ahorrando tiempo de diseño manual.
               </li>
             </ul>
           </div>
           
           <div class="glass-card" style="border-color: rgba(0, 242, 254, 0.2); display: flex; flex-direction: column; justify-content: space-between; padding: 15px;">
-            <h3 style="font-size: 0.8em; margin: 0 0 10px 0; text-align: center; color: var(--primary-accent); text-transform: uppercase;">VALUE STREAM MAP (VSM)</h3>
+            <h3 style="font-size: 0.8em; margin: 0 0 10px 0; text-align: center; color: var(--primary-accent); text-transform: uppercase;">Ejemplo Visual de Flujo</h3>
             
             <div style="background: rgba(5, 8, 20, 0.9); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.05); padding: 10px; font-size: 0.42em; display: flex; flex-direction: column; gap: 8px;">
               <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div style="background: rgba(0, 242, 254, 0.05); border: 1px solid var(--primary-accent); padding: 4px; border-radius: 4px; text-align: center; width: 44%;">
-                  <strong>Corte Mecánico</strong><br><span style="color: var(--muted-text);">T/C: 45s | Disp: 95%</span>
+                  <strong>Idea o Tarea Inicial</strong><br><span style="color: var(--muted-text);">Inicio de Proyecto</span>
                 </div>
-                <div style="color: var(--primary-accent); font-size: 0.9em;">⚠️ 300 uds ➡️</div>
+                <div style="color: var(--primary-accent); font-size: 0.9em;">Aprobado ➡️</div>
                 <div style="background: rgba(0, 242, 254, 0.05); border: 1px solid var(--primary-accent); padding: 4px; border-radius: 4px; text-align: center; width: 44%;">
-                  <strong>Acabado Final</strong><br><span style="color: var(--muted-text);">T/C: 80s | Disp: 98%</span>
+                  <strong>Desarrollo y Entrega</strong><br><span style="color: var(--muted-text);">Resultado Final</span>
                 </div>
               </div>
               
-              <div style="border-top: 1px dashed rgba(255,255,255,0.1); border-bottom: 1px dashed rgba(255,255,255,0.1); padding: 3px 0; text-align: center; display: flex; justify-content: space-around;">
-                <div><span style="color: var(--primary-accent); font-weight: 700;">VA:</span> 125s</div>
-                <div><span style="color: #ff007f; font-weight: 700;">NVA (Espera):</span> 4.5 días</div>
-              </div>
-              
-              <div style="text-align: center; color: var(--muted-text); font-style: italic; font-size: 0.85em;">
-                "El VSM digital expone retrasos de proceso para guiar decisiones Lean."
+              <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 5px; text-align: center;">
+                <span style="color: var(--primary-accent); font-weight: 700;">"Organizar las tareas visualmente mejora la comunicación y evita confusiones en el equipo."</span>
               </div>
             </div>
           </div>
@@ -547,7 +568,7 @@
       </section>
 
       <!-- ========================================================
-           SLIDE 6: LUCIDCHART (INTEGRACIONES Y DATOS EN VIVO)
+           SLIDE 6: LUCIDCHART: CONECTIVIDAD Y ECOSISTEMA
            ======================================================== -->
       <section data-transition="slide-in fade-out">
         <h2>Lucidchart: Conectividad y Ecosistema</h2>
@@ -555,50 +576,50 @@
         <div class="grid-2">
           <div class="glass-card" style="border-color: rgba(79, 172, 254, 0.3); padding: 20px;">
             <h3 style="font-size: 0.8em; margin-bottom: 12px; color: var(--primary-accent); border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 5px; text-transform: uppercase;">
-              VINCULACIÓN DINÁMICA
+              Conexión Directa
             </h3>
             
             <div style="margin-bottom: 10px;" class="fragment fade-in-then-semi-out" data-fragment-index="1">
-              <strong style="font-size: 0.58em; color: #fff; display: block;">🔗 Datos de Sheets en Vivo</strong>
+              <strong style="font-size: 0.58em; color: #fff; display: block;">🔗 Datos en Vivo</strong>
               <span style="font-size: 0.45em; color: var(--muted-text); display: block; line-height: 1.3;">
-                Conecta las formas de tu diagrama a celdas de Google Sheets. Al modificar la hoja de datos, el diagrama cambia automáticamente.
+                Vincula las figuras de tus diagramas a celdas de Sheets. Si cambias los datos numéricos, el diagrama se actualiza de inmediato.
               </span>
             </div>
             
             <div style="margin-bottom: 10px;" class="fragment fade-in-then-semi-out" data-fragment-index="2">
-              <strong style="font-size: 0.58em; color: #fff; display: block;">🌐 Símbolos ISA/ISO Incorporados</strong>
+              <strong style="font-size: 0.58em; color: #fff; display: block;">🌐 Diseños Listos</strong>
               <span style="font-size: 0.45em; color: var(--muted-text); display: block; line-height: 1.3;">
-                Plantillas normalizadas de diagramación de procesos químicos e instrumentación listas para usar.
+                Acceso a plantillas y formas universales que facilitan estructurar mapas mentales u organigramas al instante.
               </span>
             </div>
             
             <div class="fragment fade-in-then-semi-out" data-fragment-index="3">
-              <strong style="font-size: 0.58em; color: #fff; display: block;">🛡️ Gobierno Técnico & Control de Cambios</strong>
+              <strong style="font-size: 0.58em; color: #fff; display: block;">🛡️ Exportación Sencilla</strong>
               <span style="font-size: 0.45em; color: var(--muted-text); display: block; line-height: 1.3;">
-                Cumplimiento de normas ISO 27001 para resguardar la autoría y cambios de los diagramas organizacionales.
+                Descarga tus esquemas en formatos interactivos (PDF o imagen) para incluirlos de inmediato en tus documentos de estudio.
               </span>
             </div>
           </div>
           
           <div style="display: flex; flex-direction: column; justify-content: center; text-align: left;">
-            <h3 style="font-size: 0.8em; margin-bottom: 15px; color: var(--secondary-accent); text-transform: uppercase;">ECOSISTEMA INTEGRADO</h3>
+            <h3 style="font-size: 0.8em; margin-bottom: 15px; color: var(--secondary-accent); text-transform: uppercase;">Integración con Aplicaciones</h3>
             
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.46em;">
               <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--glass-border); padding: 10px; border-radius: 8px; text-align: center;" class="fragment zoom-in" data-fragment-index="4">
-                <span style="font-size: 1.3em; display: block; margin-bottom: 2px;">💬 Slack</span>
-                <span style="color: var(--muted-text);">Notificaciones de cambios en flujos de planta.</span>
+                <span style="font-size: 1.3em; display: block; margin-bottom: 2px;">💬 Chat</span>
+                <span style="color: var(--muted-text);">Notificaciones de cambios del equipo al instante.</span>
               </div>
               <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--glass-border); padding: 10px; border-radius: 8px; text-align: center;" class="fragment zoom-in" data-fragment-index="5">
-                <span style="font-size: 1.3em; display: block; margin-bottom: 2px;">🛠️ Jira</span>
-                <span style="color: var(--muted-text);">Vinculación directa de incidentes a pasos de flujo.</span>
+                <span style="font-size: 1.3em; display: block; margin-bottom: 2px;">📅 Tareas</span>
+                <span style="color: var(--muted-text);">Vinculación directa de actividades a cada figura del flujo.</span>
               </div>
               <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--glass-border); padding: 10px; border-radius: 8px; text-align: center;" class="fragment zoom-in" data-fragment-index="6">
-                <span style="font-size: 1.3em; display: block; margin-bottom: 2px;">📂 Workspace</span>
-                <span style="color: var(--muted-text);">Embeber diagramas activos en Docs y Slides.</span>
+                <span style="font-size: 1.3em; display: block; margin-bottom: 2px;">📂 Documentos</span>
+                <span style="color: var(--muted-text);">Inserta diagramas interactivos en Docs y Slides de Google.</span>
               </div>
               <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--glass-border); padding: 10px; border-radius: 8px; text-align: center;" class="fragment zoom-in" data-fragment-index="7">
-                <span style="font-size: 1.3em; display: block; margin-bottom: 2px;">🔌 SQL Import</span>
-                <span style="color: var(--muted-text);">Mapeo automático de bases de datos relacionales.</span>
+                <span style="font-size: 1.3em; display: block; margin-bottom: 2px;">💾 PDF e Imagen</span>
+                <span style="color: var(--muted-text);">Formatos listos para imprimir o exponer sin pixelar.</span>
               </div>
             </div>
           </div>
@@ -606,39 +627,39 @@
       </section>
 
       <!-- ========================================================
-           SLIDE 7: HERRAMIENTA 3 - NOTEBOOKLM (SÍNTESIS E IA)
+           SLIDE 7: HERRAMIENTA 3 - NOTEBOOKLM
            ======================================================== -->
       <section data-transition="slide-in fade-out">
-        <h2>NotebookLM: Cognición y Gestión con IA</h2>
+        <h2>NotebookLM: Estudio Inteligente con IA</h2>
         
         <div class="grid-2">
           <div>
             <p style="text-align: left; margin-bottom: 15px;">
-              Entorno interactivo impulsado por IA generativa estructurado para la síntesis de información de ingeniería y gobernanza del conocimiento:
+              Un asistente de Google potenciado por Inteligencia Artificial que te ayuda a resumir, organizar y analizar fuentes de estudio complejas:
             </p>
             
             <ul style="font-size: 0.58em; line-height: 1.45;">
               <li class="fragment fade-up" data-fragment-index="1">
-                <strong>Arquitectura RAG Nativa:</strong> (Retrieval-Augmented Generation) que procesa documentos y responde preguntas exclusivamente basándose en tus fuentes.
+                <strong>Respuestas Basadas en tus Archivos:</strong> Sube tus PDFs, apuntes o libros. La IA te responderá basándose estrictamente en el contenido que subiste.
               </li>
               <li class="fragment fade-up" data-fragment-index="2">
-                <strong>Análisis Semántico de Normas:</strong> Cruza y sintetiza rápidamente parámetros técnicos de normas de diseño (ISO, ASTM, ASME).
+                <strong>Precisión sin Inventos:</strong> A diferencia de otros chats, cada respuesta incluye citas directas y enlaces a la página exacta de tu documento original.
               </li>
               <li class="fragment fade-up" data-fragment-index="3">
-                <strong>Cero Alucinaciones:</strong> Acompaña cada respuesta con citas de verificación al número exacto de página de tu documento técnico cargado.
+                <strong>Síntesis Automática:</strong> Crea resúmenes cruzados, guías de estudio interactivas y cuestionarios de práctica en segundos.
               </li>
             </ul>
           </div>
           
           <div class="glass-card" style="border-color: rgba(0, 242, 254, 0.3); display: flex; flex-direction: column; justify-content: center; align-items: stretch; text-align: center; padding: 20px;">
-            <h3 style="font-size: 0.85em; margin-bottom: 12px; color: var(--primary-accent); text-transform: uppercase;">PILARES DE LA COGNICIÓN</h3>
+            <h3 style="font-size: 0.85em; margin-bottom: 12px; color: var(--primary-accent); text-transform: uppercase;">Ventajas Principales</h3>
             
             <div style="background: rgba(15, 23, 42, 0.6); padding: 12px; border-radius: 12px; border: 1px solid rgba(0, 242, 254, 0.15); display: flex; flex-direction: column; gap: 8px; font-size: 0.46em;">
               <div style="display: flex; align-items: center; gap: 8px;">
                 <span style="font-size: 1.3em;">🤖</span>
                 <div style="text-align: left;">
-                  <strong style="color: var(--primary-accent); display: block;">RAG Basado en Fuentes</strong>
-                  <span style="color: var(--muted-text); font-size: 0.9em; line-height: 1.2;">Síntesis segura de especificaciones de procesos complejos.</span>
+                  <strong style="color: var(--primary-accent); display: block;">IA Confiable y Segura</strong>
+                  <span style="color: var(--muted-text); font-size: 0.9em; line-height: 1.2;">Evita que la IA invente información, garantizando respuestas correctas.</span>
                 </div>
               </div>
               
@@ -647,8 +668,8 @@
               <div style="display: flex; align-items: center; gap: 8px;">
                 <span style="font-size: 1.3em;">🔬</span>
                 <div style="text-align: left;">
-                  <strong style="color: var(--secondary-accent); display: block;">Soporte de Fuentes Cruzadas</strong>
-                  <span style="color: var(--muted-text); font-size: 0.9em; line-height: 1.2;">Consolidación de hasta 50 documentos técnicos en un solo entorno de consulta.</span>
+                  <strong style="color: var(--secondary-accent); display: block;">Análisis de Varias Fuentes</strong>
+                  <span style="color: var(--muted-text); font-size: 0.9em; line-height: 1.2;">Conecta y analiza hasta 50 libros, notas o guías de estudio en un solo chat.</span>
                 </div>
               </div>
             </div>
@@ -657,51 +678,51 @@
       </section>
 
       <!-- ========================================================
-           SLIDE 8: NOTEBOOKLM (ESTRATEGIAS EN POSTGRADO E INVESTIGACIÓN)
+           SLIDE 8: NOTEBOOKLM: ALIADO EN EL APRENDIZAJE
            ======================================================== -->
       <section data-transition="slide-in fade-out">
-        <h2>NotebookLM: Aceleración de Tesis y Estándares</h2>
+        <h2>NotebookLM: Aliado en el Aprendizaje</h2>
         <p style="font-size: 0.62em; color: var(--muted-text); margin-bottom: 20px; text-align: left;">
-          Optimiza drásticamente la extracción de variables en investigaciones complejas de postgrado y proyectos de planta:
+          Optimiza la comprensión de lecturas densas y materiales de estudio en tu postgrado:
         </p>
         
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
           <!-- Case 1 -->
           <div class="glass-card fragment fade-up" data-fragment-index="1" style="padding: 12px; text-align: center; border-color: rgba(0, 242, 254, 0.08);">
             <div style="font-size: 1.3em; color: var(--primary-accent); margin-bottom: 4px;">📖</div>
-            <strong style="font-size: 0.58em; display: block; margin-bottom: 4px; text-transform: uppercase;">Extracción de Parámetros</strong>
-            <span style="font-size: 0.42em; color: var(--muted-text); display: block; line-height: 1.25;">Lee manuales técnicos masivos y recupera rangos de presión, temperatura o dimensiones mecánicas al instante.</span>
+            <strong style="font-size: 0.58em; display: block; margin-bottom: 4px; text-transform: uppercase;">Lecturas Densas</strong>
+            <span style="font-size: 0.42em; color: var(--muted-text); display: block; line-height: 1.25;">Encuentra y extrae conceptos o definiciones clave de manuales extensos en segundos.</span>
           </div>
           
           <!-- Case 2 -->
           <div class="glass-card fragment fade-up" data-fragment-index="2" style="padding: 12px; text-align: center; border-color: rgba(0, 242, 254, 0.12);">
-            <div style="font-size: 1.3em; color: var(--primary-accent); margin-bottom: 4px;">🔬</div>
-            <strong style="font-size: 0.58em; display: block; margin-bottom: 4px; text-transform: uppercase;">Síntesis de Literatura</strong>
-            <span style="font-size: 0.42em; color: var(--muted-text); display: block; line-height: 1.25;">Carga artículos científicos y genera mapas relacionales e hipótesis de investigación estructuradas rápidamente.</span>
+            <div style="font-size: 1.3em; color: var(--primary-accent); margin-bottom: 4px;">📝</div>
+            <strong style="font-size: 0.58em; display: block; margin-bottom: 4px; text-transform: uppercase;">Apoyo en Tesis</strong>
+            <span style="font-size: 0.42em; color: var(--muted-text); display: block; line-height: 1.25;">Analiza artículos científicos para estructurar tus marcos teóricos de forma ágil y ordenada.</span>
           </div>
           
           <!-- Case 3 -->
           <div class="glass-card fragment fade-up" data-fragment-index="3" style="padding: 12px; text-align: center; border-color: rgba(0, 242, 254, 0.16);">
             <div style="font-size: 1.3em; color: var(--primary-accent); margin-bottom: 4px;">🎙️</div>
-            <strong style="font-size: 0.58em; display: block; margin-bottom: 4px; text-transform: uppercase;">Guías de Estudio Activas</strong>
-            <span style="font-size: 0.42em; color: var(--muted-text); display: block; line-height: 1.25;">Genera resúmenes ejecutivos, cuestionarios dinámicos y podcasts automatizados para repasar la materia técnica.</span>
+            <strong style="font-size: 0.58em; display: block; margin-bottom: 4px; text-transform: uppercase;">Repaso Práctico</strong>
+            <span style="font-size: 0.42em; color: var(--muted-text); display: block; line-height: 1.25;">Genera glosarios automáticos, resúmenes y preguntas de práctica para estudiar temas específicos.</span>
           </div>
         </div>
         
         <div class="glass-card fragment fade-in" data-fragment-index="4" style="margin-top: 15px; padding: 10px; border-color: rgba(79, 172, 254, 0.3);">
           <p style="font-size: 0.46em; color: var(--text-color); margin: 0; text-align: left; line-height: 1.35;">
-            🤖 <strong>Uso Obligatorio de IA Generativa:</strong> Alinear este recurso interactivo al estándar académico exige el uso activo de modelos generativos (como Antigravity y NotebookLM). Esta simbiosis cognitiva permite la co-creación acelerada de contenido y la verificación sistemática del rigor académico.
+            🤖 <strong>Uso Estratégico de Inteligencia Artificial:</strong> Cumplimiento de las directrices del postgrado al integrar herramientas de IA generativa para potenciar la productividad y el aprendizaje académico autónomo.
           </p>
         </div>
       </section>
 
       <!-- ========================================================
-           SLIDE 9: MATRIZ COMPARATIVA DE LAS 3 CATEGORÍAS/HERRAMIENTAS
+           SLIDE 9: TABLERO COMPARATIVO SIMPLE Y GENERAL
            ======================================================== -->
       <section data-transition="slide-in fade-out">
-        <h2 style="margin-bottom: 15px !important;">El Tablero Comparativo 4.0</h2>
+        <h2 style="margin-bottom: 15px !important;">El Tablero Comparativo</h2>
         <p style="font-size: 0.58em; color: var(--muted-text); margin-bottom: 15px; text-align: left;">
-          Mapeo estructurado de las categorías analizadas para guiar la adopción tecnológica en la ingeniería de procesos.
+          Una vista simplificada de los principales beneficios de las tres herramientas analizadas:
         </p>
         
         <table class="custom-table fragment fade-in" data-fragment-index="1">
@@ -715,28 +736,28 @@
           </thead>
           <tbody>
             <tr>
-              <td><strong>Categoría</strong></td>
-              <td>Analítica de Datos y Automatización de Registros.</td>
-              <td>Modelado Visual y Optimización de Procesos Lean.</td>
-              <td>Gobernanza del Conocimiento y Cognición con IA.</td>
+              <td><strong>Propósito Principal</strong></td>
+              <td>Organizar y analizar datos tabulares.</td>
+              <td>Diseñar diagramas y flujos visuales.</td>
+              <td>Sintetizar y consultar documentos con IA.</td>
             </tr>
             <tr>
-              <td><strong>Pilar Técnico Clave</strong></td>
-              <td>SaaS con motor JavaScript (V8) y algoritmo concurrente OT.</td>
-              <td>Renderizado vectorial SVG/HTML5 y vinculaciónSheets dinámica.</td>
-              <td>Arquitectura RAG Nativa, fuentes cruzadas y citas seguras.</td>
+              <td><strong>¿Cómo te ayuda?</strong></td>
+              <td>Realiza cálculos rápidos y lleva un control ordenado.</td>
+              <td>Permite estructurar ideas y planificar proyectos.</td>
+              <td>Facilita el estudio de libros y lecturas extensas.</td>
             </tr>
             <tr>
-              <td><strong>Escalabilidad</strong></td>
-              <td>Baja-Media (Límite estricto de 10 millones de celdas).</td>
-              <td>Alta (Lienzos infinitos de diagramación relacional).</td>
-              <td>Muy Alta (Consolidación de hasta 50 documentos complejos).</td>
+              <td><strong>Punto Fuerte</strong></td>
+              <td>Trabajo en equipo y fórmulas en tiempo real.</td>
+              <td>Lienzo interactivo muy intuitivo (arrastrar y soltar).</td>
+              <td>Respuestas confiables basadas sólo en tus propios PDFs.</td>
             </tr>
             <tr>
-              <td><strong>Curva de Adopción</strong></td>
-              <td>Costo mínimo, curva de aprendizaje inmediata y familiar.</td>
-              <td>Costo bajo-moderado, con alto retorno ágil en planta.</td>
-              <td>Costo nulo, alta productividad e interacción en lenguaje natural.</td>
+              <td><strong>Facilidad de Uso</strong></td>
+              <td>Alta (Familiar para todos).</td>
+              <td>Alta (Sencillo de aprender).</td>
+              <td>Excelente (Se conversa en lenguaje natural).</td>
             </tr>
           </tbody>
         </table>
@@ -746,31 +767,31 @@
            SLIDE 10: CONCLUSIÓN GENERAL (E-LEARNING)
            ======================================================== -->
       <section data-transition="slide-in fade-out">
-        <h2>Conclusión: E-Learning y Herramientas 4.0</h2>
+        <h2>Conclusión: El Valor Digital en el Postgrado</h2>
         
         <div class="grid-2">
           <div>
             <p style="font-size: 0.65em; text-align: left; margin-bottom: 15px; line-height: 1.4; color: var(--muted-text);">
-              El uso estratégico de herramientas digitales en los estudios de postgrado bajo la modalidad e-learning representa una emulación indispensable de la industria 4.0:
+              El uso estratégico de herramientas digitales en la educación a distancia ofrece ventajas indispensables para los profesionales de postgrado:
             </p>
             
             <ul style="font-size: 0.55em; line-height: 1.35;">
               <li class="fragment fade-up" data-fragment-index="1">
-                <strong>Simulación de Entornos Reales:</strong> Prepara a los profesionales en ingeniería para trabajar de forma remota, descentralizada y síncrona en firmas transnacionales.
+                <strong>Trabajo Virtual Colaborativo:</strong> Prepara a los estudiantes para desempeñarse en equipos remotos y distribuidos de forma eficiente.
               </li>
               <li class="fragment fade-up" data-fragment-index="2">
-                <strong>Cultura de Gobernanza e Integridad:</strong> Inculca disciplina con respecto al control de versiones, trazabilidad y auditoría de celdas y datos técnicos.
+                <strong>Organización y Control de Datos:</strong> Desarrolla la disciplina de estructurar la información y compartirla con el equipo de forma segura y clara.
               </li>
               <li class="fragment fade-up" data-fragment-index="3">
-                <strong>Aceleración de Procesos de Aprendizaje:</strong> Optimiza la absorción de literatura compleja mediante síntesis inteligente con RAG, permitiendo avanzar más rápido en tesis y asignaturas.
+                <strong>Aprendizaje Acelerado con IA:</strong> Optimiza el análisis de textos densos y literatura especializada, acelerando la redacción de tesis e investigaciones.
               </li>
             </ul>
           </div>
           
           <div class="glass-card" style="border-color: rgba(79, 172, 254, 0.3); display: flex; flex-direction: column; justify-content: center; padding: 20px;">
-            <h3 style="font-size: 0.85em; margin-bottom: 10px; color: var(--primary-accent); text-align: center; text-transform: uppercase;">SÍNTESIS CRÍTICA</h3>
+            <h3 style="font-size: 0.85em; margin-bottom: 10px; color: var(--primary-accent); text-align: center; text-transform: uppercase;">Síntesis de Valor</h3>
             <blockquote style="font-size: 0.5em; color: var(--text-color); border-left: 2px solid var(--primary-accent); padding-left: 10px; margin: 0; font-style: italic; line-height: 1.45;">
-              "Las herramientas digitales bajo la modalidad e-learning no representan meros canales pasivos de enseñanza. Actúan como laboratorios operativos activos donde el ingeniero del postgrado entrena nativamente competencias indispensables para la Industria 4.0: gobernanza distribuida de datos, estandarización visual ágil e interactividad cognitiva asistida por Inteligencia Artificial."
+              "Las herramientas digitales en el e-learning son laboratorios de aprendizaje práctico. A través de ellas, los estudiantes desarrollan habilidades indispensables para el mercado actual: la analítica de datos en la nube, la planificación visual de ideas y el uso ético, seguro y productivo de la Inteligencia Artificial cognitiva."
             </blockquote>
           </div>
         </div>
@@ -779,7 +800,7 @@
       <!-- ========================================================
            SLIDE 11: FAREWELL (Despedida)
            ======================================================== -->
-      <section data-background-gradient="radial-gradient(circle at 50% 50%, #07112a 0%, #050814 100%)">
+      <section>
         <div class="glass-card" style="text-align: center; max-width: 800px; margin: 0 auto; border-color: rgba(0, 242, 254, 0.4); padding: 40px; position: relative;">
           
           <!-- Glowing Pulsating Emblem -->
@@ -946,17 +967,17 @@
       height = canvas.height = window.innerHeight;
     });
 
-    let speed = 0.45; // Speed of the flowing road grid
-    let offset = 0; // Animation offset
-    let horizonY = height * 0.4; // 3D Horizon position (40% from top)
-    let targetHorizonX = width * 0.5; // Slide panned center target
+    let speed = 0.55; // Fluid flow speed
+    let offset = 0; // Animation horizontal grid offset
+    let horizonY = height * 0.45; // Horizon height position (45% from top)
+    let targetHorizonX = width * 0.5; // Slide transitions coordinate target
     let horizonX = width * 0.5; // Eased center of the 3D perspective grid
 
     // Bind perspective grid steering to horizontal slide transitions
     Reveal.on('slidechanged', event => {
       // Tilt/steer the perspective grid horizon based on active slide index
       // Creates a stunning custom motion graphics cockpit curve effect
-      targetHorizonX = width * 0.5 - (event.indexh - 5) * 45;
+      targetHorizonX = width * 0.5 - (event.indexh - 5) * 80;
     });
 
     function drawFlowingGrid() {
@@ -966,11 +987,11 @@
       horizonX += (targetHorizonX - horizonX) * 0.04;
 
       const verticalLines = 18;
-      const horizontalLines = 14;
+      const horizontalLines = 12;
       const bottomY = height;
 
       // 1. Draw Perspective Vertical Grid Lines (Road)
-      ctx.lineWidth = 0.6;
+      ctx.lineWidth = 1.0;
       for (let i = 0; i <= verticalLines; i++) {
         const ratio = i / verticalLines;
         const bottomX = ratio * width;
@@ -978,8 +999,8 @@
         ctx.beginPath();
         ctx.moveTo(horizonX, horizonY);
         ctx.lineTo(bottomX, bottomY);
-        // Subtle cyan grid lines
-        ctx.strokeStyle = 'rgba(0, 242, 254, 0.05)';
+        // Made highly visible and glowing cyan
+        ctx.strokeStyle = 'rgba(0, 242, 254, 0.22)';
         ctx.stroke();
       }
 
@@ -999,7 +1020,7 @@
           ctx.moveTo(0, y);
           ctx.lineTo(width, y);
           // Fade lines as they get closer to the horizon
-          const alpha = Math.pow(depthRatio, 2) * 0.07;
+          const alpha = Math.pow(depthRatio, 2) * 0.28;
           ctx.strokeStyle = `rgba(0, 242, 254, ${alpha})`;
           ctx.stroke();
         }
@@ -1009,7 +1030,8 @@
       ctx.beginPath();
       ctx.moveTo(0, horizonY);
       ctx.lineTo(width, horizonY);
-      ctx.strokeStyle = 'rgba(0, 242, 254, 0.08)';
+      ctx.strokeStyle = 'rgba(0, 242, 254, 0.35)';
+      ctx.lineWidth = 1.5;
       ctx.stroke();
 
       requestAnimationFrame(drawFlowingGrid);
