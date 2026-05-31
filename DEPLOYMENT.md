@@ -27,8 +27,8 @@ Para trabajar de manera cómoda en este proyecto, te recomendamos configurar est
 1. Inicia sesión en tu cuenta de **GitHub**.
 2. En la esquina superior derecha, haz clic en el botón **+** y selecciona **New repository** (Nuevo repositorio).
 3. Configura los siguientes parámetros:
-   - **Repository name:** `revealjs-engineering-presentation` (o el nombre de tu preferencia).
-   - **Description:** `Presentación académica sobre innovación digital en ingeniería de procesos.`
+   - **Repository name:** `digitaltoolsPresentation` (o el nombre de tu preferencia).
+   - **Description:** `Presentación académica sobre herramientas digitales para la ingeniería.`
    - **Public/Private:** Selecciona obligatoriamente **Public** (Público) para que GitHub Pages pueda servir el archivo de manera gratuita.
    - **Initialize this repository with:** Deja todas las casillas desmarcadas (no agregues README ni .gitignore por ahora).
 4. Haz clic en **Create repository** (Crear repositorio).
@@ -54,7 +54,7 @@ git branch -M main
 
 # 5. Vincular el repositorio local con el repositorio remoto de GitHub
 # (REMPLAZA la URL con el enlace de tu repositorio creado en el Paso 2)
-git remote add origin https://github.com/TU_USUARIO_GITHUB/revealjs-engineering-presentation.git
+git remote add origin https://github.com/TU_USUARIO_GITHUB/digitaltoolsPresentation.git
 
 # 6. Empujar el código a la rama principal en GitHub
 git push -u origin main
@@ -83,7 +83,7 @@ Una vez que tu archivo `index.html` se encuentre arriba en tu repositorio de Git
 1. Espera entre 30 y 60 segundos para que los servidores de GitHub terminen de compilar y desplegar la presentación.
 2. Recarga la página de **Settings > Pages**.
 3. Verás un recuadro destacado en la parte superior con un texto similar a:
-   > **Your site is live at:** `https://TU_USUARIO_GITHUB.github.io/revealjs-engineering-presentation/`
+   > **Your site is live at:** `https://TU_USUARIO_GITHUB.github.io/digitaltoolsPresentation/`
 4. Haz clic en el botón **Visit site** para abrir la presentación RevealJS interactiva en una nueva pestaña del navegador.
 5. Copia esa URL completa y envíasela al facilitador de la universidad o compártela por el chat de Zoom durante la defensa oral de tu postgrado.
 
