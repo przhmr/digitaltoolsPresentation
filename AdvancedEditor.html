@@ -2114,11 +2114,13 @@
       
       try {
         const seed = Math.floor(Math.random() * 100000);
-        const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=600&height=400&nologo=true&private=true&enhance=true&seed=${seed}`;
+        // Removed &enhance=true to prevent unpredictable prompt rewrites that cause weird images
+        const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=600&height=400&nologo=true&seed=${seed}`;
         
         const img = new Image();
         img.onload = () => {
-          const generatedHtml = `<div class="glass-card" style="padding:10px; display:flex; flex-direction:column; align-items:center; gap:8px; width:100%; height:100%; border:1px solid rgba(0, 242, 254, 0.25); background:rgba(10,15,30,0.85);"><img src="${imageUrl}" style="width:100%; height:auto; border-radius:8px; border:1px solid rgba(255,255,255,0.06); object-fit:cover;" alt="${prompt}"><span style="font-size:0.42em; color:var(--muted-text); font-style:italic; text-align:center; display:block; line-height:1.2; margin-top:2px;">${prompt}</span></div>`;
+          // Changed object-fit from cover to contain and constrained max-height to fit perfectly in presentation slides
+          const generatedHtml = `<div class="glass-card" style="padding:10px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; width:100%; height:100%; border:1px solid rgba(0, 242, 254, 0.25); background:rgba(10,15,30,0.85); overflow:hidden;"><img src="${imageUrl}" style="max-width:100%; max-height:80%; border-radius:6px; border:1px solid rgba(255,255,255,0.06); object-fit:contain;" alt="${prompt}"><span style="font-size:0.42em; color:var(--muted-text); font-style:italic; text-align:center; display:block; line-height:1.2; margin-top:2px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:95%;">${prompt}</span></div>`;
           
           lastAiGeneratedHtml = generatedHtml;
           previewBox.innerHTML = generatedHtml;
@@ -2301,26 +2303,37 @@
         return;
       }
 
+      const cachedUrl = localStorage.getItem('supabase_url');
+      const cachedKey = localStorage.getItem('supabase_anon_key');
+      const sbUrl = cachedUrl === 'none' ? '' : (cachedUrl || DEFAULT_SUPABASE_URL);
+      const sbKey = cachedKey === 'none' ? '' : (cachedKey || DEFAULT_SUPABASE_ANON_KEY);
+
       loader.style.display = 'block';
       resultBox.style.display = 'none';
 
       try {
-        // Call Supabase Edge Function securely by passing the team password as the Bearer token!
-        const { data, error } = await supabaseClient.functions.invoke('gemini-copilot', {
-          body: { prompt: prompt },
+        // Direct fetch to Supabase Edge Function to capture the exact Deno response error body!
+        const functionUrl = `${sbUrl}/functions/v1/gemini-copilot`;
+        const response = await fetch(functionUrl, {
+          method: 'POST',
           headers: {
-            'Authorization': `Bearer ${cachedPass}`
-          }
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${cachedPass}`,
+            'apikey': sbKey
+          },
+          body: JSON.stringify({ prompt: prompt })
         });
 
-        if (error) {
-          throw new Error(error.message || 'Error en la Edge Function');
+        const resData = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          throw new Error(resData.error || `Error del servidor (Status ${response.status})`);
         }
 
-        if (data && data.html) {
-          lastAiGeneratedHtml = data.html;
-          previewBox.innerHTML = data.html;
-          document.getElementById('ai-sandbox-code').value = data.html;
+        if (resData && resData.html) {
+          lastAiGeneratedHtml = resData.html;
+          previewBox.innerHTML = resData.html;
+          document.getElementById('ai-sandbox-code').value = resData.html;
           
           previewBox.setAttribute('draggable', 'true');
           previewBox.setAttribute('ondragstart', 'handleAiDragStart(event)');
@@ -2329,14 +2342,12 @@
           showToast('Elemento generado con éxito por Corito.', '✨');
           loader.style.display = 'none';
           resultBox.style.display = 'flex';
-        } else if (data && data.error) {
-          throw new Error(data.error);
         } else {
           throw new Error('Respuesta inválida del servidor');
         }
       } catch (err) {
         console.error('Supabase Edge Function Error:', err);
-        showToast(`Fallo del Servidor: ${err.message}`, '❌', 6000);
+        showToast(`Fallo del Servidor: ${err.message}`, '❌', 8000);
         loader.style.display = 'none';
       }
     }
