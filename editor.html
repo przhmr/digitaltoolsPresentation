@@ -1,0 +1,2057 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editor Visual - Herramientas Digitales</title>
+  
+  <!-- Google Fonts for Modern Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-color: #030f26;
+      --bg-color-deep: #020612;
+      --sidebar-bg: rgba(7, 16, 38, 0.85);
+      --card-bg: rgba(13, 27, 61, 0.65);
+      --glass-border: rgba(0, 242, 254, 0.12);
+      --primary-accent: #00f2fe; /* Glowing Cyan */
+      --secondary-accent: #8b5cf6; /* Elegant Violet */
+      --neon-pink: #ff007f;
+      --text-color: #f8fafc;
+      --muted-text: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.08), var(--bg-color) 70%);
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Top Premium Nav */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: rgba(3, 11, 28, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--glass-border);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+      display: grid;
+      place-items: center;
+      font-size: 1.2rem;
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+    }
+
+    .logo-text h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff, var(--primary-accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .logo-text span {
+      font-size: 0.68rem;
+      color: var(--muted-text);
+      display: block;
+      letter-spacing: 0.05em;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    /* Premium Glassmorphic Layout Grid */
+    .editor-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr 320px;
+      flex-grow: 1;
+      height: calc(100vh - 69px);
+      overflow: hidden;
+    }
+
+    /* Sidebar - Slides list */
+    .sidebar {
+      background: var(--sidebar-bg);
+      backdrop-filter: blur(10px);
+      border-right: 1px solid var(--glass-border);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding: 20px 15px;
+    }
+
+    .section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--primary-accent);
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .slides-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex-grow: 1;
+    }
+
+    .slide-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 10px;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .slide-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(0, 242, 254, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .slide-item.active {
+      background: rgba(139, 92, 246, 0.12);
+      border-color: var(--secondary-accent);
+      box-shadow: 0 0 15px rgba(139, 92, 246, 0.15);
+    }
+
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.72rem;
+      color: var(--muted-text);
+      font-weight: 600;
+    }
+
+    .slide-label {
+      font-weight: 700;
+      color: #fff;
+      font-size: 0.78rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .slide-type-tag {
+      font-size: 0.58rem;
+      background: rgba(0, 242, 254, 0.1);
+      color: var(--primary-accent);
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid rgba(0, 242, 254, 0.15);
+      text-transform: uppercase;
+      font-weight: 800;
+      align-self: flex-start;
+      margin-top: 2px;
+    }
+
+    .slide-actions {
+      display: flex;
+      gap: 6px;
+      position: absolute;
+      right: 8px;
+      top: 8px;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .slide-item:hover .slide-actions {
+      opacity: 1;
+    }
+
+    .action-btn-mini {
+      width: 22px;
+      height: 22px;
+      border-radius: 5px;
+      border: none;
+      background: rgba(15, 23, 42, 0.8);
+      color: #fff;
+      font-size: 0.65rem;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: all 0.2s ease;
+    }
+
+    .action-btn-mini:hover {
+      background: var(--primary-accent);
+      color: #030f26;
+    }
+
+    .action-btn-mini.danger:hover {
+      background: var(--neon-pink);
+      color: #fff;
+    }
+
+    /* Main Workspace Panel */
+    .workspace {
+      display: flex;
+      flex-direction: column;
+      padding: 30px;
+      overflow-y: auto;
+      background: rgba(2, 6, 18, 0.4);
+    }
+
+    .workspace-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 15px;
+    }
+
+    .workspace-title h2 {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 1.4rem;
+      background: linear-gradient(135deg, #fff, var(--primary-accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .workspace-title span {
+      font-size: 0.78rem;
+      color: var(--muted-text);
+      display: block;
+      margin-top: 3px;
+    }
+
+    /* Beautiful Form Elements */
+    .editor-card {
+      background: var(--card-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      backdrop-filter: blur(10px);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .form-group label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted-text);
+    }
+
+    .form-input,
+    .form-textarea,
+    .form-select {
+      background: rgba(3, 11, 28, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      padding: 12px 14px;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus,
+    .form-select:focus {
+      outline: none;
+      border-color: var(--primary-accent);
+      box-shadow: 0 0 10px rgba(0, 242, 254, 0.15);
+      background: rgba(3, 11, 28, 0.95);
+    }
+
+    .form-textarea {
+      min-height: 90px;
+      resize: vertical;
+      line-height: 1.45;
+    }
+
+    /* Sub-items Editors (lists inside slides) */
+    .sub-items-editor {
+      background: rgba(3, 11, 28, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .sub-item-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 6px;
+      padding: 12px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .sub-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: var(--primary-accent);
+    }
+
+    /* Control Panel Right Sidebar */
+    .control-panel {
+      background: var(--sidebar-bg);
+      backdrop-filter: blur(10px);
+      border-left: 1px solid var(--glass-border);
+      padding: 25px 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .panel-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-radius: 10px;
+      padding: 15px;
+    }
+
+    .panel-section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding-bottom: 8px;
+      margin-bottom: 4px;
+    }
+
+    /* Standard Interactive Button */
+    .btn {
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 12px 18px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      width: 100%;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+      color: #030f26;
+      box-shadow: 0 4px 15px rgba(0, 242, 254, 0.2);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 0 25px rgba(0, 242, 254, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .btn-danger {
+      background: rgba(255, 0, 127, 0.15);
+      color: #ff007f;
+      border: 1px solid rgba(255, 0, 127, 0.25);
+    }
+
+    .btn-danger:hover {
+      background: var(--neon-pink);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    /* Status Badges */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 50px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      background: rgba(255, 0, 127, 0.1);
+      color: var(--neon-pink);
+      border: 1px solid rgba(255, 0, 127, 0.15);
+    }
+
+    .status-badge.success {
+      background: rgba(0, 242, 254, 0.1);
+      color: var(--primary-accent);
+      border: 1px solid rgba(0, 242, 254, 0.15);
+    }
+
+    /* Modals & Popups styling */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 18, 0.85);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+      display: none;
+      place-items: center;
+      padding: 20px;
+    }
+
+    .modal {
+      background: var(--sidebar-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 500px;
+      padding: 25px;
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding-bottom: 10px;
+    }
+
+    .modal-header h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .close-modal-btn {
+      background: transparent;
+      border: none;
+      color: var(--muted-text);
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .close-modal-btn:hover {
+      color: #fff;
+    }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-color-deep);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary-accent);
+    }
+
+    /* Dynamic Slide Grid styles (Table column inputs) */
+    .table-editor-grid {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .table-cell-row {
+      display: grid;
+      grid-template-columns: 100px 1fr 1fr 1fr;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .table-cell-row-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #fff;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* strategic notifications toast */
+    .toast {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      background: linear-gradient(135deg, var(--sidebar-bg), rgba(2, 6, 18, 0.95));
+      border: 1px solid var(--primary-accent);
+      border-radius: 8px;
+      padding: 15px 20px;
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 500;
+      box-shadow: 0 10px 30px rgba(0, 242, 254, 0.2);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      gap: 10px;
+      animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Premium Top Nav -->
+  <header>
+    <div class="logo-container">
+      <div class="logo-badge">🎨</div>
+      <div class="logo-text">
+        <h1>Editor de Diapositivas</h1>
+        <span>Módulo Visual para index.html</span>
+      </div>
+    </div>
+    
+    <div class="nav-actions">
+      <!-- Sync Status Badges -->
+      <div id="local-status" class="status-badge">📁 Local: Desvinculado</div>
+      <div id="github-status" class="status-badge">🌐 GitHub: Desconectado</div>
+      
+      <!-- Back Link -->
+      <a href="index.html" class="btn btn-secondary" style="padding: 8px 14px; font-size: 0.72rem;">💻 Presentación</a>
+    </div>
+  </header>
+
+  <!-- Premium Editor Workspace Grid -->
+  <div class="editor-layout">
+    
+    <!-- LEFT SIDEBAR: Slide List -->
+    <div class="sidebar">
+      <div class="section-title">
+        <span>Diapositivas</span>
+        <button id="add-slide-trigger" class="action-btn-mini" title="Agregar Diapositiva" style="width: 24px; height: 24px; font-size: 0.8rem;">➕</button>
+      </div>
+      <div class="slides-list" id="slides-list-container">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+
+    <!-- MAIN CENTER WORKSPACE: Form Editor -->
+    <div class="workspace">
+      <div class="workspace-header">
+        <div class="workspace-title">
+          <h2 id="current-slide-title">Selecciona una Diapositiva</h2>
+          <span id="current-slide-subtitle">Elige una lámina en el panel izquierdo para comenzar a editarla.</span>
+        </div>
+      </div>
+      
+      <!-- Content form panels -->
+      <div id="editor-form-wrapper" style="display: none;">
+        <div class="editor-card" id="slide-form-container">
+          <!-- Populated dynamically according to active slide layout -->
+        </div>
+      </div>
+
+      <!-- No slide selected panel -->
+      <div id="no-slide-card" style="text-align: center; padding: 60px 20px; display: block;">
+        <div style="font-size: 3.5rem; margin-bottom: 15px;">👈</div>
+        <h3 style="font-family: Outfit, sans-serif; font-size: 1.25rem; font-weight: 700;">Panel de Edición Listo</h3>
+        <p style="color: var(--muted-text); font-size: 0.85rem; max-width: 320px; margin: 8px auto 0 auto; line-height: 1.45;">
+          Selecciona una diapositiva en el menú de la izquierda para comenzar a cambiar textos y gráficos.
+        </p>
+      </div>
+    </div>
+
+    <!-- RIGHT SIDEBAR: Connection and Save options -->
+    <div class="control-panel">
+      
+      <!-- SECTION 1: Local File System Sync -->
+      <div class="panel-section">
+        <div class="panel-section-title">📁 Sincronizar Carpeta Local</div>
+        <p style="font-size: 0.72rem; color: var(--muted-text); line-height: 1.4;">
+          Vincula la carpeta de tu proyecto local para sobrescribir directamente <code style="color: var(--primary-accent);">index.html</code>.
+        </p>
+        <button id="btn-link-directory" class="btn btn-secondary">⚡ Vincular Carpeta</button>
+        <button id="btn-save-local" class="btn btn-primary" style="display: none;">💾 Guardar Cambios</button>
+        <div id="local-path-text" style="font-size: 0.62rem; color: var(--muted-text); word-break: break-all; margin-top: 4px; display: none;"></div>
+      </div>
+
+      <!-- SECTION 2: GitHub Remote Publishing -->
+      <div class="panel-section">
+        <div class="panel-section-title">🌐 Publicar en GitHub</div>
+        <p style="font-size: 0.72rem; color: var(--muted-text); line-height: 1.4;">
+          Configura tus credenciales y empuja los cambios directo a GitHub Pages en vivo de manera segura.
+        </p>
+        
+        <div class="form-group" style="margin-top: 5px;">
+          <label for="github-pat">Personal Access Token (PAT):</label>
+          <input type="password" id="github-pat" class="form-input" style="padding: 8px 10px; font-size: 0.78rem;" placeholder="ghp_xxxxxxxxxxxx">
+        </div>
+        
+        <div class="form-group">
+          <label for="github-repo">Repositorio:</label>
+          <input type="text" id="github-repo" class="form-input" style="padding: 8px 10px; font-size: 0.78rem;" placeholder="propietario/repositorio" value="przhmr/digitaltoolsPresentation">
+        </div>
+
+        <div class="form-group">
+          <label for="github-commit">Mensaje de Commit:</label>
+          <input type="text" id="github-commit" class="form-input" style="padding: 8px 10px; font-size: 0.78rem;" placeholder="Modificando slides..." value="Modificación desde Editor Visual">
+        </div>
+
+        <button id="btn-save-github" class="btn btn-primary" style="background: linear-gradient(135deg, var(--secondary-accent), var(--neon-pink)); color: #fff; box-shadow: 0 4px 15px rgba(255, 0, 127, 0.2);">🚀 Publicar en la Web</button>
+      </div>
+
+      <!-- SECTION 3: Zero-Setup Manual Options -->
+      <div class="panel-section">
+        <div class="panel-section-title">💾 Descarga Manual (Cualquiera)</div>
+        <p style="font-size: 0.72rem; color: var(--muted-text); line-height: 1.4;">
+          Si no tienes Git configurado, edita y descarga el archivo directamente para subirlo a tu hospedaje.
+        </p>
+        <button id="btn-download-html" class="btn btn-secondary">💾 Descargar index.html</button>
+        <button id="btn-copy-json" class="btn btn-secondary" style="font-size: 0.72rem;">📋 Copiar JSON de Láminas</button>
+        <a id="lnk-github-edit" href="https://github.com/przhmr/digitaltoolsPresentation/edit/main/index.html" target="_blank" class="btn btn-secondary" style="font-size: 0.72rem; display: none;">✍️ Editar en GitHub</a>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ADD SLIDE MODAL -->
+  <div class="modal-overlay" id="add-slide-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Agregar Nueva Diapositiva</h3>
+        <button class="close-modal-btn" id="close-modal-trigger">&times;</button>
+      </div>
+      <div class="form-group">
+        <label for="new-slide-type">Selecciona el Formato / Estilo:</label>
+        <select id="new-slide-type" class="form-select">
+          <option value="cover">Portada (Cover Slide)</option>
+          <option value="categories">Cuadrícula de Categorías (Slide 2)</option>
+          <option value="split_chart">Texto + Gráfico de Barras (Sheets Slide 3)</option>
+          <option value="split_flow">Texto + Flujo de Trabajo (Sheets Slide 4)</option>
+          <option value="split_road">Texto + Flujo en Ruta 3D (Lucidchart Slide 5)</option>
+          <option value="split_network">Chips + Red Conectada (Lucidchart Slide 6)</option>
+          <option value="split_pipeline">Texto + Pipeline de IA (NotebookLM Slide 7)</option>
+          <option value="grid_conclusion">Tarjetas + Resumen de IA (NotebookLM Slide 8)</option>
+          <option value="comparison_table">Tablero Comparativo (Tabla Slide 9)</option>
+          <option value="conclusion">Conclusión Grupal + Frase (Slide 10)</option>
+          <option value="farewell">Lámina de Despedida (Slide 11)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="new-slide-title">Título de la Lámina:</label>
+        <input type="text" id="new-slide-title" class="form-input" placeholder="Nueva Diapositiva..." value="Nueva Diapositiva">
+      </div>
+      <button id="btn-add-slide-confirm" class="btn btn-primary">➕ Agregar Diapositiva</button>
+    </div>
+  </div>
+
+  <!-- strategic notification toast -->
+  <div class="toast" id="editor-toast">
+    <span id="toast-icon">✨</span>
+    <span id="toast-message">Operación exitosa</span>
+  </div>
+
+  <!-- EDITOR CORE LOGIC SCRIPT -->
+  <script>
+    // State Variables
+    let slides = [];
+    let activeSlideIndex = null;
+    let indexHtmlContent = ''; // Stores the loaded index.html code template
+    let localDirectoryHandle = null; // Store for File System Access API
+    let localFileHandle = null; // Handle to index.html file directly
+
+    // Elements
+    const slidesListContainer = document.getElementById('slides-list-container');
+    const editorFormWrapper = document.getElementById('editor-form-wrapper');
+    const noSlideCard = document.getElementById('no-slide-card');
+    const slideFormContainer = document.getElementById('slide-form-container');
+    const currentSlideTitle = document.getElementById('current-slide-title');
+    const currentSlideSubtitle = document.getElementById('current-slide-subtitle');
+    
+    // Status Pills
+    const localStatusBadge = document.getElementById('local-status');
+    const githubStatusBadge = document.getElementById('github-status');
+    
+    // Action Buttons
+    const btnLinkDirectory = document.getElementById('btn-link-directory');
+    const btnSaveLocal = document.getElementById('btn-save-local');
+    const localPathText = document.getElementById('local-path-text');
+    const btnDownloadHtml = document.getElementById('btn-download-html');
+    const btnCopyJson = document.getElementById('btn-copy-json');
+    const lnkGithubEdit = document.getElementById('lnk-github-edit');
+    const btnSaveGithub = document.getElementById('btn-save-github');
+    
+    // Form elements on Controls Sidebar
+    const inputGithubPat = document.getElementById('github-pat');
+    const inputGithubRepo = document.getElementById('github-repo');
+    const inputGithubCommit = document.getElementById('github-commit');
+    
+    // Modal Elements
+    const addSlideModal = document.getElementById('add-slide-modal');
+    const addSlideTrigger = document.getElementById('add-slide-trigger');
+    const closeModalTrigger = document.getElementById('close-modal-trigger');
+    const newSlideType = document.getElementById('new-slide-type');
+    const newSlideTitle = document.getElementById('new-slide-title');
+    const btnAddSlideConfirm = document.getElementById('btn-add-slide-confirm');
+
+    // 1. Toast notifications helper
+    function showToast(message, icon = '✨', duration = 3000) {
+      const toast = document.getElementById('editor-toast');
+      const toastIcon = document.getElementById('toast-icon');
+      const toastMsg = document.getElementById('toast-message');
+      
+      toastIcon.textContent = icon;
+      toastMsg.textContent = message;
+      toast.style.display = 'flex';
+      
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, duration);
+    }
+
+    // 2. Fetch remote index.html on load as a fallback/template
+    async function loadFallbackTemplate() {
+      try {
+        const response = await fetch('index.html');
+        if (response.ok) {
+          indexHtmlContent = await response.text();
+          extractSlidesData(indexHtmlContent);
+        } else {
+          showToast('No se pudo encontrar el archivo index.html remoto.', '⚠️');
+        }
+      } catch (err) {
+        console.error('Error cargando la plantilla por defecto:', err);
+      }
+    }
+
+    // 3. Extract slides from html file
+    function extractSlidesData(html) {
+      try {
+        // Look for the SLIDES_DATA block inside index.html
+        const match = html.match(/const\s+SLIDES_DATA\s*=\s*(\[[\s\S]*?\]);\s*\/\/\s*DYNAMIC RENDERER FUNCTION/);
+        if (match && match[1]) {
+          // Parse using safe evaluators to avoid strict JSON syntax issues (since it's a JS array literal)
+          const slidesFunc = new Function(`return ${match[1]};`);
+          slides = slidesFunc();
+          renderSlidesList();
+          showToast('Estructura de diapositivas cargada con éxito.', '📦');
+          btnCopyJson.style.display = 'inline-flex';
+          lnkGithubEdit.style.display = 'inline-flex';
+        } else {
+          showToast('No se pudo ubicar la variable SLIDES_DATA en el index.html.', '❌');
+        }
+      } catch (err) {
+        console.error('Error al extraer SLIDES_DATA:', err);
+        showToast('Error al analizar los datos de las diapositivas.', '❌');
+      }
+    }
+
+    // 4. Render Slide Item cards in the sidebar
+    function renderSlidesList() {
+      slidesListContainer.innerHTML = '';
+      slides.forEach((slide, index) => {
+        const item = document.createElement('div');
+        item.className = `slide-item ${index === activeSlideIndex ? 'active' : ''}`;
+        item.onclick = () => selectSlide(index);
+        
+        // Compute standard label
+        let titleText = slide.title || 'Sin Título';
+        if (slide.type === 'cover') titleText = slide.title || 'Portada';
+        if (slide.type === 'farewell') titleText = slide.title || 'Despedida';
+        
+        item.innerHTML = `
+          <div class="slide-header">
+            <span>Lámina ${index + 1}</span>
+            <span class="slide-type-tag">${slide.type}</span>
+          </div>
+          <div class="slide-label">${titleText}</div>
+          <div class="slide-actions">
+            <button class="action-btn-mini" onclick="event.stopPropagation(); moveSlide(${index}, -1);" title="Subir" ${index === 0 ? 'disabled' : ''}>▲</button>
+            <button class="action-btn-mini" onclick="event.stopPropagation(); moveSlide(${index}, 1);" title="Bajar" ${index === slides.length - 1 ? 'disabled' : ''}>▼</button>
+            <button class="action-btn-mini" onclick="event.stopPropagation(); duplicateSlide(${index});" title="Duplicar">👯</button>
+            <button class="action-btn-mini danger" onclick="event.stopPropagation(); deleteSlide(${index});" title="Eliminar">🗑️</button>
+          </div>
+        `;
+        slidesListContainer.appendChild(item);
+      });
+    }
+
+    // 5. Swap/move slides up/down
+    function moveSlide(index, direction) {
+      const targetIndex = index + direction;
+      if (targetIndex < 0 || targetIndex >= slides.length) return;
+      
+      // Swap elements
+      const temp = slides[index];
+      slides[index] = slides[targetIndex];
+      slides[targetIndex] = temp;
+      
+      // Keep selection aligned
+      if (activeSlideIndex === index) {
+        activeSlideIndex = targetIndex;
+      } else if (activeSlideIndex === targetIndex) {
+        activeSlideIndex = index;
+      }
+      
+      renderSlidesList();
+      if (activeSlideIndex !== null) {
+        renderFormForSlide(activeSlideIndex);
+      }
+      showToast('Orden de diapositivas modificado.', '🔄');
+    }
+
+    // 6. Duplicate Slide
+    function duplicateSlide(index) {
+      const clone = JSON.parse(JSON.stringify(slides[index]));
+      clone.id = 'slide_' + Date.now();
+      if (clone.title) clone.title += ' (Copia)';
+      slides.splice(index + 1, 0, clone);
+      
+      activeSlideIndex = index + 1;
+      renderSlidesList();
+      renderFormForSlide(activeSlideIndex);
+      showToast('Diapositiva duplicada con éxito.', '👯');
+    }
+
+    // 7. Delete Slide
+    function deleteSlide(index) {
+      if (slides.length <= 1) {
+        showToast('No puedes eliminar la única lámina de la presentación.', '⚠️');
+        return;
+      }
+      if (confirm('¿Estás seguro de que deseas eliminar esta lámina?')) {
+        slides.splice(index, 1);
+        if (activeSlideIndex === index) {
+          activeSlideIndex = null;
+          editorFormWrapper.style.display = 'none';
+          noSlideCard.style.display = 'block';
+        } else if (activeSlideIndex > index) {
+          activeSlideIndex--;
+        }
+        renderSlidesList();
+        showToast('Diapositiva eliminada.', '🗑️');
+      }
+    }
+
+    // 8. Select slide to edit
+    function selectSlide(index) {
+      activeSlideIndex = index;
+      
+      // Style active state in sidebar
+      document.querySelectorAll('.slide-item').forEach((item, idx) => {
+        if (idx === index) {
+          item.classList.add('active');
+        } else {
+          item.classList.remove('active');
+        }
+      });
+      
+      renderFormForSlide(index);
+    }
+
+    // 9. Generate and inject form controls tailored to the active slide's template type
+    function renderFormForSlide(index) {
+      const slide = slides[index];
+      
+      noSlideCard.style.display = 'none';
+      editorFormWrapper.style.display = 'block';
+      
+      currentSlideTitle.textContent = `Edición Lámina ${index + 1} (${slide.type.toUpperCase()})`;
+      currentSlideSubtitle.textContent = `Ajusta el contenido del formato prediseñado para la lámina de tipo ${slide.type}.`;
+      
+      let html = '';
+      
+      // Standard generic title for all slides (except cover / farewell where it has specialized layout)
+      html += `
+        <div class="form-group">
+          <label for="editor-title">Título Principal de la Lámina</label>
+          <input type="text" id="editor-title" class="form-input" value="${escapeHtml(slide.title || '')}" oninput="updateActiveSlideField('title', this.value)">
+        </div>
+      `;
+      
+      if (slide.type === 'cover') {
+        html += `
+          <div class="form-group">
+            <label for="editor-subtitle">Subtítulo</label>
+            <input type="text" id="editor-subtitle" class="form-input" value="${escapeHtml(slide.subtitle || '')}" oninput="updateActiveSlideField('subtitle', this.value)">
+          </div>
+          
+          <div class="form-group">
+            <label>Equipo de Proyecto (Autores)</label>
+            <div class="sub-items-editor" id="cover-authors-container">
+              ${(slide.authors || []).map((author, idx) => `
+                <div style="display: flex; gap: 10px; align-items: center;">
+                  <input type="text" class="form-input author-input" value="${escapeHtml(author)}" oninput="updateAuthor(${idx}, this.value)" placeholder="Nombre del autor...">
+                  <button class="action-btn-mini danger" onclick="deleteAuthor(${idx})" style="flex-shrink: 0;">🗑️</button>
+                </div>
+              `).join('')}
+              <button class="btn btn-secondary" onclick="addAuthor()" style="margin-top: 5px; padding: 6px 12px; font-size: 0.7rem;">➕ Agregar Autor</button>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="editor-institution">Institución y Fecha</label>
+            <input type="text" id="editor-institution" class="form-input" value="${escapeHtml(slide.institution || '')}" oninput="updateActiveSlideField('institution', this.value)">
+          </div>
+        `;
+      }
+      
+      else if (slide.type === 'categories') {
+        html += `
+          <div class="form-group">
+            <label for="editor-desc">Descripción General</label>
+            <textarea id="editor-desc" class="form-textarea" oninput="updateActiveSlideField('description', this.value)">${slide.description || ''}</textarea>
+          </div>
+          
+          <div class="form-group">
+            <label>Categorías del Ecosistema (Tarjetas)</label>
+            <div class="sub-items-editor">
+              ${(slide.cards || []).map((card, idx) => `
+                <div class="sub-item-card">
+                  <div class="sub-item-header">Tarjeta de Categoría ${idx + 1}</div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label>Emoji Icono</label>
+                      <input type="text" class="form-input" value="${escapeHtml(card.emoji || '')}" oninput="updateCategoryCard(${idx}, 'emoji', this.value)">
+                    </div>
+                    <div class="form-group">
+                      <label>Etiqueta / Nombre</label>
+                      <input type="text" class="form-input" value="${escapeHtml(card.label || '')}" oninput="updateCategoryCard(${idx}, 'label', this.value)">
+                    </div>
+                  </div>
+                  <div class="form-group" style="margin-top: 4px;">
+                    <label>Descripción (admite HTML)</label>
+                    <textarea class="form-textarea" style="min-height: 54px;" oninput="updateCategoryCard(${idx}, 'desc', this.value)">${card.desc || ''}</textarea>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Insight KPIs (Fila Inferior)</label>
+            <div class="sub-items-editor">
+              ${(slide.kpis || []).map((kpi, idx) => `
+                <div class="sub-item-card">
+                  <div class="sub-item-header">KPI ${idx + 1}</div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label>Emoji / Icono</label>
+                      <input type="text" class="form-input" value="${escapeHtml(kpi.icon || '')}" oninput="updateCategoryKpi(${idx}, 'icon', this.value)">
+                    </div>
+                    <div class="form-group">
+                      <label>Título KPI</label>
+                      <input type="text" class="form-input" value="${escapeHtml(kpi.title || '')}" oninput="updateCategoryKpi(${idx}, 'title', this.value)">
+                    </div>
+                  </div>
+                  <div class="form-group" style="margin-top: 4px;">
+                    <label>Descripción Breve</label>
+                    <input type="text" class="form-input" value="${escapeHtml(kpi.desc || '')}" oninput="updateCategoryKpi(${idx}, 'desc', this.value)">
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+      
+      else if (slide.type === 'split_chart') {
+        html += `
+          <div class="form-group">
+            <label for="editor-desc">Descripción General (Izquierda)</label>
+            <textarea id="editor-desc" class="form-textarea" oninput="updateActiveSlideField('description', this.value)">${slide.description || ''}</textarea>
+          </div>
+          
+          <div class="form-group">
+            <label>Puntos Clave / Viñetas (Izquierda)</label>
+            <div class="sub-items-editor">
+              ${(slide.bullets || []).map((bullet, idx) => `
+                <div style="display: flex; gap: 10px; align-items: center;">
+                  <input type="text" class="form-input" value="${escapeHtml(bullet)}" oninput="updateBullet(${idx}, this.value)" placeholder="Punto de viñeta (admite HTML)...">
+                  <button class="action-btn-mini danger" onclick="deleteBullet(${idx})">🗑️</button>
+                </div>
+              `).join('')}
+              <button class="btn btn-secondary" onclick="addBullet()" style="margin-top: 5px; padding: 6px 12px; font-size: 0.7rem;">➕ Agregar Viñeta</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="editor-chart-title">Título del Gráfico (Derecha)</label>
+            <input type="text" id="editor-chart-title" class="form-input" value="${escapeHtml(slide.chart_title || '')}" oninput="updateActiveSlideField('chart_title', this.value)">
+          </div>
+
+          <div class="form-group">
+            <label>Datos del Gráfico de Barras</label>
+            <div class="sub-items-editor">
+              ${(slide.chart_data || []).map((bar, idx) => `
+                <div class="form-row" style="align-items: center;">
+                  <div class="form-group">
+                    <label>Etiqueta Barra</label>
+                    <input type="text" class="form-input" value="${escapeHtml(bar.label || '')}" oninput="updateChartBar(${idx}, 'label', this.value)">
+                  </div>
+                  <div class="form-group">
+                    <label>Porcentaje Altura (${bar.value}%)</label>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <input type="range" min="10" max="100" class="form-input" style="padding: 0;" value="${bar.value}" oninput="updateChartBar(${idx}, 'value', parseInt(this.value)); this.nextElementSibling.textContent = this.value + '%';">
+                      <span style="font-size: 0.75rem; font-weight: 700; width: 35px;">${bar.value}%</span>
+                    </div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Tarjetas Detalladas Inferiores (Derecha)</label>
+            <div class="sub-items-editor">
+              ${(slide.detail_cards || []).map((card, idx) => `
+                <div class="sub-item-card">
+                  <div class="sub-item-header">Tarjeta Detalle ${idx + 1}</div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label>Icono / Emoji</label>
+                      <input type="text" class="form-input" value="${escapeHtml(card.icon || '')}" oninput="updateDetailCard(${idx}, 'icon', this.value)">
+                    </div>
+                    <div class="form-group">
+                      <label>Título Tarjeta</label>
+                      <input type="text" class="form-input" value="${escapeHtml(card.title || '')}" oninput="updateDetailCard(${idx}, 'title', this.value)">
+                    </div>
+                  </div>
+                  <div class="form-group" style="margin-top: 4px;">
+                    <label>Texto Detallado</label>
+                    <textarea class="form-textarea" style="min-height: 50px;" oninput="updateDetailCard(${idx}, 'desc', this.value)">${card.desc || ''}</textarea>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+      
+      else if (slide.type === 'split_flow') {
+        html += `
+          <div class="form-group">
+            <label for="editor-left-title">Título de Sección Izquierda</label>
+            <input type="text" id="editor-left-title" class="form-input" value="${escapeHtml(slide.left_title || '')}" oninput="updateActiveSlideField('left_title', this.value)">
+          </div>
+
+          <div class="form-group">
+            <label>Tarjetas Informativas (Izquierda)</label>
+            <div class="sub-items-editor">
+              ${(slide.left_cards || []).map((card, idx) => `
+                <div class="sub-item-card">
+                  <div class="sub-item-header">Tarjeta ${idx + 1}</div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label>Emoji</label>
+                      <input type="text" class="form-input" value="${escapeHtml(card.icon || '')}" oninput="updateFlowLeftCard(${idx}, 'icon', this.value)">
+                    </div>
+                    <div class="form-group">
+                      <label>Título</label>
+                      <input type="text" class="form-input" value="${escapeHtml(card.title || '')}" oninput="updateFlowLeftCard(${idx}, 'title', this.value)">
+                    </div>
+                  </div>
+                  <div class="form-group" style="margin-top: 4px;">
+                    <label>Descripción</label>
+                    <textarea class="form-textarea" style="min-height: 50px;" oninput="updateFlowLeftCard(${idx}, 'desc', this.value)">${card.desc || ''}</textarea>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="editor-right-title">Título de Flujo Derecho</label>
+            <input type="text" id="editor-right-title" class="form-input" value="${escapeHtml(slide.right_title || '')}" oninput="updateActiveSlideField('right_title', this.value)">
+          </div>
+
+          <div class="form-group">
+            <label>Pasos del Flujo de Proceso (Derecha)</label>
+            <div class="sub-items-editor">
+              ${(slide.right_steps || []).map((step, idx) => `
+                <div class="sub-item-card">
+                  <div class="sub-item-header">Paso ${idx + 1}</div>
+                  <div class="form-group">
+                    <label>Título del Paso</label>
+                    <input type="text" class="form-input" value="${escapeHtml(step.title || '')}" oninput="updateFlowRightStep(${idx}, 'title', this.value)">
+                  </div>
+                  <div class="form-group">
+                    <label>Detalle del Paso</label>
+                    <textarea class="form-textarea" style="min-height: 50px;" oninput="updateFlowRightStep(${idx}, 'desc', this.value)">${step.desc || ''}</textarea>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+      
+      else if (slide.type === 'split_road') {
+        html += `
+          <div class="form-group">
+            <label for="editor-desc">Descripción General (Izquierda)</label>
+            <textarea id="editor-desc" class="form-textarea" oninput="updateActiveSlideField('description', this.value)">${slide.description || ''}</textarea>
+          </div>
+          
+          <div class="form-group">
+            <label>Puntos Clave / Viñetas (Izquierda)</label>
+            <div class="sub-items-editor">
+              ${(slide.bullets || []).map((bullet, idx) => `
+                <div style="display: flex; gap: 10px; align-items: center;">
+                  <input type="text" class="form-input" value="${escapeHtml(bullet)}" oninput="updateBullet(${idx}, this.value)" placeholder="Punto de viñeta...">
+                  <button class="action-btn-mini danger" onclick="deleteBullet(${idx})">🗑️</button>
+                </div>
+              `).join('')}
+              <button class="btn btn-secondary" onclick="addBullet()" style="margin-top: 5px; padding: 6px 12px; font-size: 0.7rem;">➕ Agregar Viñeta</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="editor-road-title">Título de Flujo en Ruta (Derecha)</label>
+            <input type="text" id="editor-road-title" class="form-input" value="${escapeHtml(slide.road_title || '')}" oninput="updateActiveSlideField('road_title', this.value)">
+          </div>
+
+          <div class="form-group">
+            <label>Nodos de la Ruta 3D (Comienzo, Medio, Final)</label>
+            <div class="sub-items-editor">
+              ${(slide.road_nodes || []).map((node, idx) => `
+                <div class="sub-item-card">
+                  <div class="sub-item-header">Nodo ${idx + 1} (${node.type.toUpperCase()})</div>
+                  <div class="form-group">
+                    <label>Título Nodo</label>
+                    <input type="text" class="form-input" value="${escapeHtml(node.title || '')}" oninput="updateRoadNode(${idx}, 'title', this.value)">
+                  </div>
+                  <div class="form-group">
+                    <label>Detalle del Nodo</label>
+                    <input type="text" class="form-input" value="${escapeHtml(node.desc || '')}" oninput="updateRoadNode(${idx}, 'desc', this.value)">
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Píldoras Térmicas Inferiores (Derecha)</label>
+            <div class="sub-items-editor">
+              ${(slide.heat_row || []).map((pill, idx) => `
+                <div class="form-row" style="align-items: center;">
+                  <div class="form-group">
+                    <label>Texto Píldora</label>
+                    <input type="text" class="form-input" value="${escapeHtml(pill.text || '')}" oninput="updateHeatPill(${idx}, 'text', this.value)">
+                  </div>
+                  <div class="form-group">
+                    <label>Porcentaje Carga (${pill.fill}%)</label>
+                    <input type="range" min="10" max="100" class="form-input" style="padding: 0;" value="${pill.fill}" oninput="updateHeatPill(${idx}, 'fill', parseInt(this.value))">
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+      
+      else if (slide.type === 'split_network') {
+        html += `
+          <div class="form-group">
+            <label for="editor-left-title">Título Conexiones (Izquierda)</label>
+            <input type="text" id="editor-left-title" class="form-input" value="${escapeHtml(slide.left_title || '')}" oninput="updateActiveSlideField('left_title', this.value)">
+          </div>
+
+          <div class="form-group">
+            <label>Chips Conectores (Izquierda)</label>
+            <div class="sub-items-editor">
+              ${(slide.left_chips || []).map((chip, idx) => `
+                <div class="sub-item-card">
+                  <div class="sub-item-header">Chip ${idx + 1}</div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label>Icono</label>
+                      <input type="text" class="form-input" value="${escapeHtml(chip.icon || '')}" oninput="updateNetworkLeftChip(${idx}, 'icon', this.value)">
+                    </div>
+                    <div class="form-group">
+                      <label>Título</label>
+                      <input type="text" class="form-input" value="${escapeHtml(chip.title || '')}" oninput="updateNetworkLeftChip(${idx}, 'title', this.value)">
+                    </div>
+                  </div>
+                  <div class="form-group" style="margin-top: 4px;">
+                    <label>Descripción</label>
+                    <textarea class="form-textarea" style="min-height: 50px;" oninput="updateNetworkLeftChip(${idx}, 'desc', this.value)">${chip.desc || ''}</textarea>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="editor-right-title">Título Red Derecho</label>
+            <input type="text" id="editor-right-title" class="form-input" value="${escapeHtml(slide.right_title || '')}" oninput="updateActiveSlideField('right_title', this.value)">
+          </div>
+
+          <div class="form-group">
+            <label>Nodos de la Red Conectada (5 Nodos)</label>
+            <div class="sub-items-editor">
+              ${(slide.network_cards || []).map((card, idx) => `
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Título del Nodo ${idx + 1}</label>
+                    <input type="text" class="form-input" value="${escapeHtml(card.title || '')}" oninput="updateNetworkRightCard(${idx}, 'title', this.value)">
+                  </div>
+                  <div class="form-group">
+                    <label>Subtítulo / Acción</label>
+                    <input type="text" class="form-input" value="${escapeHtml(card.subtitle || '')}" oninput="updateNetworkRightCard(${idx}, 'subtitle', this.value)">
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+      
+      else if (slide.type === 'split_pipeline') {
+        html += `
+          <div class="form-group">
+            <label for="editor-desc">Descripción General (Izquierda)</label>
+            <textarea id="editor-desc" class="form-textarea" oninput="updateActiveSlideField('description', this.value)">${slide.description || ''}</textarea>
+          </div>
+          
+          <div class="form-group">
+            <label>Puntos Clave / Viñetas (Izquierda)</label>
+            <div class="sub-items-editor">
+              ${(slide.bullets || []).map((bullet, idx) => `
+                <div style="display: flex; gap: 10px; align-items: center;">
+                  <input type="text" class="form-input" value="${escapeHtml(bullet)}" oninput="updateBullet(${idx}, this.value)" placeholder="Punto de viñeta...">
+                  <button class="action-btn-mini danger" onclick="deleteBullet(${idx})">🗑️</button>
+                </div>
+              `).join('')}
+              <button class="btn btn-secondary" onclick="addBullet()" style="margin-top: 5px; padding: 6px 12px; font-size: 0.7rem;">➕ Agregar Viñeta</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="editor-right-title">Título Pipeline de IA (Derecha)</label>
+            <input type="text" id="editor-right-title" class="form-input" value="${escapeHtml(slide.right_title || '')}" oninput="updateActiveSlideField('right_title', this.value)">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Fuentes Entrada (Izquierda Stack)</label>
+              <div class="sub-items-editor">
+                ${(slide.sources || []).map((src, idx) => `
+                  <input type="text" class="form-input" value="${escapeHtml(src)}" oninput="updatePipelineSource(${idx}, this.value)">
+                `).join('')}
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label>Resultados Salida (Derecha Stack)</label>
+              <div class="sub-items-editor">
+                ${(slide.outputs || []).map((out, idx) => `
+                  <input type="text" class="form-input" value="${escapeHtml(out)}" oninput="updatePipelineOutput(${idx}, this.value)">
+                `).join('')}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Núcleo IA Core (Esfera Central)</label>
+            <div class="sub-items-editor">
+              <div class="form-group">
+                <label>Nombre del Núcleo</label>
+                <input type="text" class="form-input" value="${escapeHtml(slide.core_title || '')}" oninput="updateActiveSlideField('core_title', this.value)">
+              </div>
+              <div class="form-group">
+                <label>Detalle del Núcleo</label>
+                <input type="text" class="form-input" value="${escapeHtml(slide.core_desc || '')}" oninput="updateActiveSlideField('core_desc', this.value)">
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      
+      else if (slide.type === 'grid_conclusion') {
+        html += `
+          <div class="form-group">
+            <label for="editor-desc">Descripción General (Subtítulo)</label>
+            <textarea id="editor-desc" class="form-textarea" oninput="updateActiveSlideField('description', this.value)">${slide.description || ''}</textarea>
+          </div>
+          
+          <div class="form-group">
+            <label>Tres Tarjetas Resumen de Apoyo</label>
+            <div class="sub-items-editor">
+              ${(slide.cards || []).map((card, idx) => `
+                <div class="sub-item-card">
+                  <div class="sub-item-header">Tarjeta ${idx + 1}</div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label>Emoji</label>
+                      <input type="text" class="form-input" value="${escapeHtml(card.emoji || '')}" oninput="updateGridCard(${idx}, 'emoji', this.value)">
+                    </div>
+                    <div class="form-group">
+                      <label>Título Tarjeta</label>
+                      <input type="text" class="form-input" value="${escapeHtml(card.title || '')}" oninput="updateGridCard(${idx}, 'title', this.value)">
+                    </div>
+                  </div>
+                  <div class="form-group" style="margin-top: 4px;">
+                    <label>Detalle</label>
+                    <textarea class="form-textarea" style="min-height: 50px;" oninput="updateGridCard(${idx}, 'desc', this.value)">${card.desc || ''}</textarea>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="editor-ia-text">Caja de Advertencia IA Estratégica</label>
+            <textarea id="editor-ia-text" class="form-textarea" oninput="updateActiveSlideField('ia_text', this.value)">${slide.ia_text || ''}</textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Píldoras Térmicas Inferiores</label>
+            <div class="sub-items-editor">
+              ${(slide.heat_row || []).map((pill, idx) => `
+                <div class="form-row" style="align-items: center;">
+                  <div class="form-group">
+                    <label>Texto Píldora</label>
+                    <input type="text" class="form-input" value="${escapeHtml(pill.text || '')}" oninput="updateHeatPill(${idx}, 'text', this.value)">
+                  </div>
+                  <div class="form-group">
+                    <label>Porcentaje Carga (${pill.fill}%)</label>
+                    <input type="range" min="10" max="100" class="form-input" style="padding: 0;" value="${pill.fill}" oninput="updateHeatPill(${idx}, 'fill', parseInt(this.value))">
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+      
+      else if (slide.type === 'comparison_table') {
+        html += `
+          <div class="form-group">
+            <label for="editor-desc">Descripción General (Subtítulo)</label>
+            <textarea id="editor-desc" class="form-textarea" oninput="updateActiveSlideField('description', this.value)">${slide.description || ''}</textarea>
+          </div>
+          
+          <div class="form-group">
+            <label>Cabeceras de la Tabla Comparativa</label>
+            <div class="sub-items-editor" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+              ${(slide.table_headers || []).map((hdr, idx) => `
+                <div>
+                  <label style="font-size: 0.6rem; color: var(--muted-text);">Columna ${idx + 1}</label>
+                  <input type="text" class="form-input" value="${escapeHtml(hdr)}" oninput="updateTableHeader(${idx}, this.value)">
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Filas de Comparación</label>
+            <div class="sub-items-editor">
+              ${(slide.table_rows || []).map((row, idx) => `
+                <div class="sub-item-card">
+                  <div class="sub-item-header">
+                    <span>Fila ${idx + 1}</span>
+                    <button class="action-btn-mini danger" onclick="deleteTableRow(${idx})" style="width:18px; height:18px;">&times;</button>
+                  </div>
+                  <div class="form-group">
+                    <label>Criterio Comparación</label>
+                    <input type="text" class="form-input" value="${escapeHtml(row.criteria || '')}" oninput="updateTableRowCell(${idx}, 'criteria', this.value)">
+                  </div>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 5px;">
+                    <div>
+                      <label style="font-size: 0.58rem; color: var(--muted-text);">Sheets (Col 2)</label>
+                      <input type="text" class="form-input" value="${escapeHtml(row.cols[0] || '')}" oninput="updateTableRowCell(${idx}, 0, this.value)">
+                    </div>
+                    <div>
+                      <label style="font-size: 0.58rem; color: var(--muted-text);">Lucidchart (Col 3)</label>
+                      <input type="text" class="form-input" value="${escapeHtml(row.cols[1] || '')}" oninput="updateTableRowCell(${idx}, 1, this.value)">
+                    </div>
+                    <div>
+                      <label style="font-size: 0.58rem; color: var(--muted-text);">NotebookLM (Col 4)</label>
+                      <input type="text" class="form-input" value="${escapeHtml(row.cols[2] || '')}" oninput="updateTableRowCell(${idx}, 2, this.value)">
+                    </div>
+                  </div>
+                </div>
+              `).join('')}
+              <button class="btn btn-secondary" onclick="addTableRow()" style="margin-top: 5px; padding: 6px 12px; font-size: 0.7rem;">➕ Agregar Fila Comparativa</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Píldoras Térmicas Inferiores</label>
+            <div class="sub-items-editor">
+              ${(slide.heat_row || []).map((pill, idx) => `
+                <div class="form-row" style="align-items: center;">
+                  <div class="form-group">
+                    <label>Texto Píldora</label>
+                    <input type="text" class="form-input" value="${escapeHtml(pill.text || '')}" oninput="updateHeatPill(${idx}, 'text', this.value)">
+                  </div>
+                  <div class="form-group">
+                    <label>Porcentaje Carga (${pill.fill}%)</label>
+                    <input type="range" min="10" max="100" class="form-input" style="padding: 0;" value="${pill.fill}" oninput="updateHeatPill(${idx}, 'fill', parseInt(this.value))">
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+      
+      else if (slide.type === 'conclusion') {
+        html += `
+          <div class="form-group">
+            <label for="editor-desc">Descripción General (Subtítulo Izquierda)</label>
+            <textarea id="editor-desc" class="form-textarea" oninput="updateActiveSlideField('description', this.value)">${slide.description || ''}</textarea>
+          </div>
+          
+          <div class="form-group">
+            <label>Puntos Clave / Viñetas (Izquierda)</label>
+            <div class="sub-items-editor">
+              ${(slide.bullets || []).map((bullet, idx) => `
+                <div style="display: flex; gap: 10px; align-items: center;">
+                  <input type="text" class="form-input" value="${escapeHtml(bullet)}" oninput="updateBullet(${idx}, this.value)" placeholder="Punto de viñeta...">
+                  <button class="action-btn-mini danger" onclick="deleteBullet(${idx})">🗑️</button>
+                </div>
+              `).join('')}
+              <button class="btn btn-secondary" onclick="addBullet()" style="margin-top: 5px; padding: 6px 12px; font-size: 0.7rem;">➕ Agregar Viñeta</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="editor-right-title">Título de Síntesis (Derecha)</label>
+            <input type="text" id="editor-right-title" class="form-input" value="${escapeHtml(slide.right_title || '')}" oninput="updateActiveSlideField('right_title', this.value)">
+          </div>
+
+          <div class="form-group">
+            <label for="editor-quote">Frase de Conclusión (Quotes)</label>
+            <textarea id="editor-quote" class="form-textarea" oninput="updateActiveSlideField('quote', this.value)">${slide.quote || ''}</textarea>
+          </div>
+
+          <div class="form-group">
+            <label>KPIs de Síntesis Inferior (3 KPIs)</label>
+            <div class="sub-items-editor">
+              ${(slide.kpis || []).map((kpi, idx) => `
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Título KPI ${idx + 1}</label>
+                    <input type="text" class="form-input" value="${escapeHtml(kpi.title || '')}" oninput="updateConclusionKpi(${idx}, 'title', this.value)">
+                  </div>
+                  <div class="form-group">
+                    <label>Descripción KPI</label>
+                    <input type="text" class="form-input" value="${escapeHtml(kpi.desc || '')}" oninput="updateConclusionKpi(${idx}, 'desc', this.value)">
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+      
+      else if (slide.type === 'farewell') {
+        html += `
+          <div class="form-group">
+            <label for="editor-emblem">Emoji del Emblema Superior</label>
+            <input type="text" id="editor-emblem" class="form-input" value="${escapeHtml(slide.emblem || '')}" oninput="updateActiveSlideField('emblem', this.value)">
+          </div>
+
+          <div class="form-group">
+            <label for="editor-quote">Frase Célebre del Cierre</label>
+            <textarea id="editor-quote" class="form-textarea" oninput="updateActiveSlideField('quote', this.value)">${slide.quote || ''}</textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="editor-quote-author">Autor de la Frase</label>
+            <input type="text" id="editor-quote-author" class="form-input" value="${escapeHtml(slide.quote_author || '')}" oninput="updateActiveSlideField('quote_author', this.value)">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="editor-btn-text">Texto Botón Debate</label>
+              <input type="text" id="editor-btn-text" class="form-input" value="${escapeHtml(slide.btn_text || '')}" oninput="updateActiveSlideField('btn_text', this.value)">
+            </div>
+            <div class="form-group">
+              <label for="editor-pdf-text">Texto Botón PDF</label>
+              <input type="text" id="editor-pdf-text" class="form-input" value="${escapeHtml(slide.pdf_text || '')}" oninput="updateActiveSlideField('pdf_text', this.value)">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="editor-footer-text">Texto de Autores (Pie de Página)</label>
+            <textarea id="editor-footer-text" class="form-textarea" oninput="updateActiveSlideField('footer_text', this.value)">${slide.footer_text || ''}</textarea>
+          </div>
+        `;
+      }
+      
+      slideFormContainer.innerHTML = html;
+    }
+
+    // 10. Core data mutation functions
+    function updateActiveSlideField(field, value) {
+      if (activeSlideIndex === null) return;
+      slides[activeSlideIndex][field] = value;
+      
+      // Update label dynamically in sidebar if it's the title
+      if (field === 'title') {
+        document.querySelectorAll('.slide-item')[activeSlideIndex].querySelector('.slide-label').textContent = value || 'Sin Título';
+      }
+    }
+
+    // Author editors helper
+    function updateAuthor(idx, value) {
+      slides[activeSlideIndex].authors[idx] = value;
+    }
+    function deleteAuthor(idx) {
+      slides[activeSlideIndex].authors.splice(idx, 1);
+      renderFormForSlide(activeSlideIndex);
+    }
+    function addAuthor() {
+      if (!slides[activeSlideIndex].authors) slides[activeSlideIndex].authors = [];
+      slides[activeSlideIndex].authors.push('Ing. Nuevo Autor');
+      renderFormForSlide(activeSlideIndex);
+    }
+
+    // Category elements editors helper
+    function updateCategoryCard(cardIdx, field, value) {
+      slides[activeSlideIndex].cards[cardIdx][field] = value;
+    }
+    function updateCategoryKpi(kpiIdx, field, value) {
+      slides[activeSlideIndex].kpis[kpiIdx][field] = value;
+    }
+
+    // Bullet point list helper
+    function updateBullet(idx, value) {
+      slides[activeSlideIndex].bullets[idx] = value;
+    }
+    function deleteBullet(idx) {
+      slides[activeSlideIndex].bullets.splice(idx, 1);
+      renderFormForSlide(activeSlideIndex);
+    }
+    function addBullet() {
+      if (!slides[activeSlideIndex].bullets) slides[activeSlideIndex].bullets = [];
+      slides[activeSlideIndex].bullets.push('Nuevo punto clave de análisis.');
+      renderFormForSlide(activeSlideIndex);
+    }
+
+    // Chart bar value helper
+    function updateChartBar(idx, field, value) {
+      slides[activeSlideIndex].chart_data[idx][field] = value;
+    }
+
+    // Detail Cards helper
+    function updateDetailCard(idx, field, value) {
+      slides[activeSlideIndex].detail_cards[idx][field] = value;
+    }
+
+    // Flow items helpers
+    function updateFlowLeftCard(idx, field, value) {
+      slides[activeSlideIndex].left_cards[idx][field] = value;
+    }
+    function updateFlowRightStep(idx, field, value) {
+      slides[activeSlideIndex].right_steps[idx][field] = value;
+    }
+
+    // Road Flow 3D items helpers
+    function updateRoadNode(idx, field, value) {
+      slides[activeSlideIndex].road_nodes[idx][field] = value;
+    }
+    function updateHeatPill(idx, field, value) {
+      slides[activeSlideIndex].heat_row[idx][field] = value;
+    }
+
+    // Network connected components helpers
+    function updateNetworkLeftChip(idx, field, value) {
+      slides[activeSlideIndex].left_chips[idx][field] = value;
+    }
+    function updateNetworkRightCard(idx, field, value) {
+      slides[activeSlideIndex].network_cards[idx][field] = value;
+    }
+
+    // IA Pipeline chip helpers
+    function updatePipelineSource(idx, value) {
+      slides[activeSlideIndex].sources[idx] = value;
+    }
+    function updatePipelineOutput(idx, value) {
+      slides[activeSlideIndex].outputs[idx] = value;
+    }
+
+    // Grid conclusion support
+    function updateGridCard(idx, field, value) {
+      slides[activeSlideIndex].cards[idx][field] = value;
+    }
+
+    // Comparison Table Support
+    function updateTableHeader(idx, value) {
+      slides[activeSlideIndex].table_headers[idx] = value;
+    }
+    function updateTableRowCell(rowIdx, cellField, value) {
+      if (cellField === 'criteria') {
+        slides[activeSlideIndex].table_rows[rowIdx].criteria = value;
+      } else {
+        slides[activeSlideIndex].table_rows[rowIdx].cols[cellField] = value;
+      }
+    }
+    function addTableRow() {
+      if (!slides[activeSlideIndex].table_rows) slides[activeSlideIndex].table_rows = [];
+      slides[activeSlideIndex].table_rows.push({
+        criteria: 'Criterio Nuevo',
+        cols: ['Beneficio Sheets', 'Uso Lucidchart', 'Uso NotebookLM']
+      });
+      renderFormForSlide(activeSlideIndex);
+    }
+    function deleteTableRow(idx) {
+      slides[activeSlideIndex].table_rows.splice(idx, 1);
+      renderFormForSlide(activeSlideIndex);
+    }
+
+    // Conclusion cards helper
+    function updateConclusionKpi(idx, field, value) {
+      slides[activeSlideIndex].kpis[idx][field] = value;
+    }
+
+    // 11. Helper to escape raw HTML text inside inputs
+    function escapeHtml(text) {
+      if (!text) return '';
+      return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    // 12. Add Slide Modal Controls
+    addSlideTrigger.onclick = () => {
+      addSlideModal.style.display = 'grid';
+    };
+
+    closeModalTrigger.onclick = () => {
+      addSlideModal.style.display = 'none';
+    };
+
+    window.onclick = (event) => {
+      if (event.target === addSlideModal) {
+        addSlideModal.style.display = 'none';
+      }
+    };
+
+    // 13. Create slide template and insert to deck
+    btnAddSlideConfirm.onclick = () => {
+      const type = newSlideType.value;
+      const title = newSlideTitle.value;
+      
+      let newSlide = {
+        id: 'slide_' + Date.now(),
+        type: type,
+        title: title
+      };
+      
+      // Inject standard template structures so it renders immediately with no undefined errors
+      if (type === 'cover') {
+        newSlide.subtitle = 'Subtítulo descriptivo';
+        newSlide.authors = ['Autor 1', 'Autor 2'];
+        newSlide.institution = 'Universidad Francisco de Miranda';
+      } else if (type === 'categories') {
+        newSlide.description = 'Descripción de categorías.';
+        newSlide.cards = [
+          { emoji: '💡', label: 'Idea', desc: 'Concepto inicial.' },
+          { emoji: '⚙️', label: 'Proceso', desc: 'Desarrollo.' },
+          { emoji: '🏁', label: 'Resultado', desc: 'Entrega.' }
+        ];
+        newSlide.kpis = [
+          { icon: '🚀', title: 'Impulso', desc: 'Velocidad de cambio.' },
+          { icon: '🛡️', title: 'Seguridad', desc: 'Confiabilidad.' },
+          { icon: '🎓', title: 'Estudio', desc: 'Metodología.' }
+        ];
+      } else if (type === 'split_chart') {
+        newSlide.description = 'Detalles técnicos de análisis.';
+        newSlide.bullets = ['Beneficio 1', 'Beneficio 2'];
+        newSlide.chart_title = 'Estadísticas de Uso';
+        newSlide.chart_data = [
+          { label: 'A', value: 60 },
+          { label: 'B', value: 80 },
+          { label: 'C', value: 45 }
+        ];
+        newSlide.detail_cards = [
+          { icon: '⚡', title: 'Detalle', desc: 'Resumen descriptivo del flujo.' }
+        ];
+      } else if (type === 'split_flow') {
+        newSlide.left_title = 'Uso';
+        newSlide.left_cards = [{ icon: '📈', title: 'Eficiencia', desc: 'Detalle de rendimiento.' }];
+        newSlide.right_title = 'Ruta';
+        newSlide.right_steps = [{ title: 'Paso 1', desc: 'Inicio de la actividad.' }];
+      } else if (type === 'split_road') {
+        newSlide.description = 'Esquema gráfico del proceso.';
+        newSlide.bullets = ['Paso clave en ruta'];
+        newSlide.road_title = 'Flujo de Trabajo';
+        newSlide.road_nodes = [
+          { type: 'start', title: 'Inicio', desc: 'Lanzamiento' },
+          { type: 'middle', title: 'Desarrollo', desc: 'Iteración' },
+          { type: 'end', title: 'Cierre', desc: 'Aprobación' }
+        ];
+        newSlide.heat_row = [{ text: 'Ruta activa', fill: 80 }];
+      } else if (type === 'split_network') {
+        newSlide.left_title = 'Conexiones';
+        newSlide.left_chips = [{ icon: '🔗', title: 'Enlace', desc: 'Canal de comunicación.' }];
+        newSlide.right_title = 'Distribución';
+        newSlide.network_cards = [
+          { title: 'Chat', subtitle: 'Conexión' },
+          { title: 'Doc', subtitle: 'Sincronía' },
+          { title: 'A', subtitle: 'Base' },
+          { title: 'B', subtitle: 'Copia' },
+          { title: 'Core', subtitle: 'Central' }
+        ];
+      } else if (type === 'split_pipeline') {
+        newSlide.description = 'Proceso de síntesis cognitiva con IA.';
+        newSlide.bullets = ['Lectura de fuentes'];
+        newSlide.right_title = 'Pipeline';
+        newSlide.sources = ['PDF', 'Txt'];
+        newSlide.core_title = 'Asistente';
+        newSlide.core_desc = 'IA Directa';
+        newSlide.outputs = ['Resumen', 'Idea'];
+      } else if (type === 'grid_conclusion') {
+        newSlide.description = 'Resumen detallado de herramientas.';
+        newSlide.cards = [
+          { emoji: '📕', title: 'Lectura', desc: 'Comprensión.' },
+          { emoji: '✏️', title: 'Apunte', desc: 'Detalles.' },
+          { emoji: '📋', title: 'Cierre', desc: 'Síntesis.' }
+        ];
+        newSlide.ia_text = '🤖 Directriz de apoyo con IA.';
+        newSlide.heat_row = [{ text: 'Comprensión', fill: 75 }];
+      } else if (type === 'comparison_table') {
+        newSlide.description = 'Comparativa de aplicaciones.';
+        newSlide.table_headers = ['Criterio', 'App A', 'App B', 'App C'];
+        newSlide.table_rows = [
+          { criteria: 'Precio', cols: ['Gratis', 'Pago', 'Parcial'] }
+        ];
+        newSlide.heat_row = [{ text: 'Elección', fill: 80 }];
+      } else if (type === 'conclusion') {
+        newSlide.description = 'Resumen del valor digital obtenido.';
+        newSlide.bullets = ['Compromiso grupal de análisis.'];
+        newSlide.right_title = 'Síntesis';
+        newSlide.quote = 'Frase de cierre educativo.';
+        newSlide.kpis = [{ title: 'Valor', desc: 'Crecimiento.' }];
+      } else if (type === 'farewell') {
+        newSlide.emblem = '🚀';
+        newSlide.quote = 'Frase final de agradecimiento.';
+        newSlide.quote_author = '— Autor';
+        newSlide.btn_text = 'Espacio de preguntas';
+        newSlide.pdf_text = 'Descargar PDF';
+        newSlide.footer_text = 'Autores del Proyecto:\nColaboradores';
+      }
+      
+      slides.push(newSlide);
+      activeSlideIndex = slides.length - 1;
+      
+      addSlideModal.style.display = 'none';
+      renderSlidesList();
+      renderFormForSlide(activeSlideIndex);
+      
+      // Auto scroll to bottom of sidebar
+      slidesListContainer.scrollTop = slidesListContainer.scrollHeight;
+      
+      showToast('Nueva diapositiva agregada.', '➕');
+    };
+
+    // =========================================================================
+    // 📁 MECANISMO 1: FILE SYSTEM ACCESS API (LOCAL STORAGE)
+    // =========================================================================
+    btnLinkDirectory.onclick = async () => {
+      try {
+        // Feature check
+        if (!window.showDirectoryPicker) {
+          showToast('Tu navegador no soporta Directory Access API. Usa Chrome/Edge o Descarga Manual.', '⚠️', 5000);
+          return;
+        }
+        
+        localDirectoryHandle = await window.showDirectoryPicker();
+        
+        // Try to get index.html file handle
+        try {
+          localFileHandle = await localDirectoryHandle.getFileHandle('index.html', { create: false });
+          const file = await localFileHandle.getFile();
+          indexHtmlContent = await file.text();
+          extractSlidesData(indexHtmlContent);
+          
+          // Update Local UI status
+          localStatusBadge.textContent = '📁 Local: Conectado';
+          localStatusBadge.classList.add('success');
+          localPathText.textContent = `Carpeta: ${localDirectoryHandle.name}/index.html`;
+          localPathText.style.display = 'block';
+          btnSaveLocal.style.display = 'inline-flex';
+          btnLinkDirectory.textContent = '🔄 Cambiar Carpeta';
+          showToast('Carpeta vinculada. index.html cargado.', '📁');
+        } catch (fileErr) {
+          console.error(fileErr);
+          showToast('No se encontró index.html en la carpeta seleccionada.', '⚠️', 4000);
+        }
+      } catch (err) {
+        console.error('Error al solicitar acceso a directorio:', err);
+        showToast('Acceso denegado a la carpeta.', '❌');
+      }
+    };
+
+    btnSaveLocal.onclick = async () => {
+      if (!localFileHandle) {
+        showToast('No hay una carpeta local vinculada.', '⚠️');
+        return;
+      }
+      
+      try {
+        const updatedHtml = compileUpdatedHtml();
+        
+        // Write back directly to disk!
+        const writable = await localFileHandle.createWritable();
+        await writable.write(updatedHtml);
+        await writable.close();
+        
+        indexHtmlContent = updatedHtml; // Update active template code
+        showToast('Cambios guardados localmente con éxito.', '💾');
+      } catch (err) {
+        console.error('Error al guardar localmente:', err);
+        showToast('Error de escritura al guardar en disco.', '❌');
+      }
+    };
+
+    // =========================================================================
+    // 💾 MECANISMO 2: DESCARGA DIRECTA / COPIAR JSON
+    // =========================================================================
+    function compileUpdatedHtml() {
+      // Stringify SLIDES_DATA accurately preserving the JS array format
+      // formatting beautifully so it matches and is easy to read
+      const indent = '    ';
+      const formattedJson = JSON.stringify(slides, null, 2)
+        .replace(/\n/g, '\n' + indent);
+        
+      // surgically replace using the regex we defined
+      const updatedHtml = indexHtmlContent.replace(
+        /(const\s+SLIDES_DATA\s*=\s*)\[[\s\S]*?\](\;\s*\/\/\s*DYNAMIC RENDERER FUNCTION)/,
+        `$1${formattedJson}$2`
+      );
+      
+      return updatedHtml;
+    }
+
+    btnDownloadHtml.onclick = () => {
+      if (!indexHtmlContent) {
+        showToast('Carga primero index.html para generar la descarga.', '⚠️');
+        return;
+      }
+      
+      try {
+        const updatedHtml = compileUpdatedHtml();
+        
+        // Trigger download
+        const blob = new Blob([updatedHtml], { type: 'text/html;charset=utf-8' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'index.html';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        showToast('Archivo index.html descargado.', '💾');
+      } catch (err) {
+        console.error('Error en descarga:', err);
+        showToast('No se pudo compilar el archivo para descargar.', '❌');
+      }
+    };
+
+    btnCopyJson.onclick = () => {
+      try {
+        const formattedJson = JSON.stringify(slides, null, 2);
+        navigator.clipboard.writeText(formattedJson);
+        showToast('JSON copiado al portapapeles.', '📋');
+      } catch (err) {
+        showToast('Error al copiar al portapapeles.', '❌');
+      }
+    };
+
+    // =========================================================================
+    // 🌐 MECANISMO 3: GITHUB REST API DIRECT SYNC
+    // =========================================================================
+    
+    // Load cached values on launch
+    window.addEventListener('DOMContentLoaded', () => {
+      const cachedPat = localStorage.getItem('github_pat');
+      const cachedRepo = localStorage.getItem('github_repo');
+      
+      if (cachedPat) {
+        inputGithubPat.value = cachedPat;
+        githubStatusBadge.textContent = '🌐 GitHub: Autenticado';
+        githubStatusBadge.classList.add('success');
+      }
+      if (cachedRepo) {
+        inputGithubRepo.value = cachedRepo;
+      }
+      
+      // Auto load fallback
+      loadFallbackTemplate();
+    });
+
+    btnSaveGithub.onclick = async () => {
+      const pat = inputGithubPat.value.trim();
+      const repo = inputGithubRepo.value.trim(); // e.g. przhmr/digitaltoolsPresentation
+      const commitMsg = inputGithubCommit.value.trim() || 'Modificación desde Editor Visual';
+      
+      if (!pat) {
+        showToast('Por favor, ingresa tu GitHub Personal Access Token (PAT).', '⚠️');
+        return;
+      }
+      if (!repo || !repo.includes('/')) {
+        showToast('Por favor, ingresa el repositorio en formato usuario/nombre.', '⚠️');
+        return;
+      }
+      
+      // Cache settings locally
+      localStorage.setItem('github_pat', pat);
+      localStorage.setItem('github_repo', repo);
+      
+      btnSaveGithub.disabled = true;
+      btnSaveGithub.textContent = '⏳ Publicando...';
+      
+      try {
+        showToast('Obteniendo detalles del archivo de GitHub...', '🌐');
+        
+        // 1. Fetch current file to get SHA (needed for update)
+        const getUrl = `https://api.github.com/repos/${repo}/contents/index.html`;
+        const headers = {
+          'Authorization': `token ${pat}`,
+          'Accept': 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json'
+        };
+        
+        const getRes = await fetch(getUrl, { headers });
+        if (!getRes.ok) {
+          throw new Error(`Error recuperando el SHA original de index.html (Status: ${getRes.status})`);
+        }
+        
+        const getJson = await getRes.json();
+        const sha = getJson.sha;
+        const currentRemoteContent = atob(getJson.content.replace(/\s/g, ''));
+        
+        // We compile the HTML based on what we fetched to avoid erasing other changes
+        // if they did edits outside of editor.html.
+        // We set indexHtmlContent to current remote content to align!
+        indexHtmlContent = currentRemoteContent;
+        const updatedHtml = compileUpdatedHtml();
+        
+        showToast('Subiendo archivo actualizado a GitHub...', '⏳');
+        
+        // 2. PUT contents to commit
+        const putUrl = `https://api.github.com/repos/${repo}/contents/index.html`;
+        const putBody = {
+          message: commitMsg,
+          content: btoa(unescape(encodeURIComponent(updatedHtml))), // UTF-8 safe base64
+          sha: sha,
+          branch: 'main'
+        };
+        
+        const putRes = await fetch(putUrl, {
+          method: 'PUT',
+          headers,
+          body: JSON.stringify(putBody)
+        });
+        
+        if (putRes.ok) {
+          showToast('¡Presentación publicada con éxito en GitHub Pages!', '🚀', 5000);
+          githubStatusBadge.textContent = '🌐 GitHub: Sincronizado';
+          githubStatusBadge.classList.add('success');
+        } else {
+          const errData = await putRes.json();
+          throw new Error(errData.message || `Status: ${putRes.status}`);
+        }
+      } catch (err) {
+        console.error('Error al publicar en GitHub:', err);
+        showToast(`Error al subir a GitHub: ${err.message}`, '❌', 5000);
+      } finally {
+        btnSaveGithub.disabled = false;
+        btnSaveGithub.textContent = '🚀 Publicar en la Web';
+      }
+    };
+  </script>
+
+</body>
+</html>
