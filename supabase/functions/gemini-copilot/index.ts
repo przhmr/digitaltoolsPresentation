@@ -70,7 +70,7 @@ Deno.serve(async (req) => {
     }
 
     // 5. Query Gemini
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`
+    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiApiKey}`
     const systemInstruction = `Eres un experto diseñador web especializado en Reveal.js y CSS moderno con glassmorphism.
 Genera un bloque de diapositiva auto-contenido en HTML premium para la indicación: "${prompt}".
 Reglas obligatorias:
