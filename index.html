@@ -21,15 +21,15 @@
   <!-- Startup Style Theme Customizations -->
   <style>
     :root {
-      --bg-color: #050814;
+      --bg-color: #030f26;
       --text-color: #f8fafc;
       --primary-accent: #00f2fe; /* Glowing Cyan */
-      --secondary-accent: #4facfe; /* Deep Cyan/Blue */
+      --secondary-accent: #8b5cf6; /* Elegant Violet */
       --neon-pink: #ff007f; /* Accent Pink */
       --muted-text: #94a3b8;
-      --glass-bg: rgba(10, 15, 30, 0.7);
+      --glass-bg: rgba(10, 15, 30, 0.65);
       --glass-border: rgba(0, 242, 254, 0.12);
-      --card-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.5);
+      --card-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.4);
     }
 
     body {
@@ -371,7 +371,7 @@
            ======================================================== -->
       <section>
         <div class="glass-card" style="text-align: center; max-width: 950px; margin: 0 auto; border-color: rgba(0, 242, 254, 0.3); padding: 40px;">
-          <h1>Herramientas Digitales</h1>
+          <h1>Herramientas Digitales para la Ingeniería</h1>
           <h3 style="font-size: 1.05em; color: var(--muted-text); font-weight: 500; margin-bottom: 40px; letter-spacing: 0.02em;">
             Optimización, Colaboración e Inteligencia Artificial en el Postgrado
           </h3>
@@ -955,7 +955,7 @@
       plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
     });
 
-    // 3D Flowing Perspective Grid Animation Engine (Motion Graphics Background)
+    // 3D Flowing Perspective Grid & Particle Stream Engine (Motion Graphics Background)
     const canvas = document.getElementById('network-canvas');
     const ctx = canvas.getContext('2d');
 
@@ -967,8 +967,9 @@
       height = canvas.height = window.innerHeight;
     });
 
-    let speed = 0.55; // Fluid flow speed
-    let offset = 0; // Animation horizontal grid offset
+    let speed = 0.005; // Flow speed of 3D particles (z-depth increment per frame)
+    let gridSpeed = 0.45; // Speed of the horizontal grid lines flow
+    let gridOffset = 0;
     let horizonY = height * 0.45; // Horizon height position (45% from top)
     let targetHorizonX = width * 0.5; // Slide transitions coordinate target
     let horizonX = width * 0.5; // Eased center of the 3D perspective grid
@@ -979,6 +980,73 @@
       // Creates a stunning custom motion graphics cockpit curve effect
       targetHorizonX = width * 0.5 - (event.indexh - 5) * 80;
     });
+
+    // Particle class for 3D perspective flow
+    const particles = [];
+    const maxParticles = 35;
+
+    class PerspectiveParticle {
+      constructor() {
+        this.reset();
+        // Distribute initial depths randomly so they don't spawn all at once
+        this.z = Math.random();
+      }
+
+      reset() {
+        this.lane = Math.random(); // lane ratio from 0 to 1
+        this.z = 0; // starts at the horizon
+        this.speed = speed * (Math.random() * 0.6 + 0.7);
+        // Soft Cyan or soft Purple/Violet to match previous colors
+        this.color = Math.random() > 0.4 ? 'rgba(0, 242, 254, ' : 'rgba(139, 92, 246, ';
+        this.size = Math.random() * 1.8 + 0.8;
+      }
+
+      update() {
+        this.z += this.speed;
+        if (this.z >= 1) {
+          this.reset();
+        }
+      }
+
+      draw() {
+        if (this.z <= 0) return;
+
+        // Exponential mapping for 3D perspective scaling
+        const y = horizonY + Math.pow(this.z, 2.2) * (height - horizonY);
+        // Radiate outward from the horizon center based on lane ratio
+        const spread = (this.lane - 0.5) * 2.2; // -1.1 to 1.1 spread
+        const x = horizonX + spread * width * 0.75 * Math.pow(this.z, 1.8);
+
+        // Calculate size based on depth
+        const r = this.size * (0.3 + this.z * 1.8);
+
+        // Fade in near the horizon, fade out near the bottom
+        let alpha = 1;
+        if (this.z < 0.15) {
+          alpha = this.z / 0.15;
+        } else if (this.z > 0.8) {
+          alpha = (1 - this.z) / 0.2;
+        }
+        alpha *= 0.35; // Maximum particle opacity (subtle and high-end)
+
+        // Draw particle core
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fillStyle = this.color + alpha + ')';
+        ctx.fill();
+
+        // Draw particle glow halo
+        ctx.beginPath();
+        ctx.arc(x, y, r * 2.2, 0, Math.PI * 2);
+        ctx.fillStyle = this.color + (alpha * 0.3) + ')';
+        ctx.fill();
+      }
+    }
+
+    // Initialize 3D Perspective Particles
+    for (let i = 0; i < maxParticles; i++) {
+      particles.push(new PerspectiveParticle());
+    }
 
     function drawFlowingGrid() {
       ctx.clearRect(0, 0, width, height);
@@ -994,22 +1062,24 @@
       ctx.lineWidth = 1.0;
       for (let i = 0; i <= verticalLines; i++) {
         const ratio = i / verticalLines;
-        const bottomX = ratio * width;
+        // Make the lines radiate from the horizon center to the bottom edge
+        const bottomX = (ratio - 0.5) * width * 1.5 + horizonX;
 
         ctx.beginPath();
         ctx.moveTo(horizonX, horizonY);
         ctx.lineTo(bottomX, bottomY);
-        // Made highly visible and glowing cyan
-        ctx.strokeStyle = 'rgba(0, 242, 254, 0.22)';
+        
+        // Extremely soft cyan-blue grid lines (premium and subtle)
+        ctx.strokeStyle = 'rgba(0, 242, 254, 0.06)';
         ctx.stroke();
       }
 
       // 2. Draw Flowing Horizontal Perspective Lines (River flow)
-      offset += speed;
-      if (offset >= 40) offset = 0;
+      gridOffset += gridSpeed;
+      if (gridOffset >= 40) gridOffset = 0;
 
       for (let i = 0; i < horizontalLines; i++) {
-        const lineOffset = (i * 40 + offset);
+        const lineOffset = (i * 40 + gridOffset);
         const depthRatio = lineOffset / (horizontalLines * 40); // 0 to 1
 
         // Exponential mapping to simulate realistic 3D perspective spacing
@@ -1020,7 +1090,7 @@
           ctx.moveTo(0, y);
           ctx.lineTo(width, y);
           // Fade lines as they get closer to the horizon
-          const alpha = Math.pow(depthRatio, 2) * 0.28;
+          const alpha = Math.pow(depthRatio, 2) * 0.1;
           ctx.strokeStyle = `rgba(0, 242, 254, ${alpha})`;
           ctx.stroke();
         }
@@ -1030,9 +1100,15 @@
       ctx.beginPath();
       ctx.moveTo(0, horizonY);
       ctx.lineTo(width, horizonY);
-      ctx.strokeStyle = 'rgba(0, 242, 254, 0.35)';
-      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = 'rgba(0, 242, 254, 0.12)';
+      ctx.lineWidth = 1.2;
       ctx.stroke();
+
+      // 4. Update and Draw Flowing 3D Particles
+      for (let i = 0; i < particles.length; i++) {
+        particles[i].update();
+        particles[i].draw();
+      }
 
       requestAnimationFrame(drawFlowingGrid);
     }
