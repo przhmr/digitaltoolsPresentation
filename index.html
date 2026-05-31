@@ -400,6 +400,7 @@
   <div class="glow-bg">
     <div class="glow-blob blob1"></div>
     <div class="glow-blob blob2"></div>
+    <canvas id="network-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; opacity: 0.15;"></canvas>
   </div>
 
   <div class="reveal">
@@ -1006,7 +1007,10 @@
       plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
     });
 
-    // Create a beautiful, connected parallax background effect on slide transition
+    // Slide transition kinetics & parallax background shift
+    let lastIndex = 0;
+    let slideWindX = 0; // Kinetic horizontal push for background particles
+
     Reveal.on('slidechanged', event => {
       const glowBg = document.querySelector('.glow-bg');
       if (glowBg) {
@@ -1016,7 +1020,99 @@
         glowBg.style.transform = `translate(${shiftX}px, ${shiftY}px)`;
         glowBg.style.transition = 'transform 1.4s cubic-bezier(0.16, 1, 0.3, 1)';
       }
+
+      // Calculate sliding direction to apply a responsive kinetic breeze to particles
+      const diff = event.indexh - lastIndex;
+      slideWindX = diff * 3.5; // Wind force vector
+      lastIndex = event.indexh;
     });
+
+    // Subtle Particle Network Animation Engine (Motion Graphics Background)
+    const canvas = document.getElementById('network-canvas');
+    const ctx = canvas.getContext('2d');
+
+    let width = canvas.width = window.innerWidth * 1.2; // Match the 120vw container width
+    let height = canvas.height = window.innerHeight * 1.2; // Match the 120vh container height
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth * 1.2;
+      height = canvas.height = window.innerHeight * 1.2;
+    });
+
+    const particles = [];
+    const particleCount = 45;
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.vx = (Math.random() - 0.5) * 0.35; // Soft velocity
+        this.vy = (Math.random() - 0.5) * 0.35;
+        this.radius = Math.random() * 1.2 + 1; // Subtle particle size
+      }
+
+      update() {
+        // Combine soft local speed + global slide wind force
+        this.x += this.vx + slideWindX;
+        this.y += this.vy;
+
+        // Soft screen wrapping
+        if (this.x < 0) this.x = width;
+        if (this.x > width) this.x = 0;
+        if (this.y < 0) this.y = height;
+        if (this.y > height) this.y = 0;
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(0, 242, 254, 0.6)';
+        ctx.fill();
+      }
+    }
+
+    // Initialize Particle Array
+    for (let i = 0; i < particleCount; i++) {
+      particles.push(new Particle());
+    }
+
+    // Main Kinetic Loop
+    function animateParticles() {
+      ctx.clearRect(0, 0, width, height);
+
+      // Decelerate the transition kinetic wind smoothly
+      slideWindX *= 0.93;
+
+      // Draw faint connections representing data/process networks
+      for (let i = 0; i < particles.length; i++) {
+        const p1 = particles[i];
+        p1.update();
+        p1.draw();
+
+        for (let j = i + 1; j < particles.length; j++) {
+          const p2 = particles[j];
+          const dx = p1.x - p2.x;
+          const dy = p1.y - p2.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 130) {
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            // Opacity maps to distance (fading at borders)
+            const alpha = (1 - dist / 130) * 0.12;
+            ctx.strokeStyle = `rgba(0, 242, 254, ${alpha})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+
+      requestAnimationFrame(animateParticles);
+    }
+
+    // Start Kinetic Particles Engine
+    animateParticles();
   </script>
 </body>
 </html>
