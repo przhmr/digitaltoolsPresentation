@@ -1442,6 +1442,23 @@
               </div>
             </section>
           `;
+        } else if (slide.type === 'agenda') {
+          return `
+            <section data-transition="convex-in fade-out">
+              <h2>${slide.title}</h2>
+              <p style="font-size: 0.7em; color: var(--muted-text); margin-bottom: 25px; text-align: left; line-height: 1.45;">
+                ${slide.description}
+              </p>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: left;">
+                ${slide.points.map((pt, i) => `
+                  <div class="glass-card fragment fade-up" data-fragment-index="${i + 1}" style="padding: 15px; border-left: 3px solid ${i % 2 === 0 ? 'var(--primary-accent)' : 'var(--secondary-accent)'};">
+                    <span style="font-size: 0.55em; font-weight: 800; color: ${i % 2 === 0 ? 'var(--primary-accent)' : 'var(--secondary-accent)'}; display: block; margin-bottom: 5px; font-family: var(--font-outfit);">0${i + 1}. ${pt.label}</span>
+                    <span style="font-size: 0.44em; color: #fff; display: block; line-height: 1.45; font-family: var(--font-inter);">${pt.desc}</span>
+                  </div>
+                `).join('')}
+              </div>
+            </section>
+          `;
         } else if (slide.type === 'categories') {
           return `
             <section data-transition="convex-in fade-out">
@@ -1717,6 +1734,20 @@
                       </div>
                     `).join('')}
                   </div>
+                </div>
+              </div>
+            </section>
+          `;
+        } else if (slide.type === 'quote') {
+          return `
+            <section data-transition="zoom-in fade-out">
+              <div class="glass-card" style="max-width: 800px; margin: 0 auto; padding: 40px; text-align: center; border-color: rgba(139, 92, 246, 0.35); position: relative;">
+                <span style="font-size: 4.5em; color: var(--secondary-accent); position: absolute; top: -15px; left: 20px; font-family: Georgia, serif; line-height: 1; opacity: 0.35;">“</span>
+                <blockquote style="font-size: 0.72em; font-style: italic; color: #fff; line-height: 1.5; margin: 20px 0; border: none; padding: 0; font-family: var(--font-inter);">
+                  "${slide.quote}"
+                </blockquote>
+                <div style="font-size: 0.52em; color: var(--primary-accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; display: inline-block; background: rgba(0, 242, 254, 0.1); padding: 5px 15px; border-radius: 20px; border: 1px solid rgba(0, 242, 254, 0.2); font-family: var(--font-outfit);">
+                  — ${slide.quote_author || slide.author}
                 </div>
               </div>
             </section>
@@ -2125,6 +2156,35 @@
             x: 5.5, y: 4.2, w: 3.5, h: 1.0,
             fontSize: 10, fontFace: 'Arial', color: '00f2fe',
             align: 'right'
+          });
+
+        } else if (slide.type === 'agenda') {
+          pptxSlide.addText(stripHtml(slide.title), {
+            x: 0.5, y: 0.4, w: 9.0, h: 0.6,
+            fontSize: 24, fontFace: 'Arial', bold: true, color: '00f2fe'
+          });
+          pptxSlide.addText(stripHtml(slide.description), {
+            x: 0.5, y: 1.0, w: 9.0, h: 0.5,
+            fontSize: 11, fontFace: 'Arial', color: '94a3b8'
+          });
+          (slide.points || []).forEach((pt, i) => {
+            let row = Math.floor(i / 2);
+            let col = i % 2;
+            let currentX = 0.5 + col * 4.6;
+            let currentY = 1.8 + row * 1.5;
+            pptxSlide.addShape(pptx.shapes.ROUNDED_RECTANGLE, {
+              x: currentX, y: currentY, w: 4.4, h: 1.3,
+              fill: { color: '0a0f1e' },
+              line: { color: i % 2 === 0 ? '00f2fe' : '8b5cf6', width: 1 }
+            });
+            pptxSlide.addText(`0${i+1}. ${stripHtml(pt.label)}`, {
+              x: currentX + 0.2, y: currentY + 0.1, w: 4.0, h: 0.3,
+              fontSize: 12, fontFace: 'Arial', bold: true, color: i % 2 === 0 ? '00f2fe' : '8b5cf6'
+            });
+            pptxSlide.addText(stripHtml(pt.desc), {
+              x: currentX + 0.2, y: currentY + 0.45, w: 4.0, h: 0.7,
+              fontSize: 10, fontFace: 'Arial', color: 'ffffff'
+            });
           });
 
         } else if (slide.type === 'categories') {
@@ -2661,6 +2721,25 @@
               x: currentX + 0.05, y: 3.95, w: kpiWidth - 0.1, h: 1.0,
               fontSize: 7.5, fontFace: 'Arial', color: 'ffffff', align: 'center'
             });
+          });
+
+        } else if (slide.type === 'quote') {
+          pptxSlide.addShape(pptx.shapes.ROUNDED_RECTANGLE, {
+            x: 1.0, y: 1.2, w: 8.0, h: 3.6,
+            fill: { color: '0a0f1e' },
+            line: { color: '8b5cf6', width: 2 }
+          });
+          pptxSlide.addText(`“`, {
+            x: 1.2, y: 0.9, w: 1.0, h: 0.8,
+            fontSize: 72, fontFace: 'Georgia', color: '8b5cf6', opacity: 0.3
+          });
+          pptxSlide.addText(`"${stripHtml(slide.quote)}"`, {
+            x: 1.5, y: 1.6, w: 7.0, h: 1.8,
+            fontSize: 16, fontFace: 'Arial', color: 'ffffff', italic: true, align: 'center'
+          });
+          pptxSlide.addText(`— ${stripHtml(slide.quote_author || slide.author)}`, {
+            x: 1.5, y: 3.6, w: 7.0, h: 0.6,
+            fontSize: 12, fontFace: 'Arial', bold: true, color: '00f2fe', align: 'center'
           });
 
         } else if (slide.type === 'custom') {

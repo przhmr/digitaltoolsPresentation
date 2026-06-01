@@ -1,0 +1,11 @@
+{
+  "type": "agenda",
+  "title": "Agenda del Proyecto",
+  "description": "Temarios y ruta de aprendizaje para el desarrollo de microservicios distribuidos.",
+  "points": [
+    { "label": "Fundamentos", "desc": "Principios RESTful, mensajería asíncrona y patrones de diseño." },
+    { "label": "Infraestructura", "desc": "Orquestación con Kubernetes, Service Mesh y gateways." },
+    { "label": "Tolerancia a Fallos", "desc": "Circuit Breakers, reintentos exponenciales y resiliencia." },
+    { "label": "Observabilidad", "desc": "Métricas distribuidas, trazas con OpenTelemetry y dashboards." }
+  ]
+}

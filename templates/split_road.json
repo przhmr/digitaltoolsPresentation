@@ -1,0 +1,21 @@
+{
+  "type": "split_road",
+  "title": "Ruta de Implementación",
+  "description": "Fases secuenciales de ejecución para la migración del monolito hacia microservicios.",
+  "bullets": [
+    "Fase de análisis y mapeo de dominios de negocio.",
+    "Migración progresiva utilizando el patrón Strangler Fig.",
+    "Monitoreo de APIs y redirección del tráfico productivo."
+  ],
+  "road_title": "Hitos del Camino",
+  "road_nodes": [
+    { "title": "Hito 1: Descubrimiento", "desc": "Mapeo DDD.", "type": "start" },
+    { "title": "Hito 2: Refactor", "desc": "Extracción de servicios.", "type": "middle" },
+    { "title": "Hito 3: Producción", "desc": "Apagado del monolito.", "type": "end" }
+  ],
+  "heat_row": [
+    { "fill": 25, "text": "Planificación" },
+    { "fill": 65, "text": "Migración" },
+    { "fill": 100, "text": "Optimización" }
+  ]
+}

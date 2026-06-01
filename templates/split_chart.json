@@ -1,0 +1,20 @@
+{
+  "type": "split_chart",
+  "title": "Rendimiento y Optimización",
+  "description": "Comparativa del tiempo de respuesta (TTFB) antes y después de aplicar estrategias de caché Redis.",
+  "bullets": [
+    "Reducción dramática del acceso a base de datos relacional.",
+    "Mejora del Largest Contentful Paint (LCP) a nivel global.",
+    "Mitigación de picos de carga en el servidor de base de datos."
+  ],
+  "chart_title": "TTFB en ms (Menor es Mejor)",
+  "chart_data": [
+    { "label": "Sin Caché", "value": 90 },
+    { "label": "Caché SQL", "value": 45 },
+    { "label": "Redis Cache", "value": 15 }
+  ],
+  "detail_cards": [
+    { "icon": "📈", "title": "Mejora del 83%", "desc": "Reducción del tiempo de respuesta del servidor principal bajo carga." },
+    { "icon": "🚀", "title": "INP Excelente", "desc": "Interactividad del cliente fluida sin bloqueos en el hilo principal." }
+  ]
+}

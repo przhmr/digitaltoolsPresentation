@@ -1,0 +1,32 @@
+{
+  "type": "custom",
+  "title": "Lienzo Libre Creativo",
+  "elements": [
+    {
+      "x": 10,
+      "y": 15,
+      "w": 38,
+      "h": 70,
+      "className": "glass-card",
+      "bg": "rgba(10, 15, 30, 0.9)",
+      "border": "1px solid rgba(0, 242, 254, 0.3)",
+      "borderRadius": "16px",
+      "padding": "25px",
+      "zIndex": 1,
+      "content": "<h3 style='color:var(--primary-accent); font-family:Outfit; font-size:0.7em; margin-bottom:12px;'>📊 ANÁLISIS DE DATOS</h3><p style='color:#fff; font-size:0.46em; line-height:1.5;'>Lienzo dinámico que permite la inserción de gráficos vectoriales interactivos, mapas conceptuales o consolas de depuración con posicionamiento absoluto en porcentaje.</p>"
+    },
+    {
+      "x": 52,
+      "y": 15,
+      "w": 38,
+      "h": 70,
+      "className": "glass-card",
+      "bg": "rgba(10, 15, 30, 0.9)",
+      "border": "1px solid rgba(139, 92, 246, 0.3)",
+      "borderRadius": "16px",
+      "padding": "25px",
+      "zIndex": 1,
+      "content": "<h3 style='color:var(--secondary-accent); font-family:Outfit; font-size:0.7em; margin-bottom:12px;'>✨ RED NEURONAL</h3><p style='color:#fff; font-size:0.46em; line-height:1.5;'>Sincronizado de forma bidireccional con el copiloto Gemini Flash 2.5. Introduce tus consignas y observa cómo se autogenera la composición visual interactiva en tiempo real.</p>"
+    }
+  ]
+}

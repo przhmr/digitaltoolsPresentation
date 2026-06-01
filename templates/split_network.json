@@ -1,0 +1,16 @@
+{
+  "type": "split_network",
+  "title": "Topología de Servicios Clave",
+  "left_title": "Capas de Acceso",
+  "left_chips": [
+    { "icon": "🌐", "title": "API Gateway", "desc": "Punto único de entrada, rate limiting, balanceo de carga y ruteo dinámico." },
+    { "icon": "🔑", "title": "Identity Provider", "desc": "Servicios de autenticación centralizada, SSO de usuarios y control RBAC." }
+  ],
+  "right_title": "Grafo de Comunicaciones",
+  "network_cards": [
+    { "title": "Web App Client", "subtitle": "UI React esmerilada" },
+    { "title": "API Gateway", "subtitle": "Routing Engine Kong" },
+    { "title": "User Microservice", "subtitle": "Deno / NestJS Core" },
+    { "title": "Auth Database", "subtitle": "Supabase PostgreSQL" }
+  ]
+}

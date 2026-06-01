@@ -60,8 +60,8 @@ Deno.serve(async (req) => {
       )
     }
 
-    // 4. Extract the generation prompt
-    const { prompt } = await req.json()
+    // 4. Extract the generation prompt and optional custom systemInstruction override
+    const { prompt, systemInstruction: customInstruction } = await req.json()
     if (!prompt) {
       return new Response(
         JSON.stringify({ error: "El prompt de generación es requerido." }),
@@ -71,7 +71,9 @@ Deno.serve(async (req) => {
 
     // 5. Query Gemini
     const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiApiKey}`
-    const systemInstruction = `Eres un experto redactor pedagógico y diseñador de contenido académico.
+    
+    // Use the custom systemInstruction if provided, else fall back to the default plain-text prompt wrapper
+    const systemInstruction = customInstruction || `Eres un experto redactor pedagógico y diseñador de contenido académico.
 Genera contenido en texto plano limpio y altamente profesional para la indicación: "${prompt}".
 Reglas obligatorias:
 1. Devuelve ÚNICAMENTE el texto redactado en formato plano. No utilices etiquetas HTML ni bloques de código markdown (\`\`\`html\`\`\` o \`\`\`text\`\`\`).

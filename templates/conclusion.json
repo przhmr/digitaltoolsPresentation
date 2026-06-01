@@ -1,0 +1,16 @@
+{
+  "type": "conclusion",
+  "title": "Resumen y Próximos Pasos",
+  "description": "Plan de acción sugerido para consolidar la arquitectura de software implementada.",
+  "bullets": [
+    "Establecer guardrails de presupuesto automático en recursos cloud.",
+    "Implementar simulaciones de caos automatizadas (Chaos Engineering).",
+    "Refinar políticas de retención y archivo de logs estructurados."
+  ],
+  "right_title": "Directriz Académica",
+  "quote": "El diseño de sistemas distribuidos no se trata de evitar fallos, sino de construir sistemas capaces de curarse a sí mismos.",
+  "kpis": [
+    { "title": "99.99% SLA", "desc": "Disponibilidad del API Gateway" },
+    { "title": "<50ms P99", "desc": "Latencia en endpoints de lectura" }
+  ]
+}

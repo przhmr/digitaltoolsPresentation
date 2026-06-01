@@ -1,0 +1,15 @@
+{
+  "type": "split_flow",
+  "title": "Ciclo de Entrega Continua",
+  "left_title": "Integración y Pruebas",
+  "left_cards": [
+    { "icon": "🧪", "title": "Unit Testing", "desc": "Pruebas de cobertura automatizadas con Jest y PyTest sobre pull requests." },
+    { "icon": "🛡️", "title": "Análisis SAST/DAST", "desc": "Escaneo estático y dinámico de vulnerabilidades en dependencias críticas." }
+  ],
+  "right_title": "Fases de despliegue",
+  "right_steps": [
+    { "title": "Compilación", "desc": "Generación de imágenes Docker y almacenamiento en registro seguro." },
+    { "title": "Staging", "desc": "Pruebas E2E automatizadas en entorno gemelo productivo." },
+    { "title": "Producción", "desc": "Despliegue progresivo Blue-Green con monitoreo en tiempo real." }
+  ]
+}

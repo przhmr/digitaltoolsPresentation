@@ -851,10 +851,32 @@
     let activeTone = 'profesional';
     let activeSlideCount = 5;
     let generatedDeck = null;
+    let templatesData = {};
 
     // Default configuration for Supabase integration (inherited seamlessly)
     const DEFAULT_SUPABASE_URL = "https://wsmktslxrgnoxzpycymj.supabase.co";
     const DEFAULT_SUPABASE_ANON_KEY = "sb_publishable__pV5l2sQPXzWwx90UsQTrw_PKRwzFm1";
+
+    // Asynchronously load the 14 templates from the local server /templates directory
+    async function loadTemplates() {
+      const TEMPLATE_NAMES = [
+        'cover', 'agenda', 'categories', 'split_flow', 'split_road',
+        'split_network', 'split_pipeline', 'split_chart', 'comparison_table',
+        'grid_conclusion', 'conclusion', 'quote', 'custom', 'farewell'
+      ];
+      for (const name of TEMPLATE_NAMES) {
+        try {
+          const res = await fetch(`templates/${name}.json`);
+          if (res.ok) {
+            templatesData[name] = await res.json();
+            console.log(`Loaded template layout dynamically: ${name}`);
+          }
+        } catch (e) {
+          console.error(`Error loading layout ${name}:`, e);
+        }
+      }
+    }
+    loadTemplates();
 
     // Selector update hooks
     function selectTheme(element) {
@@ -932,30 +954,45 @@
 
       let responseSlides = null;
 
-      // Construct systemic optimization instructions
-      const systemInstruction = `You are CoritoBot, a world-class educational presentation designer.
+      // Build templates context dynamically based on loaded physical JSON templates
+      let templatesContext = "";
+      if (Object.keys(templatesData).length > 0) {
+        templatesContext = "Choose from these slide templates and follow their exact schema structures:\n";
+        for (const [name, data] of Object.entries(templatesData)) {
+          templatesContext += `Layout name "${name}":\n${JSON.stringify(data, null, 2)}\n\n`;
+        }
+      } else {
+        // Fallback description in case fetch failed
+        templatesContext = `Choose from these slide templates and follow their exact schema structures:
+        - "cover": Title/Opening (title, subtitle, authors, institution)
+        - "agenda": Outline roadmap (title, description, points [label, desc])
+        - "categories": Concepts grilla (title, description, cards [emoji, label, desc], kpis [icon, title, desc])
+        - "split_flow": Flow (title, left_title, left_cards [icon, title, desc], right_title, right_steps [title, desc])
+        - "split_road": Sequential roadmap (title, description, bullets, road_title, road_nodes [title, desc, type], heat_row [fill, text])
+        - "split_network": Pulse node graph (title, left_title, left_chips [icon, title, desc], right_title, network_cards [title, subtitle])
+        - "split_pipeline": Left-to-right pipe (title, description, bullets, right_title, sources, core_title, core_desc, outputs)
+        - "split_chart": CSS bar chart (title, description, bullets, chart_title, chart_data [label, value], detail_cards [icon, title, desc])
+        - "comparison_table": Table (title, description, table_headers, table_rows [criteria, cols], heat_row [fill, text])
+        - "grid_conclusion": 3-card grid (title, description, cards [emoji, title, desc], ia_text, heat_row [fill, text])
+        - "conclusion": Summary block (title, description, bullets, right_title, quote, kpis [title, desc])
+        - "quote": Quote block (quote, quote_author, author)
+        - "custom": Absolute canvas layout (title, elements [x, y, w, h, content, className, ...])
+        - "farewell": Farewell final (title, emblem, quote, quote_author, btn_text, pptx_text, footer_text)
+        `;
+      }
+
+      const systemInstruction = `You are CoritoBot 🐐, a world-class academic presentation designer.
 Generate a structured JSON array representing a presentation deck about: "${prompt}".
 Theme: ${activeTheme}. Tone: ${activeTone}. Number of slides requested: ${activeSlideCount}.
-Choose appropriate template blocks for each slide. You MUST use exactly these layouts:
-1. Cover Slide ("type": "cover")
-   Required fields: title, subtitle, authors, date
-2. Grid Categories/Cards ("type": "categories")
-   Required fields: title, items (array of 3 objects with icon, name, desc)
-3. Linear Flow Diagram ("type": "split_flow")
-   Required fields: title, items (array of 3 sequential steps strings)
-4. Comparison Table ("type": "comparison_table")
-   Required fields: title, headers (array of 3 strings), rows (array of 3 arrays, each with 3 cells strings)
-5. Structured Conclusion Bulletpoints ("type": "conclusion")
-   Required fields: title, bullets (array of 3 strings)
-6. Canvas Freeform Slide ("type": "custom")
-   Required fields: title, elements (array of 1 or 2 elegant glassmorphic cards objects with x, y, w, h, content: HTML)
-7. Final Slide ("type": "farewell")
-   Required fields: title, quote, author
+
+${templatesContext}
 
 Requirements:
-1. Output ONLY a valid JSON array matching these schemas.
-2. Absolutely DO NOT include any introductory or conversational text, nor markdown tags (\`\`\` or similar). Just the raw JSON.
-3. Ensure high-fidelity content appropriate for college-level teaching.`;
+1. Choose appropriate templates. You MUST include a "cover" slide as the first slide, and a "farewell" slide as the final slide. In between, choose a diverse set of slide types matching the topic.
+2. The user has requested exactly ${activeSlideCount} slides. Make sure to generate exactly ${activeSlideCount} slides, structured in a JSON array.
+3. Output ONLY the valid JSON array containing the slides. Absolutely do not include any introductory or conversational text, nor markdown blocks. Just the raw JSON.
+4. Ensure the content is extremely high quality, rich, and tailored to the topic.
+`;
 
       if (sbUrl && sbKey && cachedPass) {
         try {
@@ -968,7 +1005,10 @@ Requirements:
               'Authorization': `Bearer ${cachedPass}`,
               'apikey': sbKey
             },
-            body: JSON.stringify({ prompt: systemInstruction })
+            body: JSON.stringify({
+              prompt: prompt,
+              systemInstruction: systemInstruction
+            })
           });
 
           if (response.ok) {
@@ -1288,6 +1328,9 @@ You MUST preserve the exact same slide "type": "${slideToEdit.type}".
 Current slide JSON object:
 ${JSON.stringify(slideToEdit, null, 2)}
 
+Expected schema structure for "${slideToEdit.type}" layout:
+${templatesData[slideToEdit.type] ? JSON.stringify(templatesData[slideToEdit.type], null, 2) : "Match the current schema pattern."}
+
 Requirements:
 1. Output ONLY the updated, single valid JSON slide object matching the exact schema of "${slideToEdit.type}".
 2. Do NOT include markdown code blocks or wrapper text (like \`\`\`json or \`\`\`). Return ONLY raw JSON.
@@ -1306,7 +1349,10 @@ Requirements:
               'Authorization': `Bearer ${cachedPass}`,
               'apikey': sbKey
             },
-            body: JSON.stringify({ prompt: systemInstruction })
+            body: JSON.stringify({
+              prompt: instruction,
+              systemInstruction: systemInstruction
+            })
           });
 
           if (response.ok) {

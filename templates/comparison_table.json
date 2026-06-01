@@ -1,0 +1,42 @@
+{
+  "type": "comparison_table",
+  "title": "Tabla Comparativa de Protocolos",
+  "description": "Análisis objetivo de idoneidad entre REST, GraphQL y gRPC para la comunicación de servicios.",
+  "table_headers": [
+    "Criterio",
+    "REST API",
+    "GraphQL",
+    "gRPC / Protobuf"
+  ],
+  "table_rows": [
+    {
+      "criteria": "Latencia",
+      "cols": [
+        "Media (HTTP/1.1)",
+        "Media-Alta (HTTP/1.1)",
+        "Mínima (HTTP/2 binario)"
+      ]
+    },
+    {
+      "criteria": "Tipado",
+      "cols": [
+        "Débil (JSON dinámico)",
+        "Fuerte (Esquemas GraphQL)",
+        "Estricto (Archivos .proto)"
+      ]
+    },
+    {
+      "criteria": "Uso Típico",
+      "cols": [
+        "Consumo de clientes web",
+        "Frontends complejos/móvil",
+        "Comunicación interna inter-servicios"
+      ]
+    }
+  ],
+  "heat_row": [
+    { "fill": 40, "text": " REST Simplicidad" },
+    { "fill": 70, "text": " GraphQL Flexibilidad" },
+    { "fill": 100, "text": " gRPC Eficiencia" }
+  ]
+}

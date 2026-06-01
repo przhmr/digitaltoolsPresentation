@@ -1,0 +1,23 @@
+{
+  "type": "split_pipeline",
+  "title": "Pipeline de Ingesta de Datos",
+  "description": "Estructura de recolección y enriquecimiento de datos masivos para el motor analítico.",
+  "bullets": [
+    "Captura en tiempo real de eventos de interacción web y móvil.",
+    "Procesamiento stream de datos crudos para limpieza instantánea.",
+    "Indexación distribuida en data warehouses optimizados."
+  ],
+  "right_title": "Flujo Físico de Datos",
+  "sources": [
+    "IoT Devices",
+    "Web Clickstream",
+    "Mobile Apps"
+  ],
+  "core_title": "Apache Kafka / Flink Engine",
+  "core_desc": "Procesamiento Stream & Enrichment",
+  "outputs": [
+    "Supabase DB",
+    "Data Lakehouse",
+    "Elasticsearch"
+  ]
+}

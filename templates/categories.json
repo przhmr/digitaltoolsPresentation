@@ -1,0 +1,14 @@
+{
+  "type": "categories",
+  "title": "Pilares de Diseño de Sistemas",
+  "description": "Directrices fundamentales para construir aplicaciones de nivel empresarial altamente escalables.",
+  "cards": [
+    { "emoji": "🛡️", "label": "Seguridad End-to-End", "desc": "Cifrado TLS, OAuth2, autenticación JWT en API Gateways." },
+    { "emoji": "⚡", "label": "Baja Latencia", "desc": "Estrategias de caché multinivel con Redis, CDN dinámicas y consultas indexadas." },
+    { "emoji": "🌀", "label": "Desacoplamiento", "desc": "Comunicación asíncrona mediante colas de eventos distribuidas con Kafka." }
+  ],
+  "kpis": [
+    { "icon": "⚡", "title": "INP < 100ms", "desc": "Interactividad instantánea en interfaces de usuario." },
+    { "icon": "🔒", "title": "Cero Brechas", "desc": "Auditorías de seguridad automáticas y firma de tokens." }
+  ]
+}

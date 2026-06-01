@@ -1,0 +1,15 @@
+{
+  "type": "grid_conclusion",
+  "title": "Conclusiones de Viabilidad",
+  "description": "Resultados finales de la evaluación técnica e impacto organizativo del proyecto.",
+  "cards": [
+    { "emoji": "🎯", "title": "Metas Logradas", "desc": "Migración del 100% de los servicios críticos dentro del plazo planificado." },
+    { "emoji": "📈", "title": "Retorno de Inversión", "desc": "Reducción del 35% en costes de infraestructura cloud mediante auto-scaling." },
+    { "emoji": "🌱", "title": "Adopción de Equipo", "desc": "Capacitación completa en GitOps y despliegues declarativos seguros." }
+  ],
+  "ia_text": "Recomendación del Copiloto IA: Priorizar la integración de observabilidad distribuida con trazas contextuales para mitigar cuellos de botella en depuraciones de producción.",
+  "heat_row": [
+    { "fill": 90, "text": "Madurez Técnica" },
+    { "fill": 95, "text": "Satisfacción de Usuarios" }
+  ]
+}
