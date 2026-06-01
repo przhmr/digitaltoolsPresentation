@@ -1030,7 +1030,7 @@
   
   <script>
     // DATA-DRIVEN PRESENTATION ENGINE
-    // This array contains the full, editable slide structure. The visual editor (editor.html)
+    // This array contains the full, editable slide structure. The visual editor (AdvancedEditor.html)
     // parses and edits this JSON array to dynamically update the presentation.
     const SLIDES_DATA = [
       {
@@ -2074,7 +2074,7 @@
     // Launch the Custom 3D Motion Graphics Grid Engine
     drawFlowingGrid();
 
-    // Real-time slide preview message listener from editor.html
+    // Real-time slide preview message listener from AdvancedEditor.html
     window.addEventListener('message', event => {
       if (event.data && event.data.type === 'update-slides') {
         const newSlides = event.data.data;

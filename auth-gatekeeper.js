@@ -1,7 +1,7 @@
 /**
  * 🛡️ SUPABASE MANUAL PASSWORD GATEKEEPER
  * ------------------------------------------------------------------------
- * Protege el acceso global a nivel de entrada para el editor.html de PresentaFacil.
+ * Protege el acceso global a nivel de entrada para el AdvancedEditor.html de PresentaFacil.
  * Requiere una contraseña de equipo validada directamente contra la base de datos de Supabase.
  */
 
