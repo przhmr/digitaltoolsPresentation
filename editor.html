@@ -2431,7 +2431,9 @@ Requirements:
       
       let recommendationHint = "";
       if (bestLayout && highestScore >= 10) {
-        recommendationHint = `RECOMMENDED LAYOUT ASSIGNMENT: The user's request is semantically matched to layout type '${bestLayout}' (Score: ${highestScore}). If generating a complete slide, you MUST use the '${bestLayout}' layout type and follow its schema exactly.`;
+        const plannedStyles = LayoutPlanner.planPresentationThemeAndStyles(prompt, [{ type: bestLayout }]);
+        const recommendedStyle = plannedStyles[0].style || {};
+        recommendationHint = `RECOMMENDED LAYOUT AND STYLE ASSIGNMENT: The user's request is semantically matched to layout type '${bestLayout}' (Score: ${highestScore}). If generating a complete slide, you MUST use the '${bestLayout}' layout type and you MUST include this exact 'style' object in the root of the JSON slide: ${JSON.stringify(recommendedStyle)}`;
       }
 
       const systemInstruction = `You are CoritoBot 🐐, an elite AI presentation assistant.
@@ -3744,7 +3746,9 @@ Output ONLY the raw JSON object OR the clean plain text. Absolutely do not inclu
         
         let recommendationHint = "";
         if (bestLayout && highestScore >= 10) {
-          recommendationHint = `RECOMMENDED LAYOUT ASSIGNMENT: The user's request is semantically matched to layout type '${bestLayout}' (Score: ${highestScore}). If generating a complete slide, you MUST use the '${bestLayout}' layout type and follow its schema exactly.`;
+          const plannedStyles = LayoutPlanner.planPresentationThemeAndStyles(prompt, [{ type: bestLayout }]);
+          const recommendedStyle = plannedStyles[0].style || {};
+          recommendationHint = `RECOMMENDED LAYOUT AND STYLE ASSIGNMENT: The user's request is semantically matched to layout type '${bestLayout}' (Score: ${highestScore}). If generating a complete slide, you MUST use the '${bestLayout}' layout type and you MUST include this exact 'style' object in the root of the JSON slide: ${JSON.stringify(recommendedStyle)}`;
         }
 
         const systemInstruction = `You are CoritoBot 🐐, an elite AI presentation assistant.

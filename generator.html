@@ -1050,7 +1050,7 @@
 
       const plannedLayouts = LayoutPlanner.planPresentationLayouts(prompt, activeSlideCount);
       const plannedLayoutsText = plannedLayouts.map((slide, idx) => {
-        return `Slide ${idx + 1}: Layout "${slide.type}" (Focus: ${slide.topic})`;
+        return `Slide ${idx + 1}: Layout "${slide.type}" (Focus: ${slide.topic})\n  Pre-planned Style: ${JSON.stringify(slide.style)}`;
       }).join('\n');
 
       const systemInstruction = `You are CoritoBot 🐐, an elite educational and business presentation designer.
@@ -1059,11 +1059,13 @@ Theme: ${activeTheme}. Tone: ${activeTone}. Number of slides requested: ${active
 
 ${templatesContext}
 
-CRITICAL: YOU MUST GENERATE EXACTLY ${activeSlideCount} SLIDES IN THE PRECISE SEQUENCE AND WITH THE MATCHING LAYOUTS PLANNED BELOW:
+CRITICAL: YOU MUST GENERATE EXACTLY ${activeSlideCount} SLIDES IN THE PRECISE SEQUENCE, WITH THE DESIGNATED LAYOUTS AND PRE-PLANNED STYLES PLANNED BELOW:
 ${plannedLayoutsText}
 
-For each slide, you MUST strictly follow the JSON structure of the designated layout name type.
-Do NOT change the sequence or replace any planned layout type. Output the final JSON array containing exactly these slides in order.
+For each slide:
+1. You MUST use the designated layout "type".
+2. You MUST strictly include the designated "style" object exactly as planned, or you may adapt or customize its CSS property fields (like title_style, card_border, background_gradient, layout_align) if you want to make it look even more custom, beautiful, and context-aligned!
+3. Do NOT change the sequence or skip any slide. Output the final JSON array containing exactly these slides in order.
 
 Output Requirements:
 - Output ONLY the valid JSON array containing exactly ${activeSlideCount} slides. Absolutely do not include any introductory or conversational text, nor markdown blocks. Just the raw JSON.

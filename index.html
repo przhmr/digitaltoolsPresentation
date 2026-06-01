@@ -1420,12 +1420,33 @@
     function renderSlides(data) {
       const container = document.querySelector('.slides');
       container.innerHTML = data.map(slide => {
+        const sStyle = slide.style || {};
+        const accentPrimary = sStyle.accent_color || 'var(--primary-accent)';
+        const accentSecondary = sStyle.accent_color_secondary || 'var(--secondary-accent)';
+        const accentTertiary = sStyle.accent_color_tertiary || 'var(--tertiary-accent)';
+        
+        const sectionStyle = `width: 100%; height: 100%; --primary-accent: ${accentPrimary}; --secondary-accent: ${accentSecondary}; --tertiary-accent: ${accentTertiary};`;
+        const sectionAttrs = [
+          slide.transition ? `data-transition="${slide.transition}"` : 'data-transition="convex-in fade-out"',
+          sStyle.background_gradient ? `data-background-gradient="${sStyle.background_gradient}"` : '',
+          `style="${sectionStyle}"`
+        ].filter(Boolean).join(' ');
+
+        const cardAlign = sStyle.layout_align || 'left';
+        const cardBorder = sStyle.card_border || 'rgba(0, 242, 254, 0.3)';
+        const cardPadding = sStyle.card_padding || '40px';
+        const cardStyleOverride = sStyle.card_style || '';
+        const cardStyle = `text-align: ${cardAlign}; border-color: ${cardBorder}; padding: ${cardPadding}; ${cardStyleOverride}`;
+
+        const titleStyle = sStyle.title_style || '';
+        const subtitleStyle = sStyle.subtitle_style || '';
+
         if (slide.type === 'cover') {
           return `
-            <section>
-              <div class="glass-card" style="text-align: center; max-width: 950px; margin: 0 auto; border-color: rgba(0, 242, 254, 0.3); padding: 40px;">
-                <h1>${slide.title}</h1>
-                <h3 style="font-size: 1.05em; color: var(--muted-text); font-weight: 500; margin-bottom: 40px; letter-spacing: 0.02em;">
+            <section ${sectionAttrs}>
+              <div class="glass-card" style="${cardStyle}; max-width: 950px; margin: 0 auto;">
+                <h1 style="${titleStyle}">${slide.title}</h1>
+                <h3 style="${subtitleStyle}; font-size: 1.05em; font-weight: 500; margin-bottom: 40px; letter-spacing: 0.02em;">
                   ${slide.subtitle}
                 </h3>
                 <div class="slide-1-footer" style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 20px; font-size: 0.58em; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 25px;">
@@ -1444,14 +1465,14 @@
           `;
         } else if (slide.type === 'agenda') {
           return `
-            <section data-transition="convex-in fade-out">
-              <h2>${slide.title}</h2>
-              <p style="font-size: 0.7em; color: var(--muted-text); margin-bottom: 25px; text-align: left; line-height: 1.45;">
+            <section ${sectionAttrs}>
+              <h2 style="${titleStyle}">${slide.title}</h2>
+              <p style="${subtitleStyle}; font-size: 0.7em; margin-bottom: 25px; line-height: 1.45;">
                 ${slide.description}
               </p>
               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: left;">
                 ${slide.points.map((pt, i) => `
-                  <div class="glass-card fragment fade-up" data-fragment-index="${i + 1}" style="padding: 15px; border-left: 3px solid ${i % 2 === 0 ? 'var(--primary-accent)' : 'var(--secondary-accent)'};">
+                  <div class="glass-card fragment fade-up" data-fragment-index="${i + 1}" style="padding: 15px; border-left: 3px solid ${i % 2 === 0 ? 'var(--primary-accent)' : 'var(--secondary-accent)'}; text-align: left;">
                     <span style="font-size: 0.55em; font-weight: 800; color: ${i % 2 === 0 ? 'var(--primary-accent)' : 'var(--secondary-accent)'}; display: block; margin-bottom: 5px; font-family: var(--font-outfit);">0${i + 1}. ${pt.label}</span>
                     <span style="font-size: 0.44em; color: #fff; display: block; line-height: 1.45; font-family: var(--font-inter);">${pt.desc}</span>
                   </div>
@@ -1461,17 +1482,17 @@
           `;
         } else if (slide.type === 'categories') {
           return `
-            <section data-transition="convex-in fade-out">
-              <h2>${slide.title}</h2>
-              <p style="font-size: 0.75em; color: var(--muted-text); margin-bottom: 30px; text-align: left; line-height: 1.45;">
+            <section ${sectionAttrs}>
+              <h2 style="${titleStyle}">${slide.title}</h2>
+              <p style="${subtitleStyle}; font-size: 0.75em; margin-bottom: 30px; line-height: 1.45;">
                 ${slide.description}
               </p>
               <div class="grid-3">
                 ${slide.cards.map((card, i) => `
-                  <div class="glass-card fragment fade-up" data-fragment-index="${i + 1}">
-                    <div class="stat-number">${card.emoji}</div>
-                    <div class="stat-label" style="font-size: 0.58em;">${card.label}</div>
-                    <div class="stat-desc" style="margin-top: 8px;">${card.desc}</div>
+                  <div class="glass-card fragment fade-up" data-fragment-index="${i + 1}" style="text-align: left; padding: 15px;">
+                    <div class="stat-number" style="font-size: 1.25em;">${card.emoji}</div>
+                    <div class="stat-label" style="font-size: 0.58em; font-family: var(--font-outfit);">${card.label}</div>
+                    <div class="stat-desc" style="margin-top: 8px; font-size: 0.42em; font-family: var(--font-inter);">${card.desc}</div>
                   </div>
                 `).join('')}
               </div>
@@ -1488,11 +1509,11 @@
           `;
         } else if (slide.type === 'split_chart') {
           return `
-            <section data-transition="convex-in fade-out">
-              <h2>${slide.title}</h2>
+            <section ${sectionAttrs}>
+              <h2 style="${titleStyle}">${slide.title}</h2>
               <div class="grid-2">
                 <div>
-                  <p style="text-align: left; margin-bottom: 15px;">
+                  <p style="${subtitleStyle}; font-size: 0.65em; margin-bottom: 15px;">
                     ${slide.description}
                   </p>
                   <ul style="font-size: 0.58em; line-height: 1.45;">
@@ -1501,17 +1522,17 @@
                     `).join('')}
                   </ul>
                 </div>
-                <div class="glass-card" style="border-color: rgba(79, 172, 254, 0.3); display: flex; flex-direction: column; justify-content: center; padding: 20px;">
-                  <h3 style="font-size: 0.85em; margin-bottom: 12px; text-align: center; color: var(--primary-accent); text-transform: uppercase; letter-spacing: 0.05em;">${slide.chart_title}</h3>
+                <div class="glass-card" style="${cardStyle}; display: flex; flex-direction: column; justify-content: center; padding: 20px;">
+                  <h3 style="font-size: 0.85em; margin-bottom: 12px; text-align: center; color: var(--primary-accent); text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--font-outfit);">${slide.chart_title}</h3>
                   <div class="bar-chart">
                     ${slide.chart_data.map((bar, i) => `
                       <div class="bar" style="--bar-height: ${bar.value}%; animation-delay: ${0.05 + i * 0.13}s;"><span>${bar.label}</span></div>
                     `).join('')}
                   </div>
                   ${slide.detail_cards.map((card, i) => `
-                    <div style="background: rgba(15, 23, 42, 0.6); padding: 10px; border-radius: 8px; border: 1px solid rgba(0,242,254,0.1); ${i < slide.detail_cards.length - 1 ? 'margin-bottom: 10px;' : ''}" class="fragment fade-in" data-fragment-index="${slide.bullets.length + i + 1}">
-                      <strong style="color: ${i % 2 === 0 ? 'var(--primary-accent)' : 'var(--secondary-accent)'}; font-size: 0.6em; display: block;">${card.icon} ${card.title}</strong>
-                      <span style="font-size: 0.45em; color: var(--muted-text); display: block; line-height: 1.3; margin-top: 2px;">
+                    <div style="background: rgba(15, 23, 42, 0.6); padding: 10px; border-radius: 8px; border: 1px solid rgba(0,242,254,0.1); text-align: left; ${i < slide.detail_cards.length - 1 ? 'margin-bottom: 10px;' : ''}" class="fragment fade-in" data-fragment-index="${slide.bullets.length + i + 1}">
+                      <strong style="color: ${i % 2 === 0 ? 'var(--primary-accent)' : 'var(--secondary-accent)'}; font-size: 0.6em; display: block; font-family: var(--font-outfit);">${card.icon} ${card.title}</strong>
+                      <span style="font-size: 0.45em; color: var(--muted-text); display: block; line-height: 1.3; margin-top: 2px; font-family: var(--font-inter);">
                         ${card.desc}
                       </span>
                     </div>
@@ -1522,22 +1543,22 @@
           `;
         } else if (slide.type === 'split_flow') {
           return `
-            <section data-transition="convex-in fade-out">
-              <h2>${slide.title}</h2>
+            <section ${sectionAttrs}>
+              <h2 style="${titleStyle}">${slide.title}</h2>
               <div class="grid-2">
-                <div class="glass-card" style="border-color: rgba(0, 242, 254, 0.3); padding: 20px;">
-                  <h3 style="font-size: 0.85em; margin-bottom: 15px; color: var(--primary-accent); text-transform: uppercase;">${slide.left_title}</h3>
+                <div class="glass-card" style="${cardStyle}; padding: 20px;">
+                  <h3 style="font-size: 0.85em; margin-bottom: 15px; color: var(--primary-accent); text-transform: uppercase; font-family: var(--font-outfit);">${slide.left_title}</h3>
                   ${slide.left_cards.map((card, i) => `
-                    <div style="${i < slide.left_cards.length - 1 ? 'margin-bottom: 15px;' : ''}">
-                      <span style="font-size: 0.58em; font-weight: 800; color: #fff; display: block;">${card.icon} ${card.title}</span>
-                      <span style="font-size: 0.48em; color: var(--muted-text); display: block; line-height: 1.3; margin-top: 2px;">
+                    <div style="text-align: left; ${i < slide.left_cards.length - 1 ? 'margin-bottom: 15px;' : ''}">
+                      <span style="font-size: 0.58em; font-weight: 800; color: #fff; display: block; font-family: var(--font-outfit);">${card.icon} ${card.title}</span>
+                      <span style="font-size: 0.48em; color: var(--muted-text); display: block; line-height: 1.3; margin-top: 2px; font-family: var(--font-inter);">
                         ${card.desc}
                       </span>
                     </div>
                   `).join('')}
                 </div>
                 <div style="display: flex; flex-direction: column; justify-content: center; text-align: left;">
-                  <h3 style="font-size: 0.85em; margin-bottom: 15px; color: var(--secondary-accent); text-transform: uppercase;">${slide.right_title}</h3>
+                  <h3 style="font-size: 0.85em; margin-bottom: 15px; color: var(--secondary-accent); text-transform: uppercase; font-family: var(--font-outfit);">${slide.right_title}</h3>
                   <div class="process-flow">
                     ${slide.right_steps.map((step, i) => `
                       <div class="flow-step fragment fade-left" data-fragment-index="${i + 1}">
@@ -1552,11 +1573,11 @@
           `;
         } else if (slide.type === 'split_road') {
           return `
-            <section data-transition="convex-in fade-out">
-              <h2>${slide.title}</h2>
+            <section ${sectionAttrs}>
+              <h2 style="${titleStyle}">${slide.title}</h2>
               <div class="grid-2">
                 <div>
-                  <p style="text-align: left; margin-bottom: 15px;">
+                  <p style="${subtitleStyle}; font-size: 0.65em; margin-bottom: 15px;">
                     ${slide.description}
                   </p>
                   <ul style="font-size: 0.58em; line-height: 1.45;">
@@ -1565,8 +1586,8 @@
                     `).join('')}
                   </ul>
                 </div>
-                <div class="glass-card" style="border-color: rgba(0, 242, 254, 0.2); display: flex; flex-direction: column; justify-content: space-between; padding: 15px;">
-                  <h3 style="font-size: 0.8em; margin: 0 0 10px 0; text-align: center; color: var(--primary-accent); text-transform: uppercase;">${slide.road_title}</h3>
+                <div class="glass-card" style="${cardStyle}; display: flex; flex-direction: column; justify-content: space-between; padding: 15px;">
+                  <h3 style="font-size: 0.8em; margin: 0 0 10px 0; text-align: center; color: var(--primary-accent); text-transform: uppercase; font-family: var(--font-outfit);">${slide.road_title}</h3>
                   <div class="road-flow fragment fade-in" data-fragment-index="1">
                     <div class="road-path"></div>
                     <div class="road-car"></div>
@@ -1588,27 +1609,27 @@
           `;
         } else if (slide.type === 'split_network') {
           return `
-            <section data-transition="convex-in fade-out">
-              <h2>${slide.title}</h2>
+            <section ${sectionAttrs}>
+              <h2 style="${titleStyle}">${slide.title}</h2>
               <div class="grid-2">
-                <div class="glass-card" style="border-color: rgba(79, 172, 254, 0.3); padding: 20px;">
-                  <h3 style="font-size: 0.8em; margin-bottom: 12px; color: var(--primary-accent); border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 5px; text-transform: uppercase;">
+                <div class="glass-card" style="${cardStyle}; padding: 20px;">
+                  <h3 style="font-size: 0.8em; margin-bottom: 12px; color: var(--primary-accent); border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 5px; text-transform: uppercase; font-family: var(--font-outfit); text-align: left;">
                     ${slide.left_title}
                   </h3>
                   ${slide.left_chips.map((chip, i) => `
-                    <div style="${i < slide.left_chips.length - 1 ? 'margin-bottom: 10px;' : ''}" class="fragment fade-in-then-semi-out" data-fragment-index="${i + 1}">
-                      <strong style="font-size: 0.58em; color: #fff; display: block;">${chip.icon} ${chip.title}</strong>
-                      <span style="font-size: 0.45em; color: var(--muted-text); display: block; line-height: 1.3;">
+                    <div style="text-align: left; ${i < slide.left_chips.length - 1 ? 'margin-bottom: 10px;' : ''}" class="fragment fade-in-then-semi-out" data-fragment-index="${i + 1}">
+                      <strong style="font-size: 0.58em; color: #fff; display: block; font-family: var(--font-outfit);">${chip.icon} ${chip.title}</strong>
+                      <span style="font-size: 0.45em; color: var(--muted-text); display: block; line-height: 1.3; font-family: var(--font-inter);">
                         ${chip.desc}
                       </span>
                     </div>
                   `).join('')}
                 </div>
                 <div style="display: flex; flex-direction: column; justify-content: center; text-align: left;">
-                  <h3 style="font-size: 0.8em; margin-bottom: 15px; color: var(--secondary-accent); text-transform: uppercase;">${slide.right_title}</h3>
+                  <h3 style="font-size: 0.8em; margin-bottom: 15px; color: var(--secondary-accent); text-transform: uppercase; font-family: var(--font-outfit);">${slide.right_title}</h3>
                   <div class="pulse-network">
                     ${slide.network_cards.map(card => `
-                      <div class="network-card">${card.title}<br><span style="color: var(--muted-text); font-weight: 500;">${card.subtitle}</span></div>
+                      <div class="network-card" style="font-family: var(--font-outfit);">${card.title}<br><span style="color: var(--muted-text); font-weight: 500; font-family: var(--font-inter);">${card.subtitle}</span></div>
                     `).join('')}
                   </div>
                 </div>
@@ -1617,11 +1638,11 @@
           `;
         } else if (slide.type === 'split_pipeline') {
           return `
-            <section data-transition="convex-in fade-out">
-              <h2>${slide.title}</h2>
+            <section ${sectionAttrs}>
+              <h2 style="${titleStyle}">${slide.title}</h2>
               <div class="grid-2">
                 <div>
-                  <p style="text-align: left; margin-bottom: 15px;">
+                  <p style="${subtitleStyle}; font-size: 0.65em; margin-bottom: 15px;">
                     ${slide.description}
                   </p>
                   <ul style="font-size: 0.58em; line-height: 1.45;">
@@ -1630,15 +1651,15 @@
                     `).join('')}
                   </ul>
                 </div>
-                <div class="glass-card" style="border-color: rgba(0, 242, 254, 0.3); display: flex; flex-direction: column; justify-content: center; align-items: stretch; text-align: center; padding: 20px;">
-                  <h3 style="font-size: 0.85em; margin-bottom: 12px; color: var(--primary-accent); text-transform: uppercase;">${slide.right_title}</h3>
+                <div class="glass-card" style="${cardStyle}; display: flex; flex-direction: column; justify-content: center; align-items: stretch; text-align: center; padding: 20px;">
+                  <h3 style="font-size: 0.85em; margin-bottom: 12px; color: var(--primary-accent); text-transform: uppercase; font-family: var(--font-outfit);">${slide.right_title}</h3>
                   <div class="source-pipeline">
                     <div class="source-stack">
-                      ${slide.sources.map(source => `<div class="source-chip">${source}</div>`).join('')}
+                      ${slide.sources.map(source => `<div class="source-chip" style="font-family: var(--font-inter);">${source}</div>`).join('')}
                     </div>
-                    <div class="ai-core">${slide.core_title}<br><span style="color: var(--muted-text); font-size: 0.7em;">${slide.core_desc}</span></div>
+                    <div class="ai-core" style="font-family: var(--font-outfit);">${slide.core_title}<br><span style="color: var(--muted-text); font-size: 0.7em; font-family: var(--font-inter);">${slide.core_desc}</span></div>
                     <div class="ai-output">
-                      ${slide.outputs.map(output => `<div class="output-chip">${output}</div>`).join('')}
+                      ${slide.outputs.map(output => `<div class="output-chip" style="font-family: var(--font-inter);">${output}</div>`).join('')}
                     </div>
                   </div>
                 </div>
@@ -1647,22 +1668,22 @@
           `;
         } else if (slide.type === 'grid_conclusion') {
           return `
-            <section data-transition="convex-in fade-out">
-              <h2>${slide.title}</h2>
-              <p style="font-size: 0.62em; color: var(--muted-text); margin-bottom: 20px; text-align: left;">
+            <section ${sectionAttrs}>
+              <h2 style="${titleStyle}">${slide.title}</h2>
+              <p style="${subtitleStyle}; font-size: 0.62em; margin-bottom: 20px;">
                 ${slide.description}
               </p>
               <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
                 ${slide.cards.map((card, i) => `
                   <div class="glass-card fragment fade-up" data-fragment-index="${i + 1}" style="padding: 12px; text-align: center; border-color: rgba(0, 242, 254, ${0.08 + i * 0.04});">
                     <div style="font-size: 1.3em; color: var(--primary-accent); margin-bottom: 4px;">${card.emoji}</div>
-                    <strong style="font-size: 0.58em; display: block; margin-bottom: 4px; text-transform: uppercase;">${card.title}</strong>
-                    <span style="font-size: 0.42em; color: var(--muted-text); display: block; line-height: 1.25;">${card.desc}</span>
+                    <strong style="font-size: 0.58em; display: block; margin-bottom: 4px; text-transform: uppercase; font-family: var(--font-outfit);">${card.title}</strong>
+                    <span style="font-size: 0.42em; color: var(--muted-text); display: block; line-height: 1.25; font-family: var(--font-inter);">${card.desc}</span>
                   </div>
                 `).join('')}
               </div>
               <div class="glass-card fragment fade-in" data-fragment-index="${slide.cards.length + 1}" style="margin-top: 15px; padding: 10px; border-color: rgba(79, 172, 254, 0.3);">
-                <p style="font-size: 0.46em; color: var(--text-color); margin: 0; text-align: left; line-height: 1.35;">
+                <p style="font-size: 0.46em; color: var(--text-color); margin: 0; text-align: left; line-height: 1.35; font-family: var(--font-inter);">
                   ${slide.ia_text}
                 </p>
               </div>
@@ -1675,13 +1696,13 @@
           `;
         } else if (slide.type === 'comparison_table') {
           return `
-            <section data-transition="convex-in fade-out">
-              <h2 style="margin-bottom: 15px !important;">${slide.title}</h2>
-              <p style="font-size: 0.58em; color: var(--muted-text); margin-bottom: 15px; text-align: left;">
+            <section ${sectionAttrs}>
+              <h2 style="${titleStyle}; margin-bottom: 15px !important;">${slide.title}</h2>
+              <p style="${subtitleStyle}; font-size: 0.58em; margin-bottom: 15px;">
                 ${slide.description}
               </p>
               <div class="table-container fragment fade-in" data-fragment-index="1">
-                <table class="custom-table">
+                <table class="custom-table" style="font-family: var(--font-inter);">
                   <thead>
                     <tr>
                       ${slide.table_headers.map((hdr, i) => `
@@ -1708,11 +1729,11 @@
           `;
         } else if (slide.type === 'conclusion') {
           return `
-            <section data-transition="convex-in fade-out">
-              <h2>${slide.title}</h2>
+            <section ${sectionAttrs}>
+              <h2 style="${titleStyle}">${slide.title}</h2>
               <div class="grid-2">
                 <div>
-                  <p style="font-size: 0.65em; text-align: left; margin-bottom: 15px; line-height: 1.4; color: var(--muted-text);">
+                  <p style="${subtitleStyle}; font-size: 0.65em; margin-bottom: 15px; line-height: 1.4;">
                     ${slide.description}
                   </p>
                   <ul style="font-size: 0.55em; line-height: 1.35;">
@@ -1721,16 +1742,16 @@
                     `).join('')}
                   </ul>
                 </div>
-                <div class="glass-card" style="border-color: rgba(79, 172, 254, 0.3); display: flex; flex-direction: column; justify-content: center; padding: 20px;">
-                  <h3 style="font-size: 0.85em; margin-bottom: 10px; color: var(--primary-accent); text-align: center; text-transform: uppercase;">${slide.right_title}</h3>
-                  <blockquote style="font-size: 0.5em; color: var(--text-color); border-left: 2px solid var(--primary-accent); padding-left: 10px; margin: 0; font-style: italic; line-height: 1.45;">
+                <div class="glass-card" style="${cardStyle}; display: flex; flex-direction: column; justify-content: center; padding: 20px;">
+                  <h3 style="font-size: 0.85em; margin-bottom: 10px; color: var(--primary-accent); text-align: center; text-transform: uppercase; font-family: var(--font-outfit);">${slide.right_title}</h3>
+                  <blockquote style="font-size: 0.5em; color: var(--text-color); border-left: 2px solid var(--primary-accent); padding-left: 10px; margin: 0; font-style: italic; line-height: 1.45; font-family: var(--font-inter);">
                     "${slide.quote}"
                   </blockquote>
                   <div class="insight-strip fragment fade-up" data-fragment-index="${slide.bullets.length + 1}">
                     ${slide.kpis.map(kpi => `
                       <div class="mini-kpi">
-                        <strong>${kpi.title}</strong>
-                        <span>${kpi.desc}</span>
+                        <strong style="font-family: var(--font-outfit);">${kpi.title}</strong>
+                        <span style="font-family: var(--font-inter);">${kpi.desc}</span>
                       </div>
                     `).join('')}
                   </div>
@@ -1740,8 +1761,8 @@
           `;
         } else if (slide.type === 'quote') {
           return `
-            <section data-transition="zoom-in fade-out">
-              <div class="glass-card" style="max-width: 800px; margin: 0 auto; padding: 40px; text-align: center; border-color: rgba(139, 92, 246, 0.35); position: relative;">
+            <section ${sectionAttrs}>
+              <div class="glass-card" style="${cardStyle}; max-width: 800px; margin: 0 auto; position: relative;">
                 <span style="font-size: 4.5em; color: var(--secondary-accent); position: absolute; top: -15px; left: 20px; font-family: Georgia, serif; line-height: 1; opacity: 0.35;">“</span>
                 <blockquote style="font-size: 0.72em; font-style: italic; color: #fff; line-height: 1.5; margin: 20px 0; border: none; padding: 0; font-family: var(--font-inter);">
                   "${slide.quote}"
@@ -1792,37 +1813,35 @@
             `;
           }).join('');
 
-          const transitionAttr = slide.transition ? `data-transition="${slide.transition}"` : 'data-transition="convex-in fade-out"';
-          
           return `
-            <section ${transitionAttr} style="position: relative; width: 100%; height: 100%;">
+            <section ${sectionAttrs} style="position: relative; width: 100%; height: 100%;">
               ${elementsHtml}
             </section>
           `;
         } else if (slide.type === 'farewell') {
           return `
-            <section>
-              <div class="glass-card" style="text-align: center; max-width: 800px; margin: 0 auto; border-color: rgba(0, 242, 254, 0.4); padding: 24px; position: relative;">
-                <div style="width: 50px; height: 50px; border-radius: 50%; background: rgba(0, 242, 254, 0.1); border: 2px solid var(--primary-accent); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px auto; font-size: 1.4em; animation: pulseGlow 2s infinite alternate ease-in-out;">
+            <section ${sectionAttrs}>
+              <div class="glass-card" style="${cardStyle}; max-width: 800px; margin: 0 auto; position: relative;">
+                <div style="width: 50px; height: 50px; border-radius: 50%; background: rgba(255, 255, 255, 0.03); border: 2px solid var(--primary-accent); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px auto; font-size: 1.4em; animation: pulseGlow 2s infinite alternate ease-in-out;">
                   ${slide.emblem}
                 </div>
-                <h1 style="font-size: 1.8em !important; background: linear-gradient(135deg, #ffffff 30%, var(--primary-accent) 70%, var(--secondary-accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: none !important; margin-bottom: 12px !important; font-weight: 900;">
+                <h1 style="${titleStyle}">
                   ${slide.title}
                 </h1>
-                <blockquote style="font-size: 0.52em; color: var(--text-color); font-weight: 500; margin: 0 auto 20px auto; max-width: 620px; line-height: 1.45; font-style: italic; border-left: 2px solid var(--primary-accent); padding-left: 12px; text-align: left;">
+                <blockquote style="font-size: 0.52em; color: var(--text-color); font-weight: 500; margin: 0 auto 20px auto; max-width: 620px; line-height: 1.45; font-style: italic; border-left: 2px solid var(--primary-accent); padding-left: 12px; text-align: left; font-family: var(--font-inter);">
                   "${slide.quote}"<br>
                   <span style="display: block; margin-top: 6px; color: var(--primary-accent); font-style: normal; font-weight: 800; text-align: right;">${slide.quote_author}</span>
                 </blockquote>
                 <div style="display: flex; gap: 12px; justify-content: center; align-items: center; margin-bottom: 18px;">
-                  <div style="background: rgba(15, 23, 42, 0.6); padding: 8px 16px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.05); display: inline-block; font-size: 0.44em; letter-spacing: 0.1em; color: var(--primary-accent); font-weight: 800; text-transform: uppercase;" class="fragment zoom-in" data-fragment-index="1">
+                  <div style="background: rgba(15, 23, 42, 0.6); padding: 8px 16px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.05); display: inline-block; font-size: 0.44em; letter-spacing: 0.1em; color: var(--primary-accent); font-weight: 800; text-transform: uppercase; font-family: var(--font-outfit);" class="fragment zoom-in" data-fragment-index="1">
                     ${slide.btn_text}
                   </div>
                   <button onclick="exportToPPTX()" style="background: rgba(139, 92, 246, 0.15); padding: 8px 14px; border-radius: 10px; border: 1px solid var(--secondary-accent); display: inline-block; font-size: 0.44em; letter-spacing: 0.1em; color: #fff; font-weight: 700; text-transform: uppercase; text-decoration: none; cursor: pointer; font-family: var(--font-inter);" class="fragment zoom-in pdf-btn" data-fragment-index="1" title="Exportar presentación a PowerPoint (.pptx)">
                     ${slide.pptx_text || '📊 Descargar PPTX'}
                   </button>
                 </div>
-                <div style="border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 12px; font-size: 0.42em; color: var(--muted-text); line-height: 1.4;">
-                  <span style="display: block; margin-bottom: 4px; font-weight: 700; color: #fff; letter-spacing: 0.05em; text-transform: uppercase;">Autores del Proyecto:</span>
+                <div style="border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 12px; font-size: 0.42em; color: var(--muted-text); line-height: 1.4; font-family: var(--font-inter);">
+                  <span style="display: block; margin-bottom: 4px; font-weight: 700; color: #fff; letter-spacing: 0.05em; text-transform: uppercase; font-family: var(--font-outfit);">Autores del Proyecto:</span>
                   ${slide.footer_text.replace(/\n/g, '<br>')}
                 </div>
               </div>

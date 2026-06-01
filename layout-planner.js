@@ -231,10 +231,173 @@
   }
 
   /**
-   * Plans the exact visual sequence of layouts for a presentation
+   * Semantically schedules a unified theme and slide-specific style variations
+   * @param {string} promptText - User presentation topic
+   * @param {Array} slidesSequence - Visual slide sequence planned
+   * @returns {Array} Sequence of slides enriched with semantic 'style' JSON blocks
+   */
+  function planPresentationThemeAndStyles(promptText, slidesSequence) {
+    const lowercasePrompt = (promptText || '').toLowerCase();
+    
+    // 1. Determine theme based on semantic analysis of the prompt
+    let themeName = 'cyberpunk'; // default
+    
+    const themeKeywords = {
+      hydrocarbon: [
+        "petroleo", "petróleo", "oil", "crudo", "carbon", "carbón", "gas", "energía", "energia", 
+        "venezuela", "extracción", "extraccion", "geología", "geologia", "química", "quimica", 
+        "industria", "ingeniería", "ingenieria", "minería", "mineria", "reservas"
+      ],
+      sunset: [
+        "diseño", "diseno", "arte", "música", "musica", "marketing", "publicidad", "ventas", 
+        "presentación", "presentacion", "creativo", "ideas", "innovación", "innovacion", 
+        "videojuegos", "gaming", "película", "cine", "fotografía"
+      ],
+      corporate: [
+        "negocios", "empresa", "corporativo", "finanzas", "banco", "economía", "economia", 
+        "inversión", "inversion", "administración", "administracion", "gerencia", "estrategia", 
+        "educación", "clase", "curso", "academia", "universidad", "salud", "medicina"
+      ]
+    };
+    
+    for (const [theme, keywords] of Object.entries(themeKeywords)) {
+      for (const word of keywords) {
+        if (lowercasePrompt.includes(word)) {
+          themeName = theme;
+          break;
+        }
+      }
+      if (themeName !== 'cyberpunk') break;
+    }
+    
+    // 2. Define visual tokens for each theme preset
+    const THEMES = {
+      cyberpunk: {
+        primary: "#00f2fe",      // Cyan
+        secondary: "#ff007f",    // Pink/Magenta
+        tertiary: "#8b5cf6",     // Purple
+        background: "linear-gradient(135deg, #030712 0%, #080710 50%, #030305 100%)",
+        titleFont: "'Space Grotesk', sans-serif",
+        bodyFont: "'Inter', sans-serif"
+      },
+      hydrocarbon: {
+        primary: "#eab308",      // Liquid Gold
+        secondary: "#10b981",    // Green/Eco
+        tertiary: "#f59e0b",     // Amber
+        background: "linear-gradient(135deg, #020617 0%, #0a0b06 60%, #020202 100%)",
+        titleFont: "'Outfit', sans-serif",
+        bodyFont: "'Space Mono', monospace"
+      },
+      sunset: {
+        primary: "#f97316",      // Orange
+        secondary: "#ef4444",    // Red
+        tertiary: "#ec4899",     // Hot Pink
+        background: "linear-gradient(135deg, #030712 0%, #15090f 50%, #020104 100%)",
+        titleFont: "'Syne', sans-serif",
+        bodyFont: "'Inter', sans-serif"
+      },
+      corporate: {
+        primary: "#06b6d4",      // Cyan Teal
+        secondary: "#3b82f6",    // Royal Blue
+        tertiary: "#10b981",     // Mint Green
+        background: "linear-gradient(135deg, #020617 0%, #050b14 50%, #020306 100%)",
+        titleFont: "'Cabinet Grotesk', sans-serif",
+        bodyFont: "'Inter', sans-serif"
+      }
+    };
+    
+    const activeTheme = THEMES[themeName];
+    
+    // 3. Programmatically generate visual variety parameters per slide index
+    const styledSlides = slidesSequence.map((slide, idx) => {
+      const isFirst = (idx === 0);
+      const isLast = (idx === slidesSequence.length - 1);
+      
+      // Alternate card text alignment (visual consistency yet unique layouts)
+      let align = 'left';
+      if (isFirst || isLast || slide.type === 'quote') {
+        align = 'center';
+      } else if (idx % 2 === 0) {
+        align = 'left';
+      } else {
+        // Subtle offset variations for alternations
+        align = 'left';
+      }
+      
+      // Let's create beautiful title and subtitle inline CSS strings!
+      let titleStyle = `font-family: ${activeTheme.titleFont}; font-weight: 900; letter-spacing: -0.02em;`;
+      
+      if (isFirst) {
+        titleStyle += ` font-size: 2.1em !important; background: linear-gradient(135deg, #ffffff 20%, ${activeTheme.primary} 70%, ${activeTheme.secondary} 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 30px rgba(0,0,0,0.5);`;
+      } else if (isLast) {
+        titleStyle += ` font-size: 1.9em !important; background: linear-gradient(135deg, #ffffff 30%, ${activeTheme.secondary} 70%, ${activeTheme.tertiary} 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: none !important;`;
+      } else {
+        titleStyle += ` font-size: 1.3em !important; background: linear-gradient(135deg, #ffffff 40%, ${activeTheme.primary} 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: none !important; margin-bottom: 15px;`;
+      }
+      
+      let subtitleStyle = `font-family: ${activeTheme.bodyFont}; font-size: 0.62em; line-height: 1.45; color: #94a3b8;`;
+      if (isFirst) {
+        subtitleStyle = `font-family: ${activeTheme.bodyFont}; font-size: 1.0em; line-height: 1.55; color: #cbd5e1; font-weight: 400;`;
+      }
+      
+      // Assign custom card border glowing color based on index to distribute visual weights
+      let cardBorder = `rgba(255, 255, 255, 0.08)`;
+      if (isFirst) {
+        cardBorder = `rgba(255, 255, 255, 0.12)`;
+      } else if (idx % 3 === 0) {
+        cardBorder = `rgba(0, 242, 254, 0.22)`;
+      } else if (idx % 3 === 1) {
+        cardBorder = `rgba(139, 92, 246, 0.22)`;
+      } else {
+        cardBorder = `rgba(255, 0, 127, 0.22)`;
+      }
+      
+      // Formulate unique slide-specific background gradients to allow visual transition dynamics
+      let slideBackground = activeTheme.background;
+      if (idx > 0 && idx < slidesSequence.length - 1) {
+        // Apply slight background color shift variations to transition along the presentation timeline
+        const offset = Math.round((idx / slidesSequence.length) * 15);
+        if (themeName === 'cyberpunk') {
+          slideBackground = `linear-gradient(135deg, #030712 0%, #0c081${offset.toString(16)} 50%, #030305 100%)`;
+        } else if (themeName === 'hydrocarbon') {
+          slideBackground = `linear-gradient(135deg, #020617 0%, #0d1${offset.toString(16)}0a 60%, #020202 100%)`;
+        } else if (themeName === 'sunset') {
+          slideBackground = `linear-gradient(135deg, #030712 0%, #1${offset.toString(16)}090f 50%, #020104 100%)`;
+        } else {
+          slideBackground = `linear-gradient(135deg, #020617 0%, #051${offset.toString(16)}14 50%, #020306 100%)`;
+        }
+      }
+      
+      // Attach style configuration object
+      const styledCopy = {
+        ...slide,
+        style: {
+          theme_name: themeName,
+          accent_color: activeTheme.primary,
+          accent_color_secondary: activeTheme.secondary,
+          accent_color_tertiary: activeTheme.tertiary,
+          background_gradient: slideBackground,
+          title_style: titleStyle,
+          subtitle_style: subtitleStyle,
+          card_border: cardBorder,
+          card_padding: isFirst || isLast ? "40px" : "25px",
+          layout_align: align,
+          title_font: activeTheme.titleFont,
+          body_font: activeTheme.bodyFont
+        }
+      };
+      
+      return styledCopy;
+    });
+    
+    return styledSlides;
+  }
+
+  /**
+   * Plans the exact visual sequence of layouts and semantic styles for a presentation
    * @param {string} promptText - User presentation topic
    * @param {number} slideCount - Number of requested slides
-   * @returns {Array<{type: string, topic: string}>} Sequence of planned slide layout objects
+   * @returns {Array<{type: string, topic: string, style: Object}>} Sequence of planned slide layout objects
    */
   function planPresentationLayouts(promptText, slideCount) {
     const lowercasePrompt = (promptText || '').toLowerCase();
@@ -269,47 +432,49 @@
       synthesisType = "grid_conclusion";
     }
 
+    let plannedSequence = [];
+
     // 1. Boundary slide count structural outlines
     if (slideCount <= 1) {
-      return [{ type: "cover", topic: "Portada de la presentación." }];
+      plannedSequence = [{ type: "cover", topic: "Portada de la presentación con el título principal." }];
     } else if (slideCount === 2) {
-      return [
+      plannedSequence = [
         { type: "cover", topic: "Portada de la presentación con el título principal." },
         { type: "farewell", topic: "Cierre y despedida final de la presentación." }
       ];
     } else if (slideCount === 3) {
       const bestContent = Object.keys(semanticScores).sort((a, b) => semanticScores[b] - semanticScores[a])[0] || 'categories';
-      return [
+      plannedSequence = [
         { type: "cover", topic: "Portada de la presentación con título principal." },
         { type: bestContent, topic: getTopicDescription(bestContent) },
         { type: "farewell", topic: "Cierre y despedida final de la presentación." }
       ];
     } else if (slideCount === 4) {
       const bestContent = Object.keys(semanticScores).sort((a, b) => semanticScores[b] - semanticScores[a])[0] || 'categories';
-      return [
+      plannedSequence = [
         { type: "cover", topic: "Portada de la presentación con título." },
         { type: "agenda", topic: "Agenda y hoja de ruta inicial de las secciones." },
         { type: bestContent, topic: getTopicDescription(bestContent) },
         { type: "farewell", topic: "Cierre y despedida final de la presentación." }
       ];
+    } else {
+      // 2. High-level planning for slideCount >= 5 (Cover -> Agenda -> Semantic CSP Content Slides -> Synthesis -> Farewell)
+      const contentCount = slideCount - 4;
+      const contentSequence = findOptimalSequence(contentCount, semanticScores);
+
+      plannedSequence.push({ type: "cover", topic: "Portada de la presentación con el título principal, subtítulo y autores." });
+      plannedSequence.push({ type: "agenda", topic: "Agenda y hoja de ruta inicial de las secciones de la presentación." });
+
+      contentSequence.forEach(layout => {
+        plannedSequence.push({ type: layout, topic: getTopicDescription(layout) });
+      });
+
+      plannedSequence.push({ type: synthesisType, topic: getTopicDescription(synthesisType) });
+      plannedSequence.push({ type: "farewell", topic: "Cierre y despedida final con agradecimiento y contacto." });
     }
 
-    // 2. High-level planning for slideCount >= 5 (Cover -> Agenda -> Semantic CSP Content Slides -> Synthesis -> Farewell)
-    const contentCount = slideCount - 4;
-    const contentSequence = findOptimalSequence(contentCount, semanticScores);
-
-    const finalSequence = [];
-    finalSequence.push({ type: "cover", topic: "Portada de la presentación con el título principal, subtítulo y autores." });
-    finalSequence.push({ type: "agenda", topic: "Agenda y hoja de ruta inicial de las secciones de la presentación." });
-
-    contentSequence.forEach(layout => {
-      finalSequence.push({ type: layout, topic: getTopicDescription(layout) });
-    });
-
-    finalSequence.push({ type: synthesisType, topic: getTopicDescription(synthesisType) });
-    finalSequence.push({ type: "farewell", topic: "Cierre y despedida final con agradecimiento y contacto." });
-
-    return finalSequence;
+    // Pipe the planned sequence through the semantic styling engine
+    return planPresentationThemeAndStyles(promptText, plannedSequence);
   }
 
   // Exports
@@ -317,6 +482,7 @@
     VISUAL_CATEGORIES,
     getTopicDescription,
     getSemanticScores,
+    planPresentationThemeAndStyles,
     planPresentationLayouts
   };
 }));
