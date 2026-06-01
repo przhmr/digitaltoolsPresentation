@@ -1418,25 +1418,6 @@
     // DYNAMIC RENDERER FUNCTION
     // Recreates the identical dynamic DOM matching the original premium static presentation.
     function renderSlides(data) {
-      // Dynamic Google Fonts asynchronous loader
-      const fontsToLoad = new Set();
-      data.forEach(slide => {
-        if (slide.style) {
-          if (slide.style.title_font_name) fontsToLoad.add(slide.style.title_font_name);
-          if (slide.style.body_font_name) fontsToLoad.add(slide.style.body_font_name);
-        }
-      });
-      fontsToLoad.forEach(fontName => {
-        const id = 'font-link-' + fontName.replace(/\s+/g, '-').toLowerCase();
-        if (!document.getElementById(id)) {
-          const link = document.createElement('link');
-          link.id = id;
-          link.rel = 'stylesheet';
-          link.href = `https://fonts.googleapis.com/css2?family=${fontName.replace(/\s+/g, '+')}:wght@300;400;500;700;800;900&display=swap`;
-          document.head.appendChild(link);
-        }
-      });
-
       const container = document.querySelector('.slides');
       container.innerHTML = data.map(slide => {
         const sStyle = slide.style || {};
@@ -1447,7 +1428,6 @@
         const sectionStyle = `width: 100%; height: 100%; --primary-accent: ${accentPrimary}; --secondary-accent: ${accentSecondary}; --tertiary-accent: ${accentTertiary};`;
         const sectionAttrs = [
           slide.transition ? `data-transition="${slide.transition}"` : 'data-transition="convex-in fade-out"',
-          slide.transition_speed ? `data-transition-speed="${slide.transition_speed}"` : '',
           sStyle.background_gradient ? `data-background-gradient="${sStyle.background_gradient}"` : '',
           `style="${sectionStyle}"`
         ].filter(Boolean).join(' ');
@@ -1457,8 +1437,6 @@
         const cardPadding = sStyle.card_padding || '40px';
         const cardStyleOverride = sStyle.card_style || '';
         const cardStyle = `text-align: ${cardAlign}; border-color: ${cardBorder}; padding: ${cardPadding}; ${cardStyleOverride}`;
-        
-        const cardAnimClass = sStyle.card_animation ? ` animation-${sStyle.card_animation}` : '';
 
         const titleStyle = sStyle.title_style || '';
         const subtitleStyle = sStyle.subtitle_style || '';
@@ -1466,7 +1444,7 @@
         if (slide.type === 'cover') {
           return `
             <section ${sectionAttrs}>
-              <div class="glass-card${cardAnimClass}" style="${cardStyle}; max-width: 950px; margin: 0 auto;">
+              <div class="glass-card" style="${cardStyle}; max-width: 950px; margin: 0 auto;">
                 <h1 style="${titleStyle}">${slide.title}</h1>
                 <h3 style="${subtitleStyle}; font-size: 1.05em; font-weight: 500; margin-bottom: 40px; letter-spacing: 0.02em;">
                   ${slide.subtitle}
@@ -1494,7 +1472,7 @@
               </p>
               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: left;">
                 ${slide.points.map((pt, i) => `
-                  <div class="glass-card${cardAnimClass} fragment fade-up" data-fragment-index="${i + 1}" style="padding: 15px; border-left: 3px solid ${i % 2 === 0 ? 'var(--primary-accent)' : 'var(--secondary-accent)'}; text-align: left;">
+                  <div class="glass-card fragment fade-up" data-fragment-index="${i + 1}" style="padding: 15px; border-left: 3px solid ${i % 2 === 0 ? 'var(--primary-accent)' : 'var(--secondary-accent)'}; text-align: left;">
                     <span style="font-size: 0.55em; font-weight: 800; color: ${i % 2 === 0 ? 'var(--primary-accent)' : 'var(--secondary-accent)'}; display: block; margin-bottom: 5px; font-family: var(--font-outfit);">0${i + 1}. ${pt.label}</span>
                     <span style="font-size: 0.44em; color: #fff; display: block; line-height: 1.45; font-family: var(--font-inter);">${pt.desc}</span>
                   </div>
@@ -1511,7 +1489,7 @@
               </p>
               <div class="grid-3">
                 ${slide.cards.map((card, i) => `
-                  <div class="glass-card${cardAnimClass} fragment fade-up" data-fragment-index="${i + 1}" style="text-align: left; padding: 15px;">
+                  <div class="glass-card fragment fade-up" data-fragment-index="${i + 1}" style="text-align: left; padding: 15px;">
                     <div class="stat-number" style="font-size: 1.25em;">${card.emoji}</div>
                     <div class="stat-label" style="font-size: 0.58em; font-family: var(--font-outfit);">${card.label}</div>
                     <div class="stat-desc" style="margin-top: 8px; font-size: 0.42em; font-family: var(--font-inter);">${card.desc}</div>
@@ -1544,7 +1522,7 @@
                     `).join('')}
                   </ul>
                 </div>
-                <div class="glass-card${cardAnimClass}" style="${cardStyle}; display: flex; flex-direction: column; justify-content: center; padding: 20px;">
+                <div class="glass-card" style="${cardStyle}; display: flex; flex-direction: column; justify-content: center; padding: 20px;">
                   <h3 style="font-size: 0.85em; margin-bottom: 12px; text-align: center; color: var(--primary-accent); text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--font-outfit);">${slide.chart_title}</h3>
                   <div class="bar-chart">
                     ${slide.chart_data.map((bar, i) => `
@@ -1568,7 +1546,7 @@
             <section ${sectionAttrs}>
               <h2 style="${titleStyle}">${slide.title}</h2>
               <div class="grid-2">
-                <div class="glass-card${cardAnimClass}" style="${cardStyle}; padding: 20px;">
+                <div class="glass-card" style="${cardStyle}; padding: 20px;">
                   <h3 style="font-size: 0.85em; margin-bottom: 15px; color: var(--primary-accent); text-transform: uppercase; font-family: var(--font-outfit);">${slide.left_title}</h3>
                   ${slide.left_cards.map((card, i) => `
                     <div style="text-align: left; ${i < slide.left_cards.length - 1 ? 'margin-bottom: 15px;' : ''}">
@@ -1608,7 +1586,7 @@
                     `).join('')}
                   </ul>
                 </div>
-                <div class="glass-card${cardAnimClass}" style="${cardStyle}; display: flex; flex-direction: column; justify-content: space-between; padding: 15px;">
+                <div class="glass-card" style="${cardStyle}; display: flex; flex-direction: column; justify-content: space-between; padding: 15px;">
                   <h3 style="font-size: 0.8em; margin: 0 0 10px 0; text-align: center; color: var(--primary-accent); text-transform: uppercase; font-family: var(--font-outfit);">${slide.road_title}</h3>
                   <div class="road-flow fragment fade-in" data-fragment-index="1">
                     <div class="road-path"></div>
@@ -1634,7 +1612,7 @@
             <section ${sectionAttrs}>
               <h2 style="${titleStyle}">${slide.title}</h2>
               <div class="grid-2">
-                <div class="glass-card${cardAnimClass}" style="${cardStyle}; padding: 20px;">
+                <div class="glass-card" style="${cardStyle}; padding: 20px;">
                   <h3 style="font-size: 0.8em; margin-bottom: 12px; color: var(--primary-accent); border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 5px; text-transform: uppercase; font-family: var(--font-outfit); text-align: left;">
                     ${slide.left_title}
                   </h3>
@@ -1673,7 +1651,7 @@
                     `).join('')}
                   </ul>
                 </div>
-                <div class="glass-card${cardAnimClass}" style="${cardStyle}; display: flex; flex-direction: column; justify-content: center; align-items: stretch; text-align: center; padding: 20px;">
+                <div class="glass-card" style="${cardStyle}; display: flex; flex-direction: column; justify-content: center; align-items: stretch; text-align: center; padding: 20px;">
                   <h3 style="font-size: 0.85em; margin-bottom: 12px; color: var(--primary-accent); text-transform: uppercase; font-family: var(--font-outfit);">${slide.right_title}</h3>
                   <div class="source-pipeline">
                     <div class="source-stack">
@@ -1697,14 +1675,14 @@
               </p>
               <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
                 ${slide.cards.map((card, i) => `
-                  <div class="glass-card${cardAnimClass} fragment fade-up" data-fragment-index="${i + 1}" style="padding: 12px; text-align: center; border-color: rgba(0, 242, 254, ${0.08 + i * 0.04});">
+                  <div class="glass-card fragment fade-up" data-fragment-index="${i + 1}" style="padding: 12px; text-align: center; border-color: rgba(0, 242, 254, ${0.08 + i * 0.04});">
                     <div style="font-size: 1.3em; color: var(--primary-accent); margin-bottom: 4px;">${card.emoji}</div>
                     <strong style="font-size: 0.58em; display: block; margin-bottom: 4px; text-transform: uppercase; font-family: var(--font-outfit);">${card.title}</strong>
                     <span style="font-size: 0.42em; color: var(--muted-text); display: block; line-height: 1.25; font-family: var(--font-inter);">${card.desc}</span>
                   </div>
                 `).join('')}
               </div>
-              <div class="glass-card${cardAnimClass} fragment fade-in" data-fragment-index="${slide.cards.length + 1}" style="margin-top: 15px; padding: 10px; border-color: rgba(79, 172, 254, 0.3);">
+              <div class="glass-card fragment fade-in" data-fragment-index="${slide.cards.length + 1}" style="margin-top: 15px; padding: 10px; border-color: rgba(79, 172, 254, 0.3);">
                 <p style="font-size: 0.46em; color: var(--text-color); margin: 0; text-align: left; line-height: 1.35; font-family: var(--font-inter);">
                   ${slide.ia_text}
                 </p>
@@ -1764,7 +1742,7 @@
                     `).join('')}
                   </ul>
                 </div>
-                <div class="glass-card${cardAnimClass}" style="${cardStyle}; display: flex; flex-direction: column; justify-content: center; padding: 20px;">
+                <div class="glass-card" style="${cardStyle}; display: flex; flex-direction: column; justify-content: center; padding: 20px;">
                   <h3 style="font-size: 0.85em; margin-bottom: 10px; color: var(--primary-accent); text-align: center; text-transform: uppercase; font-family: var(--font-outfit);">${slide.right_title}</h3>
                   <blockquote style="font-size: 0.5em; color: var(--text-color); border-left: 2px solid var(--primary-accent); padding-left: 10px; margin: 0; font-style: italic; line-height: 1.45; font-family: var(--font-inter);">
                     "${slide.quote}"
@@ -1784,7 +1762,7 @@
         } else if (slide.type === 'quote') {
           return `
             <section ${sectionAttrs}>
-              <div class="glass-card${cardAnimClass}" style="${cardStyle}; max-width: 800px; margin: 0 auto; position: relative;">
+              <div class="glass-card" style="${cardStyle}; max-width: 800px; margin: 0 auto; position: relative;">
                 <span style="font-size: 4.5em; color: var(--secondary-accent); position: absolute; top: -15px; left: 20px; font-family: Georgia, serif; line-height: 1; opacity: 0.35;">“</span>
                 <blockquote style="font-size: 0.72em; font-style: italic; color: #fff; line-height: 1.5; margin: 20px 0; border: none; padding: 0; font-family: var(--font-inter);">
                   "${slide.quote}"
