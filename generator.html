@@ -853,6 +853,72 @@
     let generatedDeck = null;
     let templatesData = {};
 
+    // 💡 ULTRA-ROBUST JSON DECK EXTRACTOR ENGINE
+    function extractJSONDecks(text) {
+      if (!text) return null;
+      let cleaned = text.trim();
+      
+      // Remove starting/ending markdown backtick wrappers
+      cleaned = cleaned.replace(/^```[a-zA-Z]*/, '').replace(/```$/, '').trim();
+      
+      // Remove leading "json" word if backticks were previously stripped
+      if (cleaned.startsWith('json')) {
+        cleaned = cleaned.substring(4).trim();
+      }
+      
+      // Robust scanning to slice out array brackets [ and ]
+      const startIdx = cleaned.indexOf('[');
+      const endIdx = cleaned.lastIndexOf(']');
+      if (startIdx !== -1 && endIdx !== -1 && endIdx > startIdx) {
+        const jsonCandidate = cleaned.substring(startIdx, endIdx + 1);
+        try {
+          return JSON.parse(jsonCandidate);
+        } catch(e) {
+          console.error("JSON array deck slice parsing failed:", e, jsonCandidate);
+        }
+      }
+
+      try {
+        return JSON.parse(cleaned);
+      } catch (e) {
+        console.error("Standard full JSON deck parse failed:", e);
+      }
+      return null;
+    }
+
+    // 💡 ULTRA-ROBUST SINGLE SLIDE JSON EXTRACTOR ENGINE
+    function extractSingleJSONSlide(text) {
+      if (!text) return null;
+      let cleaned = text.trim();
+      
+      // Remove starting/ending markdown backtick wrappers
+      cleaned = cleaned.replace(/^```[a-zA-Z]*/, '').replace(/```$/, '').trim();
+      
+      // Remove leading "json" word if backticks were previously stripped
+      if (cleaned.startsWith('json')) {
+        cleaned = cleaned.substring(4).trim();
+      }
+      
+      // Robust scanning to slice out object curly braces { and }
+      const startIdx = cleaned.indexOf('{');
+      const endIdx = cleaned.lastIndexOf('}');
+      if (startIdx !== -1 && endIdx !== -1 && endIdx > startIdx) {
+        const jsonCandidate = cleaned.substring(startIdx, endIdx + 1);
+        try {
+          return JSON.parse(jsonCandidate);
+        } catch(e) {
+          console.error("Single JSON slide object slice parsing failed:", e, jsonCandidate);
+        }
+      }
+
+      try {
+        return JSON.parse(cleaned);
+      } catch (e) {
+        console.error("Standard full single JSON slide parse failed:", e);
+      }
+      return null;
+    }
+
     // Default configuration for Supabase integration (inherited seamlessly)
     const DEFAULT_SUPABASE_URL = "https://wsmktslxrgnoxzpycymj.supabase.co";
     const DEFAULT_SUPABASE_ANON_KEY = "sb_publishable__pV5l2sQPXzWwx90UsQTrw_PKRwzFm1";
@@ -1014,8 +1080,7 @@ Requirements:
           if (response.ok) {
             const resData = await response.json().catch(() => ({}));
             if (resData && resData.html) {
-              let cleanedText = resData.html.replace(/```json/gi, '').replace(/```/g, '').replace(/```text/gi, '').trim();
-              responseSlides = JSON.parse(cleanedText);
+              responseSlides = extractJSONDecks(resData.html);
             }
           }
         } catch (e) {
@@ -1041,8 +1106,7 @@ Requirements:
               const resData = await response.json();
               if (resData && resData.candidates && resData.candidates[0].content.parts[0].text) {
                 let txt = resData.candidates[0].content.parts[0].text;
-                let cleanedText = txt.replace(/```json/gi, '').replace(/```/g, '').replace(/```text/gi, '').trim();
-                responseSlides = JSON.parse(cleanedText);
+                responseSlides = extractJSONDecks(txt);
               }
             }
           } catch (e) {
@@ -1358,8 +1422,7 @@ Requirements:
           if (response.ok) {
             const resData = await response.json();
             if (resData && resData.html) {
-              let cleanedText = resData.html.replace(/```json/gi, '').replace(/```/g, '').replace(/```text/gi, '').trim();
-              updatedSlide = JSON.parse(cleanedText);
+              updatedSlide = extractSingleJSONSlide(resData.html);
             }
           }
         } catch (e) {
@@ -1384,8 +1447,7 @@ Requirements:
               const resData = await response.json();
               if (resData && resData.candidates && resData.candidates[0].content.parts[0].text) {
                 let txt = resData.candidates[0].content.parts[0].text;
-                let cleanedText = txt.replace(/```json/gi, '').replace(/```/g, '').replace(/```text/gi, '').trim();
-                updatedSlide = JSON.parse(cleanedText);
+                updatedSlide = extractSingleJSONSlide(txt);
               }
             }
           } catch (e) {

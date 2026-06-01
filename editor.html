@@ -1720,6 +1720,39 @@
     let isGridLinesVisible = false;
     let lastAiGeneratedHtml = ''; // Cache for Gen AI outputs
 
+    // 💡 ULTRA-ROBUST SINGLE SLIDE JSON EXTRACTOR ENGINE
+    function extractSingleJSONSlide(text) {
+      if (!text) return null;
+      let cleaned = text.trim();
+      
+      // Remove starting/ending markdown backtick wrappers
+      cleaned = cleaned.replace(/^```[a-zA-Z]*/, '').replace(/```$/, '').trim();
+      
+      // Remove leading "json" word if backticks were previously stripped
+      if (cleaned.startsWith('json')) {
+        cleaned = cleaned.substring(4).trim();
+      }
+      
+      // Robust scanning to slice out object curly braces { and }
+      const startIdx = cleaned.indexOf('{');
+      const endIdx = cleaned.lastIndexOf('}');
+      if (startIdx !== -1 && endIdx !== -1 && endIdx > startIdx) {
+        const jsonCandidate = cleaned.substring(startIdx, endIdx + 1);
+        try {
+          return JSON.parse(jsonCandidate);
+        } catch(e) {
+          console.error("Single JSON slide object slice parsing failed:", e, jsonCandidate);
+        }
+      }
+
+      try {
+        return JSON.parse(cleaned);
+      } catch (e) {
+        console.error("Standard full single JSON slide parse failed:", e);
+      }
+      return null;
+    }
+
     // Draggable/Resizable Canvas State Variables
     let isDragging = false;
     let isResizing = false;
@@ -2433,13 +2466,7 @@ Output ONLY the raw JSON object OR the clean plain text. Absolutely do not inclu
 
         if (resData && resData.html) {
           let rawText = resData.html;
-          let parsedSlide = null;
-          try {
-            let cleanedText = rawText.replace(/```json/gi, '').replace(/```/g, '').replace(/```text/gi, '').trim();
-            parsedSlide = JSON.parse(cleanedText);
-          } catch(e) {
-            // It is plain text content, not a slide JSON structure
-          }
+          let parsedSlide = extractSingleJSONSlide(rawText);
 
           if (parsedSlide && parsedSlide.type) {
             // Smart slide assembly!
@@ -3728,13 +3755,7 @@ Output ONLY the raw JSON object OR the clean plain text. Absolutely do not inclu
           const resData = await response.json();
           let rawText = resData.candidates[0].content.parts[0].text;
           
-          let parsedSlide = null;
-          try {
-            let cleanedText = rawText.replace(/```json/gi, '').replace(/```/g, '').replace(/```text/gi, '').trim();
-            parsedSlide = JSON.parse(cleanedText);
-          } catch(e) {
-            // It is plain text content, not a slide JSON structure
-          }
+          let parsedSlide = extractSingleJSONSlide(rawText);
 
           if (parsedSlide && parsedSlide.type) {
             // Smart slide assembly!

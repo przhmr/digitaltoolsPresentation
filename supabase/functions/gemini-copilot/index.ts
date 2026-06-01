@@ -99,6 +99,7 @@ Reglas obligatorias:
     
     // Clean markdown wrappers
     htmlResult = htmlResult
+      .replace(/```json/gi, "")
       .replace(/```html/gi, "")
       .replace(/```text/gi, "")
       .replace(/```/g, "")
