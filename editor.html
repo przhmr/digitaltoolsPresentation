@@ -1569,19 +1569,19 @@
             
             <!-- Slides absolutely positioned DIVs will be injected dynamically -->
             
-            <!-- Standard Slide Layout Warning Overlay -->
+            <!-- Unified Canvas Creative Decomposition Wizard -->
             <div class="canvas-template-overlay" id="template-warning-screen" style="display: none;">
-              <div class="template-overlay-card">
-                <div class="template-overlay-icon">⚡</div>
-                <div class="template-overlay-title" id="template-title-label">Plantilla Estándar</div>
-                <div class="template-overlay-desc">
-                  Esta diapositiva está estructurada usando una plantilla Canva pre-diseñada. Para re-ordenar, arrastrar, cambiar de tamaño o agregar libremente elementos absolutamente posicionados:
+              <div class="template-overlay-card" style="box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(0, 242, 254, 0.15); border: 1px solid rgba(0, 242, 254, 0.3); border-radius: 16px; padding: 30px;">
+                <div class="template-overlay-icon" style="font-size: 2.2em; filter: drop-shadow(0 0 8px var(--primary-accent)); margin-bottom: 12px; animation: floatNode 3s infinite alternate ease-in-out;">🐐</div>
+                <div class="template-overlay-title" id="template-title-label" style="font-family: Outfit; font-weight: 800; font-size: 1.15rem; color: #fff; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">Asistente de Descomposición Creativa</div>
+                <div class="template-overlay-desc" style="font-size: 0.68rem; color: #cbd5e1; line-height: 1.5; margin-bottom: 20px; font-family: Inter;">
+                  Esta diapositiva está configurada con una plantilla de estructura inteligente pre-diseñada. Para arrastrar, redimensionar, superponer o incorporar libremente componentes visuales personalizados, activa el modelado interactivo libre:
                 </div>
-                <button class="btn btn-primary" onclick="convertActiveSlideToCustom()" style="width: 100%; justify-content: center; padding: 10px 15px; font-family: var(--font-outfit); font-weight:800; font-size:0.8rem; letter-spacing:0.02em;">
-                  ⚡ Convertir a Lienzo Libre
+                <button class="btn btn-primary" onclick="convertActiveSlideToCustom()" style="width: 100%; justify-content: center; padding: 12px 18px; font-family: Outfit; font-weight:800; font-size:0.8rem; letter-spacing:0.04em; text-transform: uppercase; background: linear-gradient(135deg, #00f2fe, #8b5cf6); border: none; border-radius: 8px; box-shadow: 0 0 15px rgba(0, 242, 254, 0.35); cursor: pointer; transition: all 0.25s ease;">
+                  ⚡ Activar Lienzo Libre
                 </button>
-                <div style="font-size:0.6rem; color:var(--muted-text); margin-top:10px;">
-                  *Nota: Los elementos del formulario se descompondrán en bloques libres editables.
+                <div style="font-size:0.56rem; color:var(--muted-text); margin-top:12px; font-family: Inter;">
+                  *Nota: La IA distribuirá automáticamente el contenido estructurado en bloques interactivos individuales.
                 </div>
               </div>
             </div>
@@ -2526,6 +2526,10 @@ Output ONLY the raw JSON object OR the clean plain text. Absolutely do not inclu
     }
 
 
+    function persistSlidesState() {
+      sessionStorage.setItem('ai_generated_presentation_slides', JSON.stringify(slides));
+    }
+
     // Initialize application templates
     async function loadPresentationOnStart() {
       // Check if there is an AI-generated presentation slides in sessionStorage first!
@@ -2533,7 +2537,7 @@ Output ONLY the raw JSON object OR the clean plain text. Absolutely do not inclu
       if (generatedSlides) {
         try {
           slides = JSON.parse(generatedSlides);
-          sessionStorage.removeItem('ai_generated_presentation_slides'); // Wipe after consume
+          persistSlidesState(); // Keep it persistent so that reloads don't wipe it
           
           // Still fetch index.html to keep indexHtmlContent cached for compilation and save purposes!
           const response = await fetch('index.html');
@@ -2680,8 +2684,8 @@ Output ONLY the raw JSON object OR the clean plain text. Absolutely do not inclu
       } else {
         templateWarningScreen.style.display = 'flex';
         canvasToolbarPanel.style.display = 'none';
-        templateTitleLabel.textContent = `Plantilla Estándar: ${activeSlide.type.toUpperCase()}`;
-        activeSlideInfo.textContent = `Esta diapositiva usa la plantilla '${activeSlide.type}'. Conviértela a lienzo libre para posicionar a tu gusto.`;
+        templateTitleLabel.textContent = `Estructura Inteligente: ${activeSlide.type.toUpperCase()}`;
+        activeSlideInfo.textContent = `Esta diapositiva usa la estructura '${activeSlide.type}'. Descomponla en lienzo libre para tener control absoluto.`;
         
         // Remove old elements from previous custom render
         clearCanvasElementsOnly();
@@ -2877,6 +2881,7 @@ Output ONLY the raw JSON object OR the clean plain text. Absolutely do not inclu
       slide.type = 'custom';
       slide.elements = decompElements;
 
+      persistSlidesState(); // Save state changes
       showToast('Diapositiva convertida a Lienzo Libre.', '⚡');
       renderSlidesNavigator();
       selectSlide(activeSlideIndex);
@@ -3067,6 +3072,7 @@ Output ONLY the raw JSON object OR the clean plain text. Absolutely do not inclu
       activeSlide.elements.push(el);
       activeElementIndex = activeSlide.elements.length - 1;
 
+      persistSlidesState(); // Save state changes
       renderInteractiveCanvas();
       renderInspector();
       syncPreviewIframe();
@@ -3080,6 +3086,7 @@ Output ONLY the raw JSON object OR the clean plain text. Absolutely do not inclu
       activeSlide.elements.splice(activeElementIndex, 1);
       activeElementIndex = null;
 
+      persistSlidesState(); // Save state changes
       renderInteractiveCanvas();
       renderInspector();
       syncPreviewIframe();
@@ -3098,6 +3105,7 @@ Output ONLY the raw JSON object OR the clean plain text. Absolutely do not inclu
         slides.splice(idx, 1);
         if (activeSlideIndex >= slides.length) activeSlideIndex = slides.length - 1;
         
+        persistSlidesState(); // Save state changes
         renderSlidesNavigator();
         selectSlide(activeSlideIndex);
         showToast('Diapositiva eliminada.', '🗑️');
@@ -3123,6 +3131,7 @@ Output ONLY the raw JSON object OR the clean plain text. Absolutely do not inclu
     // General Slide properties transition syncing
     function updateActiveSlideTransition(transition) {
       slides[activeSlideIndex].transition = transition;
+      persistSlidesState(); // Save state changes
       syncPreviewIframe();
     }
 
@@ -3153,6 +3162,7 @@ Output ONLY the raw JSON object OR the clean plain text. Absolutely do not inclu
       slides.push(newSlide);
       activeSlideIndex = slides.length - 1;
       
+      persistSlidesState(); // Save state changes
       renderSlidesNavigator();
       selectSlide(activeSlideIndex);
       showToast('Nueva diapositiva añadida.', '➕');
@@ -3412,6 +3422,7 @@ Output ONLY the raw JSON object OR the clean plain text. Absolutely do not inclu
       }
 
       // Update sidebar slides list coordinates counter in background
+      persistSlidesState(); // Save state changes
       renderSlidesNavigator();
       syncPreviewIframe();
     }
@@ -3512,6 +3523,7 @@ Output ONLY the raw JSON object OR the clean plain text. Absolutely do not inclu
         document.removeEventListener('touchmove', dragMove);
         document.removeEventListener('touchend', dragEnd);
         
+        persistSlidesState(); // Save state changes
         syncPreviewIframe();
       }
     }
@@ -3593,6 +3605,7 @@ Output ONLY the raw JSON object OR the clean plain text. Absolutely do not inclu
         document.removeEventListener('touchmove', resizeMove);
         document.removeEventListener('touchend', resizeEnd);
         
+        persistSlidesState(); // Save state changes
         syncPreviewIframe();
       }
     }
@@ -3933,6 +3946,7 @@ Output ONLY the raw JSON object OR the clean plain text. Absolutely do not inclu
     // General Slide properties transition syncing
     function updateActiveSlideTransition(transition) {
       slides[activeSlideIndex].transition = transition;
+      persistSlidesState(); // Save state changes
       syncPreviewIframe();
     }
 

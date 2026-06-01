@@ -239,8 +239,8 @@
   function planPresentationThemeAndStyles(promptText, slidesSequence) {
     const lowercasePrompt = (promptText || '').toLowerCase();
     
-    // 1. Determine theme based on semantic analysis of the prompt
-    let themeName = 'cyberpunk'; // default
+    // 1. Determine theme family based on semantic analysis of the prompt
+    let themeFamily = 'cyberpunk'; // default
     
     const themeKeywords = {
       hydrocarbon: [
@@ -263,127 +263,204 @@
     for (const [theme, keywords] of Object.entries(themeKeywords)) {
       for (const word of keywords) {
         if (lowercasePrompt.includes(word)) {
-          themeName = theme;
+          themeFamily = theme;
           break;
         }
       }
-      if (themeName !== 'cyberpunk') break;
+      if (themeFamily !== 'cyberpunk') break;
     }
     
-    // 2. Define visual tokens for each theme preset
-    const THEMES = {
+    // 2. Define highly varied premium Google Font pairings (12 sets)
+    const PREMIUM_FONT_PAIRINGS = [
+      { title: "Space Grotesk", body: "Inter", titleWeight: "900", spacing: "-0.03em" },
+      { title: "Outfit", body: "Inter", titleWeight: "800", spacing: "-0.01em" },
+      { title: "Syne", body: "Sora", titleWeight: "800", spacing: "-0.02em" },
+      { title: "Cabinet Grotesk", body: "Plus Jakarta Sans", titleWeight: "900", spacing: "-0.03em" },
+      { title: "Sora", body: "Inter", titleWeight: "800", spacing: "-0.02em" },
+      { title: "Clash Display", body: "Plus Jakarta Sans", titleWeight: "900", spacing: "-0.02em" },
+      { title: "Playfair Display", body: "Manrope", titleWeight: "900", spacing: "0em" },
+      { title: "Cinzel", body: "Inter", titleWeight: "700", spacing: "0.05em" },
+      { title: "Montserrat", body: "Inter", titleWeight: "900", spacing: "-0.02em" },
+      { title: "Plus Jakarta Sans", body: "Inter", titleWeight: "800", spacing: "-0.02em" },
+      { title: "Fraunces", body: "Manrope", titleWeight: "900", spacing: "-0.01em" },
+      { title: "Sora", body: "Space Mono", titleWeight: "800", spacing: "-0.01em" }
+    ];
+    
+    // Pick a random pairing for this generation to guarantee typographic diversity!
+    const selectedPair = PREMIUM_FONT_PAIRINGS[Math.floor(Math.random() * PREMIUM_FONT_PAIRINGS.length)];
+    
+    const isSerif = (font) => ["Playfair Display", "Cinzel", "Fraunces", "Cormorant Garamond"].includes(font);
+    
+    const titleFontFamily = isSerif(selectedPair.title) ? `'${selectedPair.title}', serif` : (selectedPair.title === "Space Mono" ? `'Space Mono', monospace` : `'${selectedPair.title}', sans-serif`);
+    const bodyFontFamily = isSerif(selectedPair.body) ? `'${selectedPair.body}', serif` : (selectedPair.body === "Space Mono" ? `'Space Mono', monospace` : `'${selectedPair.body}', sans-serif`);
+    
+    // 3. Define visual color matrices for procedural synthesis
+    const COLOR_MATRICES = {
       cyberpunk: {
-        primary: "#00f2fe",      // Cyan
-        secondary: "#ff007f",    // Pink/Magenta
-        tertiary: "#8b5cf6",     // Purple
-        background: "linear-gradient(135deg, #030712 0%, #080710 50%, #030305 100%)",
-        titleFont: "'Space Grotesk', sans-serif",
-        bodyFont: "'Inter', sans-serif"
+        primary: ["#00f2fe", "#06b6d4", "#0ea5e9", "#38bdf8"],
+        secondary: ["#ff007f", "#d946ef", "#ec4899", "#f43f5e"],
+        tertiary: ["#8b5cf6", "#6366f1", "#a855f7", "#818cf8"],
+        bases: ["#030712", "#050508", "#080710", "#05020a"]
       },
       hydrocarbon: {
-        primary: "#eab308",      // Liquid Gold
-        secondary: "#10b981",    // Green/Eco
-        tertiary: "#f59e0b",     // Amber
-        background: "linear-gradient(135deg, #020617 0%, #0a0b06 60%, #020202 100%)",
-        titleFont: "'Outfit', sans-serif",
-        bodyFont: "'Space Mono', monospace"
+        primary: ["#eab308", "#f59e0b", "#d97706", "#fbbf24"],
+        secondary: ["#10b981", "#059669", "#14b8a6", "#34d399"],
+        tertiary: ["#f97316", "#d97706", "#b45309", "#f59e0b"],
+        bases: ["#020617", "#050608", "#0b0c10", "#080b0c"]
       },
       sunset: {
-        primary: "#f97316",      // Orange
-        secondary: "#ef4444",    // Red
-        tertiary: "#ec4899",     // Hot Pink
-        background: "linear-gradient(135deg, #030712 0%, #15090f 50%, #020104 100%)",
-        titleFont: "'Syne', sans-serif",
-        bodyFont: "'Inter', sans-serif"
+        primary: ["#f97316", "#ea580c", "#f97316", "#fb923c"],
+        secondary: ["#ef4444", "#dc2626", "#f43f5e", "#fb7185"],
+        tertiary: ["#ec4899", "#db2777", "#f472b6", "#ec4899"],
+        bases: ["#030712", "#0a0307", "#0d0408", "#070205"]
       },
       corporate: {
-        primary: "#06b6d4",      // Cyan Teal
-        secondary: "#3b82f6",    // Royal Blue
-        tertiary: "#10b981",     // Mint Green
-        background: "linear-gradient(135deg, #020617 0%, #050b14 50%, #020306 100%)",
-        titleFont: "'Cabinet Grotesk', sans-serif",
-        bodyFont: "'Inter', sans-serif"
+        primary: ["#06b6d4", "#0ea5e9", "#0891b2", "#38bdf8"],
+        secondary: ["#3b82f6", "#2563eb", "#1d4ed8", "#60a5fa"],
+        tertiary: ["#10b981", "#34d399", "#059669", "#10b981"],
+        bases: ["#020617", "#050b14", "#020306", "#040810"]
       }
     };
     
-    const activeTheme = THEMES[themeName];
+    const activePalette = COLOR_MATRICES[themeFamily];
     
-    // 3. Programmatically generate visual variety parameters per slide index
+    // Choose dynamic specific shades for this generation
+    const activePrimary = activePalette.primary[Math.floor(Math.random() * activePalette.primary.length)];
+    const activeSecondary = activePalette.secondary[Math.floor(Math.random() * activePalette.secondary.length)];
+    const activeTertiary = activePalette.tertiary[Math.floor(Math.random() * activePalette.tertiary.length)];
+    const baseSpaceColor = activePalette.bases[Math.floor(Math.random() * activePalette.bases.length)];
+    
+    // Curate unique transitions per slide
+    const TRANSITIONS = [
+      "slide", "fade", "convex", "concave", "zoom",
+      "fade-in slide-out", "slide-in fade-out", "zoom-in fade-out", "convex-in fade-out"
+    ];
+    const TRANSITION_SPEEDS = ["default", "fast", "slow"];
+    
+    // Helper to convert hex to RGB for alpha transparency in styles
+    function hexToRgb(hex) {
+      const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+      const fullHex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(fullHex);
+      return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : "0, 242, 254";
+    }
+    
+    const primaryRgb = hexToRgb(activePrimary);
+    const secondaryRgb = hexToRgb(activeSecondary);
+    const tertiaryRgb = hexToRgb(activeTertiary);
+    
+    // 4. Programmatically generate visual variety parameters per slide index
     const styledSlides = slidesSequence.map((slide, idx) => {
       const isFirst = (idx === 0);
       const isLast = (idx === slidesSequence.length - 1);
       
-      // Alternate card text alignment (visual consistency yet unique layouts)
+      // Randomize slide transition and speed individually
+      const slideTransition = TRANSITIONS[Math.floor(Math.random() * TRANSITIONS.length)];
+      const slideSpeed = TRANSITION_SPEEDS[Math.floor(Math.random() * TRANSITION_SPEEDS.length)];
+      
+      // Alternate card alignment dynamically
       let align = 'left';
       if (isFirst || isLast || slide.type === 'quote') {
         align = 'center';
-      } else if (idx % 2 === 0) {
-        align = 'left';
       } else {
-        // Subtle offset variations for alternations
-        align = 'left';
+        // 3-way layout alternation (Left-aligned, Centered, Offset Left)
+        const layouts = ['left', 'center', 'left'];
+        align = layouts[idx % layouts.length];
       }
       
-      // Let's create beautiful title and subtitle inline CSS strings!
-      let titleStyle = `font-family: ${activeTheme.titleFont}; font-weight: 900; letter-spacing: -0.02em;`;
+      // Select beautiful title gradients procedurally
+      let titleStyle = `font-family: ${titleFontFamily}; font-weight: ${selectedPair.titleWeight}; letter-spacing: ${selectedPair.spacing};`;
       
       if (isFirst) {
-        titleStyle += ` font-size: 2.1em !important; background: linear-gradient(135deg, #ffffff 20%, ${activeTheme.primary} 70%, ${activeTheme.secondary} 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 30px rgba(0,0,0,0.5);`;
+        titleStyle += ` font-size: 2.15em !important; background: linear-gradient(135deg, #ffffff 15%, ${activePrimary} 65%, ${activeSecondary} 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 35px rgba(0,0,0,0.6);`;
       } else if (isLast) {
-        titleStyle += ` font-size: 1.9em !important; background: linear-gradient(135deg, #ffffff 30%, ${activeTheme.secondary} 70%, ${activeTheme.tertiary} 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: none !important;`;
+        titleStyle += ` font-size: 1.95em !important; background: linear-gradient(135deg, #ffffff 25%, ${activeSecondary} 70%, ${activeTertiary} 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: none !important;`;
       } else {
-        titleStyle += ` font-size: 1.3em !important; background: linear-gradient(135deg, #ffffff 40%, ${activeTheme.primary} 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: none !important; margin-bottom: 15px;`;
-      }
-      
-      let subtitleStyle = `font-family: ${activeTheme.bodyFont}; font-size: 0.62em; line-height: 1.45; color: #94a3b8;`;
-      if (isFirst) {
-        subtitleStyle = `font-family: ${activeTheme.bodyFont}; font-size: 1.0em; line-height: 1.55; color: #cbd5e1; font-weight: 400;`;
-      }
-      
-      // Assign custom card border glowing color based on index to distribute visual weights
-      let cardBorder = `rgba(255, 255, 255, 0.08)`;
-      if (isFirst) {
-        cardBorder = `rgba(255, 255, 255, 0.12)`;
-      } else if (idx % 3 === 0) {
-        cardBorder = `rgba(0, 242, 254, 0.22)`;
-      } else if (idx % 3 === 1) {
-        cardBorder = `rgba(139, 92, 246, 0.22)`;
-      } else {
-        cardBorder = `rgba(255, 0, 127, 0.22)`;
-      }
-      
-      // Formulate unique slide-specific background gradients to allow visual transition dynamics
-      let slideBackground = activeTheme.background;
-      if (idx > 0 && idx < slidesSequence.length - 1) {
-        // Apply slight background color shift variations to transition along the presentation timeline
-        const offset = Math.round((idx / slidesSequence.length) * 15);
-        if (themeName === 'cyberpunk') {
-          slideBackground = `linear-gradient(135deg, #030712 0%, #0c081${offset.toString(16)} 50%, #030305 100%)`;
-        } else if (themeName === 'hydrocarbon') {
-          slideBackground = `linear-gradient(135deg, #020617 0%, #0d1${offset.toString(16)}0a 60%, #020202 100%)`;
-        } else if (themeName === 'sunset') {
-          slideBackground = `linear-gradient(135deg, #030712 0%, #1${offset.toString(16)}090f 50%, #020104 100%)`;
+        // Slide title variations: rotate gradients or introduce pure clean primary accents
+        if (idx % 2 === 0) {
+          titleStyle += ` font-size: 1.35em !important; background: linear-gradient(135deg, #ffffff 30%, ${activePrimary} 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: none !important; margin-bottom: 18px;`;
         } else {
-          slideBackground = `linear-gradient(135deg, #020617 0%, #051${offset.toString(16)}14 50%, #020306 100%)`;
+          titleStyle += ` font-size: 1.35em !important; background: linear-gradient(135deg, #ffffff 20%, ${activeSecondary} 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: none !important; margin-bottom: 18px;`;
         }
+      }
+      
+      let subtitleStyle = `font-family: ${bodyFontFamily}; font-size: 0.62em; line-height: 1.45; color: #94a3b8;`;
+      if (isFirst) {
+        subtitleStyle = `font-family: ${bodyFontFamily}; font-size: 0.95em; line-height: 1.55; color: #cbd5e1; font-weight: 400;`;
+      }
+      
+      // Asymmetric card borders and premium neon glass styling
+      const r1 = Math.floor(Math.random() * 15) + 10;
+      const r2 = Math.floor(Math.random() * 20) + 10;
+      const r3 = Math.floor(Math.random() * 15) + 10;
+      const r4 = Math.floor(Math.random() * 25) + 10;
+      const cardBorderRadius = `${r1}px ${r2}px ${r3}px ${r4}px`;
+      
+      // Choose neon border glowing weight
+      let cardBorder = `rgba(255, 255, 255, 0.08)`;
+      let glowColor = activePrimary;
+      if (idx % 3 === 0) {
+        cardBorder = `rgba(${primaryRgb}, 0.22)`;
+        glowColor = activePrimary;
+      } else if (idx % 3 === 1) {
+        cardBorder = `rgba(${tertiaryRgb}, 0.22)`;
+        glowColor = activeTertiary;
+      } else {
+        cardBorder = `rgba(${secondaryRgb}, 0.22)`;
+        glowColor = activeSecondary;
+      }
+      
+      // Procedural glass backdrop parameters
+      const blurIntensity = Math.floor(Math.random() * 14) + 14; // 14px to 28px
+      const cardOpacity = (0.55 + Math.random() * 0.12).toFixed(2); // 0.55 to 0.67
+      const neonGlowShadow = `box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.45), inset 0 0 16px rgba(${hexToRgb(glowColor)}, 0.1), 0 4px 18px rgba(${hexToRgb(glowColor)}, 0.05);`;
+      const cardStyleOverride = `border-radius: ${cardBorderRadius}; backdrop-filter: blur(${blurIntensity}px); background: rgba(10, 15, 30, ${cardOpacity}); ${neonGlowShadow}`;
+      
+      // Formulate unique procedurally generated background gradients per slide index to shift as we navigate
+      const shiftPercent = Math.round((idx / slidesSequence.length) * 15) + 5;
+      const angle = Math.floor(Math.random() * 90) + 100; // 100deg to 190deg
+      
+      let slideBackground = baseSpaceColor;
+      if (themeFamily === 'cyberpunk') {
+        slideBackground = `linear-gradient(${angle}deg, ${baseSpaceColor} 0%, #0c081${shiftPercent.toString(16)} ${40 + shiftPercent}%, #030305 100%)`;
+      } else if (themeFamily === 'hydrocarbon') {
+        slideBackground = `linear-gradient(${angle}deg, ${baseSpaceColor} 0%, #0d1${shiftPercent.toString(16)}0a ${45 + shiftPercent}%, #020202 100%)`;
+      } else if (themeFamily === 'sunset') {
+        slideBackground = `linear-gradient(${angle}deg, ${baseSpaceColor} 0%, #1${shiftPercent.toString(16)}090f ${50 + shiftPercent}%, #020104 100%)`;
+      } else {
+        slideBackground = `linear-gradient(${angle}deg, ${baseSpaceColor} 0%, #051${shiftPercent.toString(16)}14 ${40 + shiftPercent}%, #020306 100%)`;
+      }
+      
+      // Assign subtle random loop micro-animations to first, last or split card layouts
+      let animationName = "";
+      if (idx % 4 === 0 && !isFirst && !isLast) {
+        const animations = ["float", "pulse", "glow", "shimmer"];
+        animationName = animations[idx % animations.length];
       }
       
       // Attach style configuration object
       const styledCopy = {
         ...slide,
+        transition: slideTransition,
+        transition_speed: slideSpeed,
         style: {
-          theme_name: themeName,
-          accent_color: activeTheme.primary,
-          accent_color_secondary: activeTheme.secondary,
-          accent_color_tertiary: activeTheme.tertiary,
+          theme_name: themeFamily,
+          accent_color: activePrimary,
+          accent_color_secondary: activeSecondary,
+          accent_color_tertiary: activeTertiary,
           background_gradient: slideBackground,
           title_style: titleStyle,
           subtitle_style: subtitleStyle,
           card_border: cardBorder,
-          card_padding: isFirst || isLast ? "40px" : "25px",
+          card_padding: isFirst || isLast ? "42px" : "26px",
+          card_style: cardStyleOverride,
           layout_align: align,
-          title_font: activeTheme.titleFont,
-          body_font: activeTheme.bodyFont
+          title_font: titleFontFamily,
+          body_font: bodyFontFamily,
+          title_font_name: selectedPair.title,
+          body_font_name: selectedPair.body,
+          card_animation: animationName,
+          transition_speed: slideSpeed
         }
       };
       
