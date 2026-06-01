@@ -845,6 +845,7 @@
   <!-- Toast Message Alert System -->
   <div id="toast-container" class="toast-container"></div>
 
+  <script src="layout-planner.js"></script>
   <script>
     // State values
     let activeTheme = 'cyberpunk';
@@ -1047,17 +1048,26 @@
         `;
       }
 
-      const systemInstruction = `You are CoritoBot 🐐, a world-class academic presentation designer.
+      const plannedLayouts = LayoutPlanner.planPresentationLayouts(prompt, activeSlideCount);
+      const plannedLayoutsText = plannedLayouts.map((slide, idx) => {
+        return `Slide ${idx + 1}: Layout "${slide.type}" (Focus: ${slide.topic})`;
+      }).join('\n');
+
+      const systemInstruction = `You are CoritoBot 🐐, an elite educational and business presentation designer.
 Generate a structured JSON array representing a presentation deck about: "${prompt}".
 Theme: ${activeTheme}. Tone: ${activeTone}. Number of slides requested: ${activeSlideCount}.
 
 ${templatesContext}
 
-Requirements:
-1. Choose appropriate templates. You MUST include a "cover" slide as the first slide, and a "farewell" slide as the final slide. In between, choose a diverse set of slide types matching the topic.
-2. The user has requested exactly ${activeSlideCount} slides. Make sure to generate exactly ${activeSlideCount} slides, structured in a JSON array.
-3. Output ONLY the valid JSON array containing the slides. Absolutely do not include any introductory or conversational text, nor markdown blocks. Just the raw JSON.
-4. Ensure the content is extremely high quality, rich, and tailored to the topic.
+CRITICAL: YOU MUST GENERATE EXACTLY ${activeSlideCount} SLIDES IN THE PRECISE SEQUENCE AND WITH THE MATCHING LAYOUTS PLANNED BELOW:
+${plannedLayoutsText}
+
+For each slide, you MUST strictly follow the JSON structure of the designated layout name type.
+Do NOT change the sequence or replace any planned layout type. Output the final JSON array containing exactly these slides in order.
+
+Output Requirements:
+- Output ONLY the valid JSON array containing exactly ${activeSlideCount} slides. Absolutely do not include any introductory or conversational text, nor markdown blocks. Just the raw JSON.
+- Ensure the content is extremely high quality, rich, educational, and tailored to the topic.
 `;
 
       if (sbUrl && sbKey && cachedPass) {
@@ -1153,87 +1163,165 @@ Requirements:
     // Local Fallback Slides Generator
     function generateOfflineFallbackDeck(prompt, count) {
       const topicTitle = prompt.charAt(0).toUpperCase() + prompt.slice(1);
-      const deck = [
-        {
+      const plannedSequence = LayoutPlanner.planPresentationLayouts(prompt, count);
+      
+      const mockContents = {
+        cover: {
           type: "cover",
           title: topicTitle,
           subtitle: `Una aproximación integral e inteligente en entornos digitales`,
           authors: "PresentaFacil AI Fallback Engine",
           date: new Date().toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })
-        }
-      ];
-
-      // Add category deck
-      if (count >= 3) {
-        deck.push({
+        },
+        agenda: {
+          type: "agenda",
+          title: "Dimensiones y Hoja de Ruta",
+          description: "Visualización integral de los pilares del desarrollo de la presentación.",
+          points: [
+            { label: "01. Fundamentos", desc: "Configuración inicial y bases teóricas." },
+            { label: "02. Implementación", desc: "Procesamiento dinámico y aplicación." },
+            { label: "03. Conclusión", desc: "Resultados clave y recomendaciones." }
+          ]
+        },
+        categories: {
           type: "categories",
           title: "Dimensiones y Pilares Fundamentales",
-          items: [
-            { icon: "🛡️", name: "Seguridad y Control", desc: "Monitoreo y protección activa a nivel de arquitectura global." },
-            { icon: "⚡", name: "Eficiencia y Velocidad", desc: "Optimización de recursos y latencias mínimas de procesamiento." },
-            { icon: "📊", name: "Consistencia Visual", desc: "Bloques pre-estructurados de alto impacto visual responsivo." }
+          description: "Desglose de conceptos de alto impacto visual.",
+          cards: [
+            { emoji: "🛡️", label: "Seguridad y Control", desc: "Monitoreo y protección activa a nivel de arquitectura global." },
+            { emoji: "⚡", label: "Eficiencia y Velocidad", desc: "Optimización de recursos y latencias mínimas de procesamiento." },
+            { emoji: "📊", label: "Consistencia Visual", desc: "Bloques pre-estructurados de alto impacto visual responsivo." }
+          ],
+          kpis: [
+            { icon: "📈", title: "Rendimiento", desc: "+45% velocidad" }
           ]
-        });
-      }
-
-      // Add diagram deck
-      if (count >= 5) {
-        deck.push({
+        },
+        split_flow: {
           type: "split_flow",
-          title: "Ciclo de Vida y Pipeline del Proceso",
-          items: [
-            "Fase 1: Configuración de parámetros iniciales del sistema",
-            "Fase 2: Redacción inteligente y estructuración semántica",
-            "Fase 3: Exportación en formato dinámico e interactivo"
+          title: "Flujo del Proceso Secuencial",
+          left_title: "Fases Principales",
+          left_cards: [
+            { icon: "⚙️", title: "1. Setup", desc: "Configuración de parámetros." }
+          ],
+          right_title: "Detalle Técnico",
+          right_steps: [
+            { title: "Redacción AI", desc: "Estructuración de textos." },
+            { title: "Render RevealJS", desc: "Visualización instantánea." }
           ]
-        });
-
-        deck.push({
+        },
+        split_road: {
+          type: "split_road",
+          title: "Camino de Evolución y Desarrollo",
+          description: "Visión histórica y hitos clave alcanzados.",
+          bullets: ["Fase de lanzamiento inicial", "Madurez de la arquitectura global"],
+          road_title: "Cronología de Hitos",
+          road_nodes: [
+            { title: "Inicio", desc: "Concepción de la idea", type: "start" },
+            { title: "Despliegue", desc: "Integración de Supabase", type: "middle" },
+            { title: "Madurez", desc: "Lanzamiento estable", type: "end" }
+          ]
+        },
+        split_network: {
+          type: "split_network",
+          title: "Infraestructura y Conexiones",
+          left_title: "Topología de Red",
+          left_chips: [
+            { icon: "🌐", title: "Edge", desc: "Servidores en el borde." }
+          ],
+          right_title: "Componentes del Servidor",
+          network_cards: [
+            { title: "Supabase DB", subtitle: "Almacenamiento de sesiones." },
+            { title: "Gemini Copilot", subtitle: "Inferencia inteligente." }
+          ]
+        },
+        split_pipeline: {
+          type: "split_pipeline",
+          title: "Pipeline y Procesamiento de Datos",
+          description: "Canal de ingesta y transformación de datos.",
+          bullets: ["Limpieza en tiempo real", "Inyección semántica"],
+          right_title: "Fases del Pipeline",
+          sources: ["Origen A", "Origen B"],
+          core_title: "Motor Central",
+          core_desc: "Normalización de datos estructurados",
+          outputs: ["JSON final", "RevealJS Slides"]
+        },
+        split_chart: {
+          type: "split_chart",
+          title: "Métricas de Rendimiento Cuantitativo",
+          description: "Visualización analítica de los datos del sistema.",
+          bullets: ["Alto crecimiento anual", "Mínimo desperdicio de memoria"],
+          chart_title: "Porcentaje de Eficiencia",
+          chart_data: [
+            { label: "Offline Engine", value: 85 },
+            { label: "AI Generator", value: 98 }
+          ],
+          detail_cards: [
+            { icon: "📈", title: "Eficiencia", desc: "Optimización continua" }
+          ]
+        },
+        comparison_table: {
           type: "comparison_table",
           title: "Matriz Comparativa de Enfoques",
-          headers: ["Criterios", "Enfoque Estático", "Enfoque Dinámico AI"],
-          rows: [
-            ["Flexibilidad", "Rigidez de plantillas fijas", "Lienzo libre interactivo"],
-            ["Velocidad", "Trabajo manual intensivo", "Generación en 15 segundos"],
-            ["Calidad Visual", "Diseño genérico básico", "Estética premium esmerilada"]
+          description: "Evaluación cuantitativa y cualitativa de opciones.",
+          table_headers: ["Criterio", "Enfoque Estático", "Enfoque Dinámico AI"],
+          table_rows: [
+            { criteria: "Flexibilidad", cols: ["Rigidez estructural", "Lienzo libre interactivo"] },
+            { criteria: "Velocidad", cols: ["Trabajo manual", "Generación en 15 segundos"] }
           ]
-        });
-      }
-
-      // Add custom canvas slide
-      if (count >= 7) {
-        deck.push({
+        },
+        grid_conclusion: {
+          type: "grid_conclusion",
+          title: "Evaluación y Resumen Final",
+          description: "Resumen estructurado de las conclusiones clave.",
+          cards: [
+            { emoji: "✅", title: "Calidad", desc: "Estética cyberpunk hermosa" }
+          ],
+          ia_text: "CoritoBot ha evaluado el flujo y certifica óptimo rendimiento."
+        },
+        conclusion: {
+          type: "conclusion",
+          title: "Conclusiones y Siguientes Pasos",
+          description: "Resumen integrador para la toma de decisiones.",
+          bullets: [
+            "La estructuración por bloques garantiza la visualización óptima en cualquier dispositivo.",
+            "La inactividad de sesión segura protege el editor en entornos compartidos."
+          ],
+          right_title: "KPIs",
+          quote: "La mejor forma de predecir el futuro es creándolo nosotros mismos.",
+          kpis: [
+            { title: "100%", desc: "Satisfacción garantizada" }
+          ]
+        },
+        quote: {
+          type: "quote",
+          quote: "La consistencia y la visualización de datos son el lenguaje de la verdad.",
+          quote_author: "PresentaFacil AI Fallback Engine"
+        },
+        custom: {
           type: "custom",
-          title: "Estructura Libre del Lienzo",
+          title: "Lienzo Libre Personalizado",
           elements: [
-            {
-              x: 10, y: 25, w: 38, h: 50,
-              content: `<div class="glass-card" style="padding:15px; border:1px solid rgba(0, 242, 254, 0.25); background:rgba(10,15,30,0.85); overflow:hidden; font-family:var(--font-inter); font-size:0.45em; line-height:1.55; text-align:left; color:#fff; height:100%; width:100%; box-sizing:border-box;"><h3>Enfoque Principal</h3><p style="margin-top:10px; color:#94a3b8;">Establece los parámetros clave para el lienzo de libre diseño.</p></div>`
-            },
-            {
-              x: 52, y: 25, w: 38, h: 50,
-              content: `<div class="glass-card" style="padding:15px; border:1px solid rgba(139, 92, 246, 0.25); background:rgba(10,15,30,0.85); overflow:hidden; font-family:var(--font-inter); font-size:0.45em; line-height:1.55; text-align:left; color:#fff; height:100%; width:100%; box-sizing:border-box;"><h3>Arquitectura CoritoBot</h3><p style="margin-top:10px; color:#94a3b8;">La inyección automática mapea la estructura de RevealJS dinámicamente.</p></div>`
-            }
+            { x: 10, y: 25, w: 38, h: 50, content: `<div class="glass-card" style="padding:15px; border:1px solid rgba(0, 242, 254, 0.25); background:rgba(10,15,30,0.85); overflow:hidden; font-family:var(--font-inter); font-size:0.45em; line-height:1.55; text-align:left; color:#fff; height:100%; width:100%; box-sizing:border-box;"><h3>Enfoque Principal</h3><p style="margin-top:10px; color:#94a3b8;">Establece los parámetros clave para el lienzo de libre diseño.</p></div>` }
           ]
-        });
-      }
+        },
+        farewell: {
+          type: "farewell",
+          title: "¡Muchas Gracias!",
+          emblem: "🐐",
+          quote: "La mejor forma de predecir el futuro es creándolo nosotros mismos.",
+          quote_author: "CoritoBot 🐐",
+          btn_text: "Descargar Proyecto",
+          pptx_text: "Obtener Formato PPTX",
+          footer_text: "PresentaFacil 2026 - CoritoBot Ecosystem"
+        }
+      };
 
-      // Add standard conclusion and farewell
-      deck.push({
-        type: "conclusion",
-        title: "Conclusiones y Siguientes Pasos",
-        bullets: [
-          "La estructuración por bloques garantiza la visualización óptima en cualquier dispositivo.",
-          "La inactividad de sesión segura protege el editor en entornos compartidos.",
-          "La integración directa permite la edición libre interactiva de manera instantánea."
-        ]
-      });
-
-      deck.push({
-        type: "farewell",
-        title: "¡Muchas Gracias!",
-        quote: "La mejor forma de predecir el futuro es creándolo nosotros mismos.",
-        author: "PresentaFacil AI & CoritoBot 🐐"
+      const deck = [];
+      plannedSequence.forEach(slide => {
+        const mock = mockContents[slide.type] || mockContents.categories;
+        // Deep copy
+        const copy = JSON.parse(JSON.stringify(mock));
+        deck.push(copy);
       });
 
       return deck;

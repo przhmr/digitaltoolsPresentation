@@ -1086,6 +1086,7 @@
   <!-- Supabase & Global Auth Gatekeeper -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="auth-gatekeeper.js"></script>
+  <script src="layout-planner.js"></script>
   <!-- PptxGenJS Client-Side PowerPoint Library -->
   <script src="https://cdn.jsdelivr.net/gh/gitbrent/PptxGenJS@3.12.0/dist/pptxgen.bundle.js"></script>
 </head>
@@ -2417,8 +2418,26 @@ Requirements:
       loader.style.display = 'block';
       resultBox.style.display = 'none';
 
+      // Smart Layout Recommendation Advisor
+      const semanticScores = LayoutPlanner.getSemanticScores(prompt);
+      let bestLayout = null;
+      let highestScore = 0;
+      for (const [layout, score] of Object.entries(semanticScores)) {
+        if (score > highestScore) {
+          highestScore = score;
+          bestLayout = layout;
+        }
+      }
+      
+      let recommendationHint = "";
+      if (bestLayout && highestScore >= 10) {
+        recommendationHint = `RECOMMENDED LAYOUT ASSIGNMENT: The user's request is semantically matched to layout type '${bestLayout}' (Score: ${highestScore}). If generating a complete slide, you MUST use the '${bestLayout}' layout type and follow its schema exactly.`;
+      }
+
       const systemInstruction = `You are CoritoBot 🐐, an elite AI presentation assistant.
 The user is asking: "${prompt}".
+
+${recommendationHint}
 
 Analyze the user's intent:
 1. If the user wants to generate, insert, or compile a complete slide, presentation slide, or structured deck component, you MUST respond with exactly ONE valid JSON object representing that slide.
@@ -3712,8 +3731,26 @@ Output ONLY the raw JSON object OR the clean plain text. Absolutely do not inclu
       try {
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
         
+        // Smart Layout Recommendation Advisor
+        const semanticScores = LayoutPlanner.getSemanticScores(prompt);
+        let bestLayout = null;
+        let highestScore = 0;
+        for (const [layout, score] of Object.entries(semanticScores)) {
+          if (score > highestScore) {
+            highestScore = score;
+            bestLayout = layout;
+          }
+        }
+        
+        let recommendationHint = "";
+        if (bestLayout && highestScore >= 10) {
+          recommendationHint = `RECOMMENDED LAYOUT ASSIGNMENT: The user's request is semantically matched to layout type '${bestLayout}' (Score: ${highestScore}). If generating a complete slide, you MUST use the '${bestLayout}' layout type and follow its schema exactly.`;
+        }
+
         const systemInstruction = `You are CoritoBot 🐐, an elite AI presentation assistant.
 The user is asking: "${prompt}".
+
+${recommendationHint}
 
 Analyze the user's intent:
 1. If the user wants to generate, insert, or compile a complete slide, presentation slide, or structured deck component, you MUST respond with exactly ONE valid JSON object representing that slide.
