@@ -1172,7 +1172,13 @@ Output Requirements:
           type: "cover",
           title: topicTitle,
           subtitle: `Una aproximación integral e inteligente en entornos digitales`,
-          authors: "PresentaFacil AI Fallback Engine",
+          authors: [
+            "Ing. Dalia Rojas D.",
+            "Ing. Homer Perozo N.",
+            "Ing. Indiana Salas P.",
+            "Lic. Ruby Medina L."
+          ],
+          institution: "Universidad Nacional Experimental Francisco de Miranda • 2026",
           date: new Date().toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })
         },
         agenda: {
@@ -1221,6 +1227,11 @@ Output Requirements:
             { title: "Inicio", desc: "Concepción de la idea", type: "start" },
             { title: "Despliegue", desc: "Integración de Supabase", type: "middle" },
             { title: "Madurez", desc: "Lanzamiento estable", type: "end" }
+          ],
+          heat_row: [
+            { fill: 35, text: "Fase 1: Configuración" },
+            { fill: 75, text: "Fase 2: Integración" },
+            { fill: 100, text: "Fase 3: Optimización" }
           ]
         },
         split_network: {
@@ -1269,6 +1280,10 @@ Output Requirements:
           table_rows: [
             { criteria: "Flexibilidad", cols: ["Rigidez estructural", "Lienzo libre interactivo"] },
             { criteria: "Velocidad", cols: ["Trabajo manual", "Generación en 15 segundos"] }
+          ],
+          heat_row: [
+            { fill: 40, text: "Eficiencia Estática" },
+            { fill: 95, text: "Eficiencia AI" }
           ]
         },
         grid_conclusion: {
@@ -1278,7 +1293,11 @@ Output Requirements:
           cards: [
             { emoji: "✅", title: "Calidad", desc: "Estética cyberpunk hermosa" }
           ],
-          ia_text: "CoritoBot ha evaluado el flujo y certifica óptimo rendimiento."
+          ia_text: "CoritoBot ha evaluado el flujo y certifica óptimo rendimiento.",
+          heat_row: [
+            { fill: 90, text: "Conclusión de Estructura" },
+            { fill: 95, text: "Conclusión de Estética" }
+          ]
         },
         conclusion: {
           type: "conclusion",
@@ -1323,6 +1342,26 @@ Output Requirements:
         const mock = mockContents[slide.type] || mockContents.categories;
         // Deep copy
         const copy = JSON.parse(JSON.stringify(mock));
+        // Attach procedurally generated style blocks, transitions and layouts planned!
+        copy.style = slide.style;
+        copy.transition = slide.transition;
+        copy.transition_speed = slide.transition_speed;
+        
+        // Dynamic offline content customization to make slide text feel incredibly custom!
+        if (copy.type !== 'cover' && copy.type !== 'farewell' && copy.title) {
+          copy.title = copy.title.replace("del Proceso Secuencial", `de ${topicTitle}`)
+                                 .replace("y Pilares Fundamentales", `en ${topicTitle}`)
+                                 .replace("y Evolución y Desarrollo", `de ${topicTitle}`)
+                                 .replace("y Conexiones", `en ${topicTitle}`)
+                                 .replace("y Procesamiento de Datos", `en ${topicTitle}`)
+                                 .replace("Cuantitativo", `de ${topicTitle}`)
+                                 .replace("de Enfoques", `en ${topicTitle}`)
+                                 .replace("y Resumen Final", `de ${topicTitle}`)
+                                 .replace("y Siguientes Pasos", `sobre ${topicTitle}`)
+                                 .replace("Dimensiones y Pilares Fundamentales", `Dimensiones de ${topicTitle}`)
+                                 .replace("Pilares Fundamentales", `Pilares de ${topicTitle}`)
+                                 .replace("Análisis de Datos y Control", `con ${topicTitle}`);
+        }
         deck.push(copy);
       });
 

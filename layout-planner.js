@@ -207,10 +207,11 @@
         return;
       }
 
-      // Candidate sorting heuristic: prioritize layouts with high semantic affinity and no previous usage
-      const candidates = [...CONTENT_LAYOUTS].sort((a, b) => {
-        const scoreA = semanticScores[a] - (currentSeq.includes(a) ? 120 : 0);
-        const scoreB = semanticScores[b] - (currentSeq.includes(b) ? 120 : 0);
+      // Shuffle layouts first to break ties randomly and introduce maximum layout sequence diversity!
+      const shuffledLayouts = [...CONTENT_LAYOUTS].sort(() => Math.random() - 0.5);
+      const candidates = shuffledLayouts.sort((a, b) => {
+        const scoreA = (semanticScores[a] || 0) - (currentSeq.includes(a) ? 120 : 0);
+        const scoreB = (semanticScores[b] || 0) - (currentSeq.includes(b) ? 120 : 0);
         return scoreB - scoreA;
       });
 
