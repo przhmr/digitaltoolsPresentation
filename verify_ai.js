@@ -11,8 +11,8 @@ const { chromium } = require('playwright');
   await page.setViewportSize({ width: 1400, height: 900 });
 
   try {
-    console.log('🔗 Navigating to http://localhost:8080/AdvancedEditor.html...');
-    await page.goto('http://localhost:8080/AdvancedEditor.html');
+    console.log('🔗 Navigating to http://localhost:8080/editor.html...');
+    await page.goto('http://localhost:8080/editor.html');
     await page.evaluate(() => {
       localStorage.clear();
       localStorage.setItem('supabase_url', 'none');
